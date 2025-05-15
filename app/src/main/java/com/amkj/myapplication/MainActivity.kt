@@ -1,4 +1,4 @@
-    package com.amkj.myapplication
+package com.amkj.myapplication
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
