@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">App-Reservas-CAB</string>
-    <string name="iniciosesion">Inicio de sesión</string>
+    <string name="app_name">Gestion De Reservas</string>
+    <string name="documento">Numero de documento</string>
+    <string name="contra">Contraseña</string>
+    <string name="inicioSesion">Iniciar sesion</string>
+    <string name="olvidaste">¿Olvidaste tu contraseña?</string>
 </resources>

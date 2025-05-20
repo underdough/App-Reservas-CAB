@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.amkj.myapplication"
+    namespace = "com.amkj.appreservascab"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.amkj.myapplication"
+        applicationId = "com.amkj.appreservascab"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -32,6 +32,11 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+    }
+
+    buildFeatures{
+        viewBinding = true
+
     }
 }
 
