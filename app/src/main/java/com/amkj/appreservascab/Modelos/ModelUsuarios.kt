@@ -1,4 +1,4 @@
-package com.amkj.appreservascab.models
+package com.amkj.appreservascab.Modelos
 
 data class ModeloUsuarios(
     var id:Int,

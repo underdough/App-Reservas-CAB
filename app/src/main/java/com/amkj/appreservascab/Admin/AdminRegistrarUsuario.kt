@@ -1,11 +1,8 @@
-package com.amkj.appreservascab
+package com.amkj.appreservascab.Admin
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
-import android.widget.Toast
 import androidx.core.content.edit
-import androidx.recyclerview.widget.RecyclerView
 
 object AdminRegistrarUsuario {
     private lateinit var prefs: SharedPreferences

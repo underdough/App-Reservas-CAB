@@ -7,8 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.amkj.appreservascab.Admin.AdminRegistrarUsuario
 import com.amkj.appreservascab.databinding.ActivityMainBinding
-import com.amkj.appreservascab.models.ModeloUsuarios
 
 
 class MainActivity : AppCompatActivity() {
