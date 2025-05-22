@@ -35,14 +35,18 @@ class MainActivity : AppCompatActivity() {
             binding.ivVerContra.setOnClickListener {
                 if (contraVisible) {
                     // Ocultar contraseña
-                    binding.etContra.inputType = android.text.InputType.TYPE_CLASS_TEXT or
-                            android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
-                    binding.ivVerContra.setImageResource(R.drawable.ic_ojo_cerrado) // ← usa tu ícono de "ojo cerrado"
+                    binding.etContra.transformationMethod = null
+                    binding.ivVerContra.setImageResource(R.drawable.ic_ojo_abierto)
+//                    binding.etContra.inputType = android.text.InputType.TYPE_CLASS_TEXT or
+//                            android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+//                    binding.ivVerContra.setImageResource(R.drawable.ic_ojo_cerrado) // ← usa tu ícono de "ojo cerrado"
                 } else {
                     // Mostrar contraseña
-                    binding.etContra.inputType = android.text.InputType.TYPE_CLASS_TEXT or
-                            android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                    binding.ivVerContra.setImageResource(R.drawable.ic_ojo_abierto) // ← usa tu ícono de "ojo abierto"
+                    binding.etContra.transformationMethod = android.text.method.PasswordTransformationMethod.getInstance()
+                    binding.ivVerContra.setImageResource(R.drawable.ic_ojo_cerrado) // ícono de ojo normal
+//                    binding.etContra.inputType = android.text.InputType.TYPE_CLASS_TEXT or
+//                            android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+//                    binding.ivVerContra.setImageResource(R.drawable.ic_ojo_abierto) // ← usa tu ícono de "ojo abierto"
                 }
                 // Mueve el cursor al final del texto
                 binding.etContra.setSelection(binding.etContra.text.length)
@@ -60,10 +64,6 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "No se permiten campos vacíos.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
-
-
-
 
 
         }

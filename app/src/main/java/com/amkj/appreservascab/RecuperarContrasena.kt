@@ -18,12 +18,18 @@ class RecuperarContrasena : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityRecuperarContrasenaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.layoutRecuperarContrasena)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
         AdminRegistrarUsuario.iniciar(applicationContext)
+
+        binding.ibVolver.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         binding.btnEnviarInstrucciones.setOnClickListener{
             val intent = Intent(this, RCCorreoEnviado::class.java)

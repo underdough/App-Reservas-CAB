@@ -23,14 +23,13 @@
         android:id="@+id/etEmail"
         android:layout_width="350dp"
         android:layout_height="50dp"
-        android:text="@string/txtcorreo_electronico"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="30pt"
         android:textColorHint="@color/txt_color"
         android:textColor="@color/black"
         android:hint="@string/txtcorreo_electronico"
-        android:fontFamily="@font/poppins"
         android:inputType="textEmailAddress"
+        android:fontFamily="@font/poppins"
         android:autofillHints="emailAddress"/>
 
     <FrameLayout
@@ -79,10 +78,11 @@
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="5pt"
         android:background="@color/white"
+        android:textStyle="italic"
         android:text="@string/olvidaste"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
-        android:fontFamily="@font/poppins"
+        android:contextClickable="true"
         android:textSize="15sp" />
 </LinearLayout>
 

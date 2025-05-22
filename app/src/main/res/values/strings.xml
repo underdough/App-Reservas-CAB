@@ -7,7 +7,7 @@
     <string name="txtRecuperarcontrasena">Ingresa el correo electrónico asociado a tu cuenta y te enviaremos un correo electrónico con instrucciones para restablecer tu contraseña.</string>
     <string name="txtVolver">Volver</string>
     <string name="txtRecuperarContrasena">Recuperar contraseña</string>
-    <string name="txtcorreo_electronico">Correo electronico</string>
+    <string name="txtcorreo_electronico">Correo electrónico</string>
     <string name="txtenviar_instrucciones">Enviar instrucciones</string>
     <string name="logo_sena">Logo SENA</string>
     <string name="verContra">Ver contraseña\n</string>
