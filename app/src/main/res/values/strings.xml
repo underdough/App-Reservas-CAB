@@ -4,4 +4,22 @@
     <string name="contra">Contraseña</string>
     <string name="inicioSesion">Iniciar sesion</string>
     <string name="olvidaste">¿Olvidaste tu contraseña?</string>
+    <string name="txtRecuperarcontrasena">Ingresa el correo electrónico asociado a tu cuenta y te enviaremos un correo electrónico con instrucciones para restablecer tu contraseña.</string>
+    <string name="txtVolver">Volver</string>
+    <string name="txtRecuperarContrasena">Recuperar contraseña</string>
+    <string name="txtcorreo_electronico">Correo electronico</string>
+    <string name="txtenviar_instrucciones">Enviar instrucciones</string>
+    <string name="logo_sena">Logo SENA</string>
+    <string name="verContra">Ver contraseña\n</string>
+    <string name="ic_correo_enviado">Ícono de correo enviado</string>
+    <string name="txtrevisacorreo">Revisa tu correo</string>
+    <string name="txt_instruccioncorreo">Te hemos enviado instrucciones\npara recuperar tu contraseña a tu\ncorreo electrónico</string>
+    <string name="txtabrirgmail">Abrir Gmail</string>
+    <string name="txt_reenviarinstruccion">¿No recibiste un correo? Reenvía la instrucción dando</string>
+    <string name="txt_clickaqui">click aquí</string>
+    <string name="txt_otrocorreo">O prueba con otra\ndirección de correo electrónico</string>
+    <string name="txt_crearNuevaContra">Crear nueva contraseña</string>
+    <string name="txt_nuevaContrasena">Tu nueva contraseña debe ser diferente de las contraseñas utilizadas anteriormente.</string>
+    <string name="conf_contra">Confirmar contraseña</string>
+    <string name="restablecer_contra">Restablecer contraseña</string>
 </resources>

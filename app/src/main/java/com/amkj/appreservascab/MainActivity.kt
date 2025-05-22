@@ -29,11 +29,34 @@ class MainActivity : AppCompatActivity() {
             AdminRegistrarUsuario.iniciar(applicationContext)
 
 
+
+        binding.ivVerContra.setOnClickListener {
+            var contraVisible = false
+            binding.ivVerContra.setOnClickListener {
+                if (contraVisible) {
+                    // Ocultar contraseña
+                    binding.etContra.inputType = android.text.InputType.TYPE_CLASS_TEXT or
+                            android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+                    binding.ivVerContra.setImageResource(R.drawable.ic_ojo_cerrado) // ← usa tu ícono de "ojo cerrado"
+                } else {
+                    // Mostrar contraseña
+                    binding.etContra.inputType = android.text.InputType.TYPE_CLASS_TEXT or
+                            android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                    binding.ivVerContra.setImageResource(R.drawable.ic_ojo_abierto) // ← usa tu ícono de "ojo abierto"
+                }
+                // Mueve el cursor al final del texto
+                binding.etContra.setSelection(binding.etContra.text.length)
+                contraVisible = !contraVisible
+            }
+
+        }
+
+        // Evento para ingreso a el inicio
         binding.btnIniciar.setOnClickListener {
-            val numDocumento = binding.etDocumento.text.toString().trim()
+            val correo = binding.etEmail.text.toString().trim()
             val contrasena = binding.etContra.text.toString().trim()
 
-            if (numDocumento.isEmpty() || contrasena.isEmpty()) {
+            if (correo.isEmpty() || contrasena.isEmpty()) {
                 Toast.makeText(this, "No se permiten campos vacíos.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -45,8 +68,9 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+
         binding.tvOlvidaste.setOnClickListener {
-            val intent = Intent(this, OlvidasteContrasena::class.java)
+            val intent = Intent(this, RecuperarContrasena::class.java)
             startActivity(intent)
         }
     }
