@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/tvUser"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="125dp"
+        android:layout_marginTop="30pt"
+        android:background="@drawable/ic_user"
+        android:textColor="@color/txt_color"
+        android:contentDescription="@string/logo_sena"/>
+
+    <TextView
+        android:id="@+id/tvNomUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="25dp"
+        android:textColor="@color/txt_color"
+        android:textSize="34sp"/>
+
+
+    <Button
+        android:id="@+id/btnPerfil"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="30pt"
+        android:backgroundTint="@color/colorBtns"
+        android:text="@string/miPerfil"
+        android:textStyle="bold"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/btnMisReservas"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="20pt"
+        android:backgroundTint="@color/colorBtns"
+        android:textStyle="bold"
+
+        android:text="@string/miReservas"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/white" />
+
+
+
+</LinearLayout>
+
+
