@@ -22,4 +22,14 @@
     <string name="txt_nuevaContrasena">Tu nueva contraseña debe ser diferente de las contraseñas utilizadas anteriormente.</string>
     <string name="conf_contra">Confirmar contraseña</string>
     <string name="restablecer_contra">Restablecer contraseña</string>
+    <string name="miPerfil">Mi Perfil</string>
+    <string name="miReservas">Mis Reservas</string>
+    <string name="nombre">Nombre:</string>
+    <string name="telefono">Telefono:</string>
+    <string name="correo">Correo:</string>
+    <string name="txtMisReservas">Mis Reservas</string>
+    <string name="filtrar">Filtrar busqueda</string>
+    <string name="equiposComputo">Equipos de Computo</string>
+    <string name="imgItem">equipos</string>
+    <string name="ambiente">Ambientes</string>
 </resources>
