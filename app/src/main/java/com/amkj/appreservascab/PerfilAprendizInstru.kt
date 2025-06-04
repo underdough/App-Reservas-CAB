@@ -7,8 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.amkj.appreservascab.databinding.ActivityMainBinding
 
-class MenuAprendizInstru: AppCompatActivity() {
-
+class PerfilAprendizInstru: AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,4 +21,5 @@ class MenuAprendizInstru: AppCompatActivity() {
             insets
         }
     }
+
 }
