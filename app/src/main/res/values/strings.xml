@@ -32,4 +32,15 @@
     <string name="equiposComputo">Equipos de Computo</string>
     <string name="imgItem">equipos</string>
     <string name="ambiente">Ambientes</string>
+    <string name="txtSolicitudReservas">Solicitud de reservas</string>
+    <string name="nombreAmbiente">Ambiente:</string>
+    <string name="fecha">Fecha:</string>
+    <string name="jornada">Jornada:</string>
+    <string name="Mañana">Mañana</string>
+    <string name="Tarde">Tarde</string>
+    <string name="Noche">Noche</string>
+    <string name="nombreRecurso">Recurso:</string>
+    <string name="nombreEquipo">Equipo de computo:</string>
+    <string name="SolicitadoPor">Solicitado por:</string>
+    <string name="Referencia">Referencia:</string>
 </resources>
