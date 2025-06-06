@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
 
         // Evento para ingreso a el inicio
         binding.btnIniciar.setOnClickListener {
+
             val correo = binding.etEmail.text.toString().trim()
             val contrasena = binding.etContra.text.toString().trim()
 
@@ -64,6 +65,22 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "No se permiten campos vacíos.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+            val adminValido = AdminRegistrarUsuario.usuariosad.any {
+                it.correo == correo && it.contrasena == contrasena
+            }
+
+            if (adminValido) {
+                // prueba
+                val intent = Intent(this, MenuAprendizInstru::class.java)
+                intent.putExtra("correo", correo)
+                startActivity(intent)
+
+
+            } else {
+                Toast.makeText(this, "El usuario no está registrado, comuníquese con el administrador del sistema", Toast.LENGTH_SHORT).show()
+            }
+
 
 
         }

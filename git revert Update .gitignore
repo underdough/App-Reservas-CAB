@@ -1,0 +1,116 @@
+[33mcommit ca6b6ddebfd7c1ee0a17b3ee1337c76649dbccab[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: underdough <k3vinch3nl1@gmail.com>
+Date:   Thu May 22 18:23:13 2025 -0500
+
+    Pre-configurando Recuperación de contraseña
+
+[33mcommit a1d90b262601676fe084276ff9192a1135f60be0[m
+Author: underdough <k3vinch3nl1@gmail.com>
+Date:   Thu May 22 16:33:03 2025 -0500
+
+    Añadiendo Módulo Recuperacion de contraseña
+
+[33mcommit 3b55e3852ffa4a811b083aa35c860873e1ba2ecc[m
+Author: underdough <k3vinch3nl1@gmail.com>
+Date:   Thu May 22 13:12:38 2025 -0500
+
+    carpetas acomodadas
+
+[33mcommit f0781772757d1e1c2e55ecdc878518205fbf7d13[m
+Merge: 4e48a18 a6a99cc
+Author: underdough <k3vinch3nl1@gmail.com>
+Date:   Thu May 22 12:37:30 2025 -0500
+
+    update .gitignore
+
+[33mcommit 4e48a180ce1f596ed91b8ab4df82e8ba55ae9aaa[m
+Merge: 046d3ee 806ab44
+Author: underdough <k3vinch3nl1@gmail.com>
+Date:   Thu May 22 12:35:36 2025 -0500
+
+    update .gitignore
+
+[33mcommit a6a99cc017043c41595c588b2e7260c7110f5390[m
+Author: KeLiCH <159218044+underdough@users.noreply.github.com>
+Date:   Thu May 22 11:54:03 2025 -0500
+
+    Update .gitignore
+
+[33mcommit 046d3eefc1c6edf9383d445b82ff9249e96cdd52[m
+Author: underdough <k3vinch3nl1@gmail.com>
+Date:   Thu May 22 11:52:40 2025 -0500
+
+    update .-gitignore
+
+[33mcommit 806ab44aab8abeed0bb9f1c22a8dfbb3ee53610a[m
+Author: KeLiCH <159218044+underdough@users.noreply.github.com>
+Date:   Thu May 22 11:48:35 2025 -0500
+
+    Update .gitignore
+
+[33mcommit 869c79cf0668ee7eb239f0e2e1fb84cc48817ad0[m
+Author: KeLiCH <159218044+underdough@users.noreply.github.com>
+Date:   Thu May 22 11:48:04 2025 -0500
+
+    Update .gitignore
+
+[33mcommit b173c7e07b2f83e74282caa2425fab761e6915e2[m
+Author: KeLiCH <159218044+underdough@users.noreply.github.com>
+Date:   Thu May 22 11:47:07 2025 -0500
+
+    Update .gitignore
+
+[33mcommit c25b0e5bd4504d59821553ed2584593dc2cd1693[m
+Author: KeLiCH <159218044+underdough@users.noreply.github.com>
+Date:   Thu May 22 11:46:13 2025 -0500
+
+    ignorar log de error master
+
+[33mcommit 00d37ba933e1df86d3450223448026fa256b128b[m
+Author: underdough <k3vinch3nl1@gmail.com>
+Date:   Thu May 22 11:42:53 2025 -0500
+
+    agregando elementos
+
+[33mcommit 5e0fdf77056c5dee883d8a42e15abd321b8fc495[m
+Merge: ab7e5da 2bc4101
+Author: underdough <k3vinch3nl1@gmail.com>
+Date:   Mon May 19 21:09:08 2025 -0500
+
+    Merge branch 'develop'
+    
+    # Conflicts:
+    #       app/src/main/res/layout/activity_main.xml
+
+[33mcommit ab7e5daadcf02df9645192a398786b48ba3d51fd[m
+Author: underdough <k3vinch3nl1@gmail.com>
+Date:   Mon May 19 19:36:37 2025 -0500
+
+    Agregando elementos del login
+
+[33mcommit 2bc41016383a60125f947f6b377b202cf6027e06[m
+Author: underdough <k3vinch3nl1@gmail.com>
+Date:   Thu May 15 17:07:29 2025 -0500
+
+    cambios en el layout
+
+[33mcommit 1d2fdac89d8f23b35a18f892153e10c6566a744c[m
+Merge: b8f2894 6624a30
+Author: KeLiCH <159218044+underdough@users.noreply.github.com>
+Date:   Thu May 15 16:22:49 2025 -0500
+
+    Merge pull request #1 from underdough/develop
+    
+    Prueba Inicio de sesión
+
+[33mcommit 6624a30d1ac28fe95cbdb07fdaeca8ce21be6b3a[m
+Author: underdough <k3vinch3nl1@gmail.com>
+Date:   Thu May 15 15:19:57 2025 -0500
+
+    Prueba Inicio de sesión
+
+[33mcommit b8f2894996f170af362b975429dbd96623829298[m
+Author: underdough <k3vinch3nl1@gmail.com>
+Date:   Thu May 15 15:04:41 2025 -0500
+
+    Archivos pre-iniciales cargados

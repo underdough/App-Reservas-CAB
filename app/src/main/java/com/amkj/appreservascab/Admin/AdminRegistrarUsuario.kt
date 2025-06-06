@@ -9,8 +9,8 @@ object AdminRegistrarUsuario {
     private const val PREFS_USERS = "UsuariosPrefs"
     private const val KEY_USERS = "RegistrarUsuarios"
 
-    val usuarios = mutableListOf(
-        AdminRegistrarUsuarios("maria", "1234"),
+    val usuariosad = mutableListOf(
+        AdminRegistrarUsuarios("admin01", "123456"),
     )
 
     fun iniciar(context: Context) {
@@ -21,11 +21,11 @@ object AdminRegistrarUsuario {
     private fun cargarUsuarios() {
         val usuariosGuardados = prefs.getStringSet(KEY_USERS, null)
         if (usuariosGuardados != null) {
-            usuarios.clear()
+            usuariosad.clear()
             for (usuario in usuariosGuardados) {
                 val partes = usuario.split(":")
                 if (partes.size == 2) {
-                    usuarios.add(AdminRegistrarUsuarios(partes[0], partes[1]))
+                    usuariosad.add(AdminRegistrarUsuarios(partes[0], partes[1]))
                 }
             }
         } else {
@@ -33,14 +33,16 @@ object AdminRegistrarUsuario {
         }
     }
 
-    fun agregarUsuario(nombre: String, contrasena: String) {
-        usuarios.add(AdminRegistrarUsuarios(nombre, contrasena))
-        guardarUsuarios()
-    }
+
+
+//    fun agregarUsuario(nombre: String, contrasena: String) {
+//        usuariosad.add(AdminRegistrarUsuarios(nombre, contrasena))
+//        guardarUsuarios()
+//    }
 
     fun guardarUsuarios() {
         prefs.edit {
-            val usuariosSet = usuarios.map { "${it.nombre}:${it.contrasena}" }.toSet()
+            val usuariosSet = usuariosad.map { "${it.correo}:${it.contrasena}" }.toSet()
             putStringSet(KEY_USERS, usuariosSet)
         }
     }
@@ -64,4 +66,4 @@ object AdminRegistrarUsuario {
 //    }
 }
 
-data class AdminRegistrarUsuarios(val nombre: String, val contrasena: String)
+data class AdminRegistrarUsuarios(val correo: String, val contrasena: String)

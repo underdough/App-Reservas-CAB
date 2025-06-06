@@ -47,6 +47,14 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+//    recycle views
+    implementation(libs.androidx.recyclerview)
+// //    recycler view seleccionable
+//    implementation("androidx.recyclerview:recyclerview-selection:1.2.0")
+
+    // retrofit
+    implementation(libs.retrofit)
+    implementation (libs.converter.gson)
 //    implementation("com.android.volley:volley:1.2.1")
     implementation(libs.androidx.runtime)
     testImplementation(libs.junit)

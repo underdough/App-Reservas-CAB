@@ -15,6 +15,7 @@
 local.properties
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /.kotlin/errors
 =======
 /.kotlin/errors
@@ -22,3 +23,6 @@ local.properties
 =======
 
 >>>>>>> a6a99cc017043c41595c588b2e7260c7110f5390
+=======
+/.kotlin/errors
+>>>>>>> parent of b173c7e (Update .gitignore)
