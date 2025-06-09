@@ -57,7 +57,7 @@
         android:padding="8dp"
         android:clipToPadding="false"
         android:scrollbars="horizontal"
-        tools:listitem="@layout/activity_ambientes">
+        tools:listitem="@layout/item_vistappal">
 
     </androidx.recyclerview.widget.RecyclerView>
 
