@@ -2,7 +2,14 @@ package com.amkj.appreservascab.servicios
 
 
 
-interface ConexionDB {
+import com.amkj.appreservascab.Modelos.ModeloUsuarios
+import retrofit2.http.GET
 
+interface ConexionDB {
+     companion object {
+         val url: String = "http://192.168.20.42:80/phpGestionReservas"
+     }
+    @GET("/consultaUsuario")
+    suspend fun getconsultaUsuario(): retrofit2.Response<List<ModeloUsuarios>>
 
 }

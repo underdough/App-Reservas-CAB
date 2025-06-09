@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.amkj.appreservascab.Admin.AdminRegistrarUsuario
 import com.amkj.appreservascab.databinding.ActivityMainBinding
+import retrofit2.Retrofit
 
 
 class MainActivity : AppCompatActivity() {
@@ -72,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
             if (adminValido) {
                 // prueba
-                val intent = Intent(this, MenuAprendizInstru::class.java)
+                val intent = Intent(this, VistaPrincipal::class.java)
                 intent.putExtra("correo", correo)
                 startActivity(intent)
 
@@ -92,5 +93,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun getRetrofit(): Retrofit{
+        return Retrofit.Builder()
+            .baseUrl()
+    }
 
     }

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainlyVistappal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".VistaPrincipal"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+<!--        Encabezado de iconos-->
+        <LinearLayout
+            android:id="@+id/lyEncabezado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/lyLogoSENA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+    <!--   Logo SENA -->
+            <ImageView
+                android:id="@+id/logoSENA"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="30dp"
+                android:contentDescription="@string/logo_sena"
+                android:src="@drawable/ic_sena"
+
+                />
+
+        </LinearLayout>
+
+
+<!--      Iconos redirigidos a otras vistas     -->
+        <LinearLayout
+            android:id="@+id/lyBtns"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="130dp"
+            android:layout_marginTop="40dp">
+
+<!--            Solicitud/ Notificación -->
+            <ImageButton
+                android:id="@+id/ibNotifcacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/txt_notificacion"
+                android:src="@drawable/ic_notificacion"
+                android:background="none"/>
+
+
+<!--            Menú -->
+            <ImageButton
+                android:id="@+id/ibMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_menu"
+                android:background="none"
+                android:layout_marginStart="10dp"/>
+
+        </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvBienvenido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="@string/bienvenido"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        />
+    <LinearLayout
+        android:id="@+id/lyFiltro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/disrecursos"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        />
+
+<!--  Recursos disponibles  -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        >
+
+        <include
+            android:id="@+id/lyAmbientesPpal"
+            layout="@layout/item_vistappal" />
+
+
+<!--       Layout de ambientes -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+<!--        Layout de equipos de computo-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+</LinearLayout>
