@@ -30,7 +30,7 @@
                 android:id="@+id/logoSENA"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_margin="30dp"
+                android:layout_margin="20dp"
                 android:contentDescription="@string/logo_sena"
                 android:src="@drawable/ic_sena"
 
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/txt_notificacion"
                 android:src="@drawable/ic_notificacion"
-                android:background="none"/>
+                android:background="@color/transparente"/>
 
 
 <!--            Menú -->
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_menu"
-                android:background="none"
+                android:background="@color/transparente"
                 android:layout_marginStart="10dp"/>
 
         </LinearLayout>
@@ -82,12 +82,68 @@
         android:textColor="@color/black"
         android:textSize="22sp"
         />
+
     <LinearLayout
         android:id="@+id/lyFiltro"
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
+        <!--        <EditText-->
+        <!--            android:id="@+id/et_buscar"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="5dp"-->
+        <!--            android:layout_marginBottom="6dp"-->
+        <!--            android:layout_marginStart="20dp"-->
+        <!--            android:layout_marginEnd="20dp"-->
+        <!--            android:layout_gravity="center"-->
+        <!--            android:hint="Ambiente"/>-->
+
+        <FrameLayout
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="10pt">
+
+            <!-- Reemplazo de SearchView por EditText
+            sin esto no me dejaba probar lo de la busqueda-->
+            <EditText
+                android:id="@+id/etBuscar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:drawablePadding="8dp"
+                android:hint="Buscar..."
+                android:paddingStart="40dp"
+
+                android:paddingEnd="50dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/txt_color" />
+
+            <ImageView
+                android:id="@+id/ivFiltrar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="10dp"
+                android:contentDescription="@string/filtrar"
+                android:src="@drawable/ic_filtro" />
+
+
+        </FrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvLista"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="8dp"
+            android:contextClickable="true"
+            android:layout_weight="1"
+            tools:listitem="@layout/item_rv_ambientes"
+
+            />
     </LinearLayout>
 
     <TextView

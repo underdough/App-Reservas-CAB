@@ -62,27 +62,29 @@ class MainActivity : AppCompatActivity() {
             val correo = binding.etEmail.text.toString().trim()
             val contrasena = binding.etContra.text.toString().trim()
 
-            if (correo.isEmpty() || contrasena.isEmpty()) {
-                Toast.makeText(this, "No se permiten campos vacíos.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+//            if (correo.isEmpty() || contrasena.isEmpty()) {
+//                Toast.makeText(this, "No se permiten campos vacíos.", Toast.LENGTH_SHORT).show()
+//                return@setOnClickListener
+//            }
+//
+//            val adminValido = AdminRegistrarUsuario.usuariosad.any {
+//                it.correo == correo && it.contrasena == contrasena
+//            }
+//
+//            if (adminValido) {
+//                // prueba
+//                val intent = Intent(this, VistaPrincipal::class.java)
+//                intent.putExtra("correo", correo)
+//                startActivity(intent)
+//
+//
+//            } else {
+//                Toast.makeText(this, "El usuario no está registrado, comuníquese con el administrador del sistema", Toast.LENGTH_SHORT).show()
+//            }
 
-            val adminValido = AdminRegistrarUsuario.usuariosad.any {
-                it.correo == correo && it.contrasena == contrasena
-            }
 
-            if (adminValido) {
-                // prueba
-                val intent = Intent(this, VistaPrincipal::class.java)
-                intent.putExtra("correo", correo)
-                startActivity(intent)
-
-
-            } else {
-                Toast.makeText(this, "El usuario no está registrado, comuníquese con el administrador del sistema", Toast.LENGTH_SHORT).show()
-            }
-
-
+            val intent = Intent(this, VistaPrincipal::class.java)
+            startActivity(intent)
 
         }
 
@@ -93,9 +95,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getRetrofit(): Retrofit{
-        return Retrofit.Builder()
-            .baseUrl()
-    }
+//    fun getRetrofit(): Retrofit{
+//        return Retrofit.Builder()
+//            .baseUrl()
+//    }
 
     }
