@@ -32,11 +32,11 @@
     <string name="equiposComputo">Equipos de Computo</string>
     <string name="imgItem">equipos</string>
     <string name="ambiente">Ambientes</string>
-<!--<<<<<<< HEAD-->
+    <!--<<<<<<< HEAD-->
     <string name="bienvenido">¡Bienvenid@!</string>
     <string name="disrecursos">Recursos Disponibles</string>
     <string name="txt_notificacion">notificacion</string>
-=======
+    =======
     <string name="txtSolicitudReservas">Solicitud de reservas</string>
     <string name="nombreAmbiente">Ambiente:</string>
     <string name="fecha">Fecha:</string>
@@ -48,5 +48,5 @@
     <string name="nombreEquipo">Equipo de computo:</string>
     <string name="SolicitadoPor">Solicitado por:</string>
     <string name="Referencia">Referencia:</string>
->>>>>>> ba3dc9a3d71f43bb6e82a4d2b1080a05966b4c7f
+    >>>>>>> ba3dc9a3d71f43bb6e82a4d2b1080a05966b4c7f
 </resources>
