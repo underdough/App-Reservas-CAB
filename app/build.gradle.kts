@@ -59,6 +59,8 @@ dependencies {
 //    implementation (libs.converter.gson)
 //    implementation("com.android.volley:volley:1.2.1")
     implementation(libs.androidx.runtime)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
