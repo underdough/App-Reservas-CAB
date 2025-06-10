@@ -6,7 +6,9 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VistaPrincipal">
+    tools:context=".VistaPrincipal"
+    android:layout_gravity="center"
+    android:foregroundGravity="center">
 
     <!-- Contenido principal (tu diseño actual) -->
     <LinearLayout
@@ -14,12 +16,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:gravity="center"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_gravity="start"
+            android:layout_marginBottom="40dp"
+            >
             <!--        Encabezado de iconos-->
             <LinearLayout
                 android:id="@+id/lyEncabezado"

@@ -1,8 +1,8 @@
-package com.amkj.appreservascab.Modelos
-
+package com.amkj.appreservascab.ModelView
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.amkj.appreservascab.Modelos.ModeloUsuarios
 
 class UsuarioViewModel: ViewModel() {
 

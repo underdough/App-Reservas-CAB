@@ -4,7 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@android:color/white"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainlyPerfilAprendizInstru"
+    tools:context=".PerfilAprendizInstru"
+    >
 
 
     <ImageView

@@ -9,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -60,6 +61,7 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                     adaptador.filtrar(listaFiltrada)
                 } else {
                     binding.rvLista.visibility = View.GONE
+
                 }
             }
         })
@@ -111,15 +113,29 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 return true
             }
 
+            R.id.nav_cerrar_Sesion -> {
+                    val sharedPreferences = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    editor.clear()
+                    editor.apply()
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    Toast.makeText(this, "Inicio de sesion cerrado con exito", Toast.LENGTH_SHORT)
+                        .show()
+                    finish()
 
+            }
 
             else -> return false
         }
+        return false
     }
 
 
 
     // Manejar el botón de retroceso para cerrar el drawer si está abierto
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
             binding.drawerLayout.closeDrawer(GravityCompat.END)

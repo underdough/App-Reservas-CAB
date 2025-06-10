@@ -5,10 +5,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.amkj.appreservascab.databinding.ActivityMenuAprendizInstruBinding
 import com.amkj.appreservascab.databinding.ActivitySolicitudReservasBinding
 
-class SolicitudReservas: AppCompatActivity() {
+class SolicitudReservas : AppCompatActivity() {
 
     private lateinit var binding: ActivitySolicitudReservasBinding
 
@@ -17,7 +16,7 @@ class SolicitudReservas: AppCompatActivity() {
         binding = ActivitySolicitudReservasBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainlySolicitudReservas)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets

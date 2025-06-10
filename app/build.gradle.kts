@@ -52,7 +52,7 @@ dependencies {
 //    recycle views
     implementation(libs.androidx.recyclerview)
 // //    recycler view seleccionable
-//    implementation("androidx.recyclerview:recyclerview-selection:1.2.0")
+    implementation("androidx.recyclerview:recyclerview-selection:1.2.0")
 
     // retrofit
 //    implementation(libs.retrofit)
