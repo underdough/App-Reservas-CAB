@@ -10,6 +10,6 @@ interface ConexionDB {
          val url: String = "http://192.168.20.42:80/phpGestionReservas"
      }
     @GET("/consultaUsuario")
-    suspend fun getconsultaUsuario(): retrofit2.Response<List<ModeloUsuarios>>
+    suspend fun consultaUsuario(): retrofit2.Response<List<ModeloUsuarios>>
 
 }

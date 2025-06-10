@@ -8,3 +8,9 @@ data class ModeloUsuarios(
     var rol: String,
     var bloque:String
 )
+
+object ModeloDatosUsuarios{
+    val datos: List<ModeloUsuarios> = listOf(
+
+    )
+}

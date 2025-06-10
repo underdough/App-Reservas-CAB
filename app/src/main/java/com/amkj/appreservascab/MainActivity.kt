@@ -4,17 +4,21 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.amkj.appreservascab.Admin.AdminRegistrarUsuario
+import com.amkj.appreservascab.Modelos.UsuarioViewModel
 import com.amkj.appreservascab.databinding.ActivityMainBinding
 import retrofit2.Retrofit
+
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    val usuarioViewModel : UsuarioViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         }
 
             AdminRegistrarUsuario.iniciar(applicationContext)
+            listarUsuario()
 
 
 
@@ -93,6 +98,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, RecuperarContrasena::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun listarUsuario() {
+        usuarioViewModel.addUsuarioLista(Model)
     }
 
 //    fun getRetrofit(): Retrofit{
