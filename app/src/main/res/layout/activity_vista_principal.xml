@@ -206,7 +206,7 @@
 
     <!-- Navigation Drawer (Menú lateral) -->
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/vista_navegacion"
+        android:id="@+id/Vista_navegacionxd"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="end"

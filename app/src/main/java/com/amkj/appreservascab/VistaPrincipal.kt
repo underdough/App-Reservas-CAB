@@ -1,36 +1,35 @@
 package com.amkj.appreservascab
 
+import android.content.Intent
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.core.view.GravityCompat
+import com.google.android.material.navigation.NavigationView
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amkj.appreservascab.Adapters.AdapterAmbientes
 import com.amkj.appreservascab.Modelos.ModelAmbientes
-import com.amkj.appreservascab.Modelos.UsuarioViewModel
-import com.amkj.appreservascab.Modelos.usuarioViewModel
 import com.amkj.appreservascab.databinding.ActivityVistaPrincipalBinding
-import com.amkj.appreservascab.servicios.ConexionDB
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-class VistaPrincipal : AppCompatActivity() {
+class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityVistaPrincipalBinding
     private lateinit var adaptador: AdapterAmbientes
     private lateinit var listaOriginal: ArrayList<ModelAmbientes>
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Usar el binding para inflar la vista
         binding = ActivityVistaPrincipalBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // CORRECCIÓN: Usar el ID correcto del NavigationView
+        binding.VistaNavegacionxd.setNavigationItemSelectedListener(this)
 
         // Datos de ejemplo
         listaOriginal = arrayListOf(
@@ -65,26 +64,67 @@ class VistaPrincipal : AppCompatActivity() {
             }
         })
 
+        // Esta diablura abre el menu de opciones
+        binding.ibMenu.setOnClickListener {
+            binding.drawerLayout.openDrawer(GravityCompat.END)
+        }
     }
 
-    fun getRetrofit(): Retrofit{
-        return Retrofit.Builder()
-            .baseUrl(ConexionDB.url)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
+    // redirecciones
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.nav_reserva -> {
+                try {
+                    val intent = Intent(this, SolicitudReservas::class.java)
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    e.printStackTrace()
 
-    private fun listaUsuario(){
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-
-            val call = getRetrofit().create(ConexionDB::class.java).consultaUsuario()
-                if(call.isSuccessful && call.body() != null){
-                    withContext(Dispatchers.Main){
-
-                    }
                 }
+                return true
             }
+
+            R.id.nav_mi_reservas -> {
+                try {
+                    val intent = Intent(this, InstruMisReservas::class.java)
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                return true
+            }
+
+            R.id.nav_perfil -> {
+                try {
+                    val intent = Intent(this, PerfilAprendizInstru::class.java)
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                return true
+            }
+
+            R.id.nav_quejas -> {
+                // hagan la actividad de quejas
+                // val intent = Intent(this, QuejasActivity::class.java)
+                // startActivity(intent)
+                return true
+            }
+
+
+
+            else -> return false
+        }
+    }
+
+
+
+    // Manejar el botón de retroceso para cerrar el drawer si está abierto
+    override fun onBackPressed() {
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.END)
+        } else {
+            super.onBackPressed()
         }
     }
 }

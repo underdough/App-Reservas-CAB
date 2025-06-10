@@ -13,6 +13,12 @@
         android:theme="@style/Theme.AppReservasCAB"
         tools:targetApi="31">
         <activity
+            android:name=".xd"
+            android:exported="false" />
+        <activity
+            android:name=".Usuarios.xd"
+            android:exported="false" />
+        <activity
             android:name=".InstruMisReservas"
             android:exported="false" />
         <activity
