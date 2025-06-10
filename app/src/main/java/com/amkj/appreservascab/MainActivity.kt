@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.amkj.appreservascab.Admin.AdminRegistrarUsuario
+import com.amkj.appreservascab.Modelos.ModeloDatosUsuarios
+import com.amkj.appreservascab.Modelos.ModeloUsuarios
 import com.amkj.appreservascab.Modelos.UsuarioViewModel
 import com.amkj.appreservascab.databinding.ActivityMainBinding
 import retrofit2.Retrofit
@@ -101,7 +103,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun listarUsuario() {
-        usuarioViewModel.addUsuarioLista(Model)
+        usuarioViewModel.addUsuarioLista(ModeloDatosUsuarios.datos.toMutableList())
     }
 
 //    fun getRetrofit(): Retrofit{
