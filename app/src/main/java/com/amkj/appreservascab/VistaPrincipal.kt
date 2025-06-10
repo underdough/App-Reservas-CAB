@@ -1,4 +1,3 @@
-
 package com.amkj.appreservascab
 
 import android.os.Bundle
@@ -9,13 +8,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amkj.appreservascab.Adapters.AdapterAmbientes
 import com.amkj.appreservascab.Modelos.ModelAmbientes
+import com.amkj.appreservascab.Modelos.UsuarioViewModel
+import com.amkj.appreservascab.Modelos.usuarioViewModel
 import com.amkj.appreservascab.databinding.ActivityVistaPrincipalBinding
+import com.amkj.appreservascab.servicios.ConexionDB
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class VistaPrincipal : AppCompatActivity() {
 
     private lateinit var binding: ActivityVistaPrincipalBinding
     private lateinit var adaptador: AdapterAmbientes
     private lateinit var listaOriginal: ArrayList<ModelAmbientes>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,5 +64,27 @@ class VistaPrincipal : AppCompatActivity() {
                 }
             }
         })
+
+    }
+
+    fun getRetrofit(): Retrofit{
+        return Retrofit.Builder()
+            .baseUrl(ConexionDB.url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    private fun listaUsuario(){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+
+            val call = getRetrofit().create(ConexionDB::class.java).consultaUsuario()
+                if(call.isSuccessful && call.body() != null){
+                    withContext(Dispatchers.Main){
+
+                    }
+                }
+            }
+        }
     }
 }
