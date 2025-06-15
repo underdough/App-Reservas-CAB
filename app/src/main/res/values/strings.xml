@@ -43,4 +43,8 @@
     <string name="nombreEquipo">Equipo de computo:</string>
     <string name="SolicitadoPor">Solicitado por:</string>
     <string name="Referencia">Referencia:</string>
+    <string name="txtQuejas">Quejas o novedades</string>
+    <string name="descripcionDetallada">Descripción detallada:</string>
+    <string name="evidencia">Evidencia:</string>
+    <string name="seleccionar">Seleccionar imagen</string>
 </resources>
