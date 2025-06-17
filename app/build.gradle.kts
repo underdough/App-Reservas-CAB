@@ -53,15 +53,15 @@ dependencies {
 //    implementation("androidx.recyclerview:recyclerview-selection:1.2.0")
 
     // retrofit
-<<<<<<< HEAD
+
 //    implementation(libs.retrofit)
 //    implementation (libs.converter.gson)
 
-=======
-    implementation(libs.retrofit)
-    implementation (libs.converter.gson)
+
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 //    implementation("com.android.volley:volley:1.2.1")
->>>>>>> cd4810b805f411e97cae0baa3b90201d8a46e73d
+
     implementation(libs.androidx.runtime)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

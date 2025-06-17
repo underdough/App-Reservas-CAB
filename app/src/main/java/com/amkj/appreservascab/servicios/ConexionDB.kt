@@ -1,6 +1,6 @@
 package com.amkj.appreservascab.servicios
 
-<<<<<<< HEAD
+
 import com.amkj.appreservascab.Modelos.ModeloUsuarios
 import retrofit2.Response
 import retrofit2.http.Body
@@ -14,6 +14,7 @@ interface ConexionDB {
     companion object {
         const val URL = "http://192.168.1.23:80/phpGestionReservas/"
     }
+
     @POST("consultaUsuario.php")
     suspend fun consultaUsuario(): Response<List<ModeloUsuarios>>
 
@@ -23,13 +24,6 @@ interface ConexionDB {
     @PUT("modificarUsuario.php")
     suspend fun modificarUsuario(@Body mReservas: ModeloUsuarios): retrofit2.Response<ModeloUsuarios>
 
-    @DELETE("eliminarUsuario.php")
-    suspend fun eliminarUsuario(@Query("id") id: Int): retrofit2.Response<Any>
-=======
-
-
-interface ConexionDB {
-
->>>>>>> cd4810b805f411e97cae0baa3b90201d8a46e73d
-
+//    @DELETE("eliminarUsuario.php")
+//    suspend fun eliminarUsuario(@Query("id") id: Int): retrofit2.<Any>
 }
