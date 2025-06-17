@@ -11,22 +11,22 @@ class UsuarioViewModel: ViewModel() {
         val dataListUsuario: MutableLiveData<MutableList<ModeloUsuarios>>
             get() = _datalistUsuario
 
-        fun addUsuarioLista(reservas: List<ModeloUsuarios>) {
+        fun addUsuarioLista(mReservas: List<ModeloUsuarios>) {
             val currentList = _datalistUsuario.value ?: mutableListOf()
-            currentList.addAll(reservas)
+            currentList.addAll(mReservas)
             _datalistUsuario.postValue(currentList)
         }
 
-        fun addUsuario(reservas: ModeloUsuarios) {
+        fun addUsuario(mReservas: ModeloUsuarios) {
             val currentList = _datalistUsuario.value ?: mutableListOf()
-            currentList.add(reservas)
+            currentList.add(mReservas)
             _datalistUsuario.postValue(currentList)
         }
 
-        fun actualizarUsuario(position: Int, mInstagram: ModeloUsuarios) {
+        fun actualizarUsuario(position: Int, mReservas: ModeloUsuarios) {
             val currentList = _datalistUsuario.value ?: mutableListOf()
             if (position in currentList.indices) {
-                currentList[position] = mInstagram
+                currentList[position] = mReservas
                 _datalistUsuario.postValue(currentList)
             }
         }
@@ -42,3 +42,5 @@ class UsuarioViewModel: ViewModel() {
 
 
 }
+
+

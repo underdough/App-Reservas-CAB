@@ -57,7 +57,7 @@ dependencies {
     // retrofit
 //    implementation(libs.retrofit)
 //    implementation (libs.converter.gson)
-//    implementation("com.android.volley:volley:1.2.1")
+
     implementation(libs.androidx.runtime)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
@@ -71,5 +71,11 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     implementation("androidx.activity:activity-ktx:1.8.2")
+
+
+        implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0") // Usa una versión compatible
+
+//    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+
 
 }
