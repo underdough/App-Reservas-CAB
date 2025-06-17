@@ -42,8 +42,6 @@ android {
 
 dependencies {
 
-
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -52,25 +50,23 @@ dependencies {
 //    recycle views
     implementation(libs.androidx.recyclerview)
 // //    recycler view seleccionable
-    implementation("androidx.recyclerview:recyclerview-selection:1.2.0")
+//    implementation("androidx.recyclerview:recyclerview-selection:1.2.0")
 
     // retrofit
+<<<<<<< HEAD
 //    implementation(libs.retrofit)
 //    implementation (libs.converter.gson)
 
+=======
+    implementation(libs.retrofit)
+    implementation (libs.converter.gson)
+//    implementation("com.android.volley:volley:1.2.1")
+>>>>>>> cd4810b805f411e97cae0baa3b90201d8a46e73d
     implementation(libs.androidx.runtime)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.navigation.fragment.ktx)
-    implementation(libs.navigation.ui.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
-    implementation("androidx.activity:activity-ktx:1.8.2")
 
 
         implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0") // Usa una versión compatible

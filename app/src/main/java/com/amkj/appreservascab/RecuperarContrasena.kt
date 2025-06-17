@@ -32,7 +32,8 @@ class RecuperarContrasena : AppCompatActivity() {
         }
 
         binding.btnEnviarInstrucciones.setOnClickListener{
-            onBackPressedDispatcher
+            val intent = Intent(this, RCCorreoEnviado::class.java)
+            startActivity(intent)
         }
 
     }

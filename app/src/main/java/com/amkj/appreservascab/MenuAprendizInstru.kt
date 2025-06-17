@@ -1,21 +1,19 @@
 package com.amkj.appreservascab
 
 import android.os.Bundle
-import android.view.Menu
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.amkj.appreservascab.databinding.ActivityMainBinding
-import com.amkj.appreservascab.databinding.ActivityMenuAprendizInstruBinding
 
 class MenuAprendizInstru: AppCompatActivity() {
 
-    private lateinit var binding: ActivityMenuAprendizInstruBinding
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMenuAprendizInstruBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

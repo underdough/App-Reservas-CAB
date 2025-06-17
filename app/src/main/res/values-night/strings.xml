@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="iniciosesion" tools:ignore="ExtraTranslation">Inicio de sesión</string>
+<resources>
+    <string name="iniciosesion">Inicio de sesión</string>
 </resources>

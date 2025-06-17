@@ -2,8 +2,8 @@ package com.amkj.appreservascab
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
+<<<<<<< HEAD
 import androidx.appcompat.app.AppCompatActivity
 //import androidx.privacysandbox.tools.core.generator.build
 import com.amkj.appreservascab.databinding.ActivityMainBinding
@@ -17,6 +17,15 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+=======
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.amkj.appreservascab.Admin.AdminRegistrarUsuario
+import com.amkj.appreservascab.databinding.ActivityMainBinding
+
+>>>>>>> cd4810b805f411e97cae0baa3b90201d8a46e73d
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +35,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+<<<<<<< HEAD
+=======
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
+            AdminRegistrarUsuario.iniciar(applicationContext)
+
+
+>>>>>>> cd4810b805f411e97cae0baa3b90201d8a46e73d
 
         binding.ivVerContra.setOnClickListener {
             var contraVisible = false
@@ -34,6 +55,7 @@ class MainActivity : AppCompatActivity() {
                     // Ocultar contraseña
                     binding.etContra.transformationMethod = null
                     binding.ivVerContra.setImageResource(R.drawable.ic_ojo_abierto)
+<<<<<<< HEAD
                     binding.etContra.inputType = android.text.InputType.TYPE_CLASS_TEXT or
                             android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
                     binding.ivVerContra.setImageResource(R.drawable.ic_ojo_cerrado)
@@ -45,6 +67,18 @@ class MainActivity : AppCompatActivity() {
                     binding.etContra.inputType = android.text.InputType.TYPE_CLASS_TEXT or
                             android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                     binding.ivVerContra.setImageResource(R.drawable.ic_ojo_abierto)
+=======
+//                    binding.etContra.inputType = android.text.InputType.TYPE_CLASS_TEXT or
+//                            android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+//                    binding.ivVerContra.setImageResource(R.drawable.ic_ojo_cerrado) // ← usa tu ícono de "ojo cerrado"
+                } else {
+                    // Mostrar contraseña
+                    binding.etContra.transformationMethod = android.text.method.PasswordTransformationMethod.getInstance()
+                    binding.ivVerContra.setImageResource(R.drawable.ic_ojo_cerrado) // ícono de ojo normal
+//                    binding.etContra.inputType = android.text.InputType.TYPE_CLASS_TEXT or
+//                            android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+//                    binding.ivVerContra.setImageResource(R.drawable.ic_ojo_abierto) // ← usa tu ícono de "ojo abierto"
+>>>>>>> cd4810b805f411e97cae0baa3b90201d8a46e73d
                 }
                 // Mueve el cursor al final del texto
                 binding.etContra.setSelection(binding.etContra.text.length)
@@ -60,6 +94,7 @@ class MainActivity : AppCompatActivity() {
             if (correo.isEmpty() || contrasena.isEmpty()) {
                 Toast.makeText(this, "No se permiten campos vacíos.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
+<<<<<<< HEAD
             } else {
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
@@ -124,9 +159,39 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+=======
+            }
+
+            val adminValido = AdminRegistrarUsuario.usuariosad.any {
+                it.correo == correo && it.contrasena == contrasena
+            }
+
+            if (adminValido) {
+                // prueba
+                val intent = Intent(this, MenuAprendizInstru::class.java)
+                intent.putExtra("correo", correo)
+                startActivity(intent)
+
+
+            } else {
+                Toast.makeText(this, "El usuario no está registrado, comuníquese con el administrador del sistema", Toast.LENGTH_SHORT).show()
+            }
+
+
+
+        }
+
+
+>>>>>>> cd4810b805f411e97cae0baa3b90201d8a46e73d
         binding.tvOlvidaste.setOnClickListener {
             val intent = Intent(this, RecuperarContrasena::class.java)
             startActivity(intent)
         }
     }
+<<<<<<< HEAD
 }
+=======
+
+
+    }
+>>>>>>> cd4810b805f411e97cae0baa3b90201d8a46e73d

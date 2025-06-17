@@ -3,21 +3,17 @@
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:id="@+id/mainlySolicitudReservas"
     android:background="@android:color/white"
-    android:layout_height="match_parent"
-    tools:context=".SolicitudReservas"
-    android:gravity="center">
+    android:layout_height="match_parent">
 
-<!--        android:layout_marginStart="100dp"-->
-<!--        android:layout_marginEnd="15dp"-->
 
     <TextView
         android:id="@+id/tvTitulo"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="15dp"
         android:text="@string/txtSolicitudReservas"
         android:textAlignment="center"
         android:textColor="@android:color/black"
@@ -28,9 +24,8 @@
         android:id="@+id/tvNombreAmbiente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
         android:text="@string/nombreAmbiente"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -42,7 +37,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginTop="15dp"
-        android:layout_gravity="start"
         android:textColor="@color/txt_color"
         android:textSize="28sp"/>
 
@@ -52,7 +46,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginTop="15dp"
-        android:layout_gravity="start"
         android:text="@string/SolicitadoPor"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -64,7 +57,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginTop="15dp"
-        android:layout_gravity="start"
         android:textColor="@color/txt_color"
         android:textSize="28sp"/>
 
@@ -74,7 +66,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginTop="15dp"
-        android:layout_gravity="start"
         android:text="@string/fecha"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -87,7 +78,6 @@
         android:layout_marginHorizontal="100dp"
         android:layout_marginTop="5pt"
         android:textAlignment="center"
-        android:layout_gravity="start"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_calendario"
         android:textColor="@color/white" />
@@ -98,7 +88,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginTop="10dp"
-        android:layout_gravity="start"
         android:text="@string/jornada"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -110,8 +99,7 @@
         android:layout_height="50dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginStart="55dp"
-        android:layout_marginTop="5pt"
-        android:layout_gravity="start">
+        android:layout_marginTop="5pt">
 
         <CheckBox
             android:id="@+id/checkMañana"
@@ -143,11 +131,7 @@
             android:buttonTint="@color/btn_sena" />
     </LinearLayout>
 
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginBottom="20dp">
+
     <ImageButton
         android:id="@+id/btnCancelar"
         android:layout_width="70dp"
@@ -165,11 +149,9 @@
         android:layout_height="70dp"
         android:layout_marginHorizontal="300dp"
         android:layout_marginTop="-70dp"
-        android:layout_gravity="start"
         android:backgroundTint="@color/colorBtns"
-        android:layout_marginBottom="20dp"
+        android:textAlignment="center"
         android:src="@drawable/ic_guardar"
         android:textColor="@color/white" />
-</LinearLayout>
 
 </LinearLayout>
