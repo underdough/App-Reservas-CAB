@@ -53,7 +53,8 @@ class CambiarContrasena : AppCompatActivity() {
                 nombre = SesionUsuarioPrefs.obtenerNombre(),
                 correo = SesionUsuarioPrefs.obtenerCorreo(),
                 contrasena = nuevaContra,
-                rol = SesionUsuarioPrefs.obtenerRol()
+                rol = SesionUsuarioPrefs.obtenerRol(),
+                bloque = SesionUsuarioPrefs.obtenerBloque()
             )
 
             CoroutineScope(Dispatchers.IO).launch {

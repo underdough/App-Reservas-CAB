@@ -11,6 +11,7 @@ object SesionUsuarioPrefs {
     private const val KEY_DOCUMENTO = "num_documento"
     private const val KEY_ROL = "rol"
     private const val KEY_ID= "id"
+    private const val KEY_BLOQUE= "bloque"
 
     private lateinit var prefs: SharedPreferences
 
@@ -34,4 +35,5 @@ object SesionUsuarioPrefs {
     fun obtenerDocumento(): String = prefs.getString(KEY_DOCUMENTO, "") ?: ""
     fun obtenerRol(): String = prefs.getString(KEY_ROL, "") ?: ""
     fun obtenerId():String=prefs.getString(KEY_ID, "") ?:""
+    fun obtenerBloque():String=prefs.getString(KEY_ID, "") ?:""
 }

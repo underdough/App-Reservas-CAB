@@ -48,4 +48,7 @@
     <string name="evidencia">Evidencia:</string>
     <string name="seleccionar">Seleccionar imagen</string>
     <string name="txt_VerificarToken">Verificar Token\n</string>
+    <string name="bienvenido">¡Bienvenid@!</string>
+    <string name="txt_notificacion">Notificacion</string>
+    <string name="disrecursos">Recursos Disponinbles</string>
 </resources>

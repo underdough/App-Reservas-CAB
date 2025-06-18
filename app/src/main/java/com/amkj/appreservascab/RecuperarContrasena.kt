@@ -29,6 +29,10 @@ class RecuperarContrasena : AppCompatActivity() {
             insets
         }
 
+        binding.ibVolver.setOnClickListener{
+            onBackPressedDispatcher.onBackPressed()
+        }
+
         // Acción al presionar el botón para enviar código
         binding.btnEnviarInstrucciones.setOnClickListener {
             val correo = binding.etCorreoElectronico.text.toString().trim()

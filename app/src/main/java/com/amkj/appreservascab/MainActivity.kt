@@ -3,11 +3,13 @@ package com.amkj.appreservascab
 import android.content.Intent
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.amkj.appreservascab.databinding.ActivityMainBinding
 import com.amkj.appreservascab.servicios.ConexionDB
 import com.amkj.appreservascab.Modelos.ModeloUsuarios
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,19 +47,28 @@ class MainActivity : AppCompatActivity() {
 
             if (correo.isEmpty() || contrasena.isEmpty()) {
                 Toast.makeText(this, "No se permiten campos vacíos.", Toast.LENGTH_SHORT).show()
-
-                val intent = Intent(this@MainActivity, RecuperarContrasena::class.java)
-                startActivity(intent)
+                return@setOnClickListener // ⛔ Detiene la ejecución si hay campos vacíos
             }
-        }
-    }
-}
 
-            /*CoroutineScope(Dispatchers.IO).launch {
+            // ✅ Ahora sí puedes usar correo y contrasena dentro del scope
+            CoroutineScope(Dispatchers.IO).launch {
+
                 try {
+                    val logging = HttpLoggingInterceptor()
+                    logging.level = HttpLoggingInterceptor.Level.BODY
+
+                    val client = OkHttpClient.Builder()
+                        .addInterceptor(logging)
+                        .build()
+
+                    val gson = GsonBuilder()
+                        .setLenient()
+                        .create()
+
                     val retrofit = Retrofit.Builder()
                         .baseUrl(ConexionDB.URL)
-                        .addConverterFactory(GsonConverterFactory.create())
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create(gson))
                         .build()
 
                     val service = retrofit.create(ConexionDB::class.java)
@@ -71,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                             } ?: false
 
                             if (usuarioValido) {
-                                val intent = Intent(this@MainActivity, RecuperarContrasena::class.java)
+                                val intent = Intent(this@MainActivity, VistaPrincipal::class.java)
                                 startActivity(intent)
                             } else {
                                 Toast.makeText(this@MainActivity, "Correo o contraseña incorrectos.", Toast.LENGTH_SHORT).show()
@@ -85,14 +96,18 @@ class MainActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(this@MainActivity, "Error de red: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Log.e("amkj","${e.message}" )
                     }
                 }
             }
         }
 
+
         binding.tvOlvidaste.setOnClickListener {
             startActivity(Intent(this, RecuperarContrasena::class.java))
         }
+        }
     }
-}
-*/
+
+
+
