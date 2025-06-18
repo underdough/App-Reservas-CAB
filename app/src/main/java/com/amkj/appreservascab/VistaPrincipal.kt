@@ -9,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -70,6 +71,23 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         binding.ibMenu.setOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.END)
         }
+
+        // Obtener referencia del layout del menú lateral
+        val headerView = binding.VistaNavegacionxd.getHeaderView(0)
+        val tvUserName = headerView.findViewById<TextView>(R.id.tvUserName)
+        val tvUserSubtitle = headerView.findViewById<TextView>(R.id.tvUserSubtitle)
+
+// Obtener nombre y rol del usuario desde SharedPreferences
+        val sharedPref = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
+        val nombre = sharedPref.getString("nombre", "Nombre Usuario")
+        val rol = sharedPref.getString("rol", "Rol Desconocido")
+
+// Mostrar en los TextView del menú lateral
+        tvUserName.text = nombre
+        tvUserSubtitle.text = rol
+
+
+
     }
 
     // redirecciones
@@ -98,18 +116,21 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
             R.id.nav_perfil -> {
                 try {
-                    val intent = Intent(this, PerfilAprendizInstru::class.java)
+                    val intent = Intent(this@VistaPrincipal, PerfilAprendizInstru::class.java)
                     startActivity(intent)
-                } catch (e: Exception) {
+                } catch (e: Exception){
                     e.printStackTrace()
                 }
-                return true
             }
 
             R.id.nav_quejas -> {
                 // hagan la actividad de quejas
-                // val intent = Intent(this, QuejasActivity::class.java)
-                // startActivity(intent)
+                try {
+                 val intent = Intent(this, QuejasNovedades::class.java)
+                 startActivity(intent)
+                } catch (e: Exception){
+                    e.printStackTrace()
+                }
                 return true
             }
 

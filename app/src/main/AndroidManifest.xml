@@ -19,6 +19,15 @@
         android:theme="@style/Theme.AppReservasCAB"
         tools:targetApi="31">
         <activity
+            android:name=".PerfilAprendizInstru"
+            android:exported="false" />
+        <activity
+            android:name=".QuejasNovedades"
+            android:exported="false" />
+        <activity
+            android:name=".SolicitudReservas"
+            android:exported="false" />
+        <activity
             android:name=".InstruMisReservas"
             android:exported="false" />
         <activity

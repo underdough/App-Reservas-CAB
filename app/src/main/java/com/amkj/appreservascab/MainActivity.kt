@@ -77,11 +77,18 @@ class MainActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val usuarios = response.body()
                         withContext(Dispatchers.Main) {
-                            val usuarioValido = usuarios?.any {
+                            val usuarioValido = usuarios?.find {
                                 it.correo == correo && it.contrasena == contrasena
-                            } ?: false
+                            }
 
-                            if (usuarioValido) {
+
+                            if (usuarioValido!=null) {
+                                val sharedPref = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
+                                with(sharedPref.edit()) {
+                                    putString("nombre", usuarioValido.nombre)
+                                    putString("rol", usuarioValido.rol)
+                                    apply()
+                                }
                                 val intent = Intent(this@MainActivity, VistaPrincipal::class.java)
                                 startActivity(intent)
                             } else {
@@ -100,6 +107,8 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
+
         }
 
 
