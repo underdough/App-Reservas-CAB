@@ -30,6 +30,14 @@ class QuejasNovedades : AppCompatActivity() {
             insets
         }
 
+        // Obtener nombre del usuario desde SharedPreferences
+        val sharedPref = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
+        val nombreUsuario = sharedPref.getString("nombre", "Usuario no identificado")
+
+// Mostrar el nombre en el TextView correspondiente
+        binding.tvNombre.text = nombreUsuario
+
+
         // Selección de imagen
         binding.miImagen.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)

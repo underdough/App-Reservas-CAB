@@ -22,5 +22,9 @@ class InstruMisReservas : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        binding.ibVolver.setOnClickListener{
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
 }

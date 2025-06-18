@@ -87,6 +87,7 @@ class MainActivity : AppCompatActivity() {
                                 with(sharedPref.edit()) {
                                     putString("nombre", usuarioValido.nombre)
                                     putString("rol", usuarioValido.rol)
+                                    putString("correo", usuarioValido.correo)
                                     apply()
                                 }
                                 val intent = Intent(this@MainActivity, VistaPrincipal::class.java)
