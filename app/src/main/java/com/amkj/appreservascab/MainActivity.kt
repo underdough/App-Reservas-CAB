@@ -18,6 +18,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
             if (correo.isEmpty() || contrasena.isEmpty()) {
                 Toast.makeText(this, "No se permiten campos vacíos.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener // ⛔ Detiene la ejecución si hay campos vacíos
+                return@setOnClickListener // Detiene la ejecución si hay campos vacíos
             }
 
             // ✅ Ahora sí puedes usar correo y contrasena dentro del scope
@@ -78,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                         val usuarios = response.body()
                         withContext(Dispatchers.Main) {
                             val usuarioValido = usuarios?.find {
-                                it.correo == correo && it.contrasena == contrasena
+                                it.correo == correo && it.contrasena == md5(contrasena) || it.contrasena == contrasena
                             }
 
 
@@ -118,6 +119,9 @@ class MainActivity : AppCompatActivity() {
         }
         }
     }
-
+fun md5(input: String): String {
+    val bytes = MessageDigest.getInstance("MD5").digest(input.toByteArray())
+    return bytes.joinToString("") { "%02x".format(it) }
+}
 
 

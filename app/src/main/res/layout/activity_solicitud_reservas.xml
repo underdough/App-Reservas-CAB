@@ -22,7 +22,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/tvNombreAmbiente"
+        android:id="@+id/tvAmbiente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
@@ -33,13 +33,13 @@
         android:textSize="24sp"/>
 
     <TextView
-        android:id="@+id/tvNomUser"
+        android:id="@+id/tvNombreAmbiente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginTop="15dp"
         android:textColor="@color/txt_color"
-        android:textSize="28sp"/>
+        android:textSize="28sp" />
 
     <TextView
         android:id="@+id/tvSolicitado"
@@ -53,13 +53,13 @@
         android:textSize="24sp"/>
 
     <TextView
-        android:id="@+id/tvInfoTelefono"
+        android:id="@+id/tvSolicitante"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginTop="15dp"
         android:textColor="@color/txt_color"
-        android:textSize="28sp"/>
+        android:textSize="28sp" />
 
     <TextView
         android:id="@+id/tvFecha"
@@ -82,6 +82,17 @@
         android:background="@android:color/transparent"
         android:src="@drawable/ic_calendario"
         android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/tvFechaSeleccionada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
+
 
     <TextView
         android:id="@+id/tvJornada"

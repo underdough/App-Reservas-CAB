@@ -7,7 +7,7 @@
     android:background="@android:color/white"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".PerfilAprendizInstru"
-    android:gravity="center">
+    >
 
     <ImageButton
         android:background="@android:color/transparent"
@@ -28,6 +28,7 @@
         android:layout_marginTop="2pt"
         android:background="@drawable/ic_user"
         android:textColor="@color/txt_color"
+        android:layout_gravity="center"
         android:contentDescription="@string/logo_sena"/>
 
     <TextView
