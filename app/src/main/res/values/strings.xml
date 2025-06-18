@@ -47,4 +47,5 @@
     <string name="descripcionDetallada">Descripción detallada:</string>
     <string name="evidencia">Evidencia:</string>
     <string name="seleccionar">Seleccionar imagen</string>
+    <string name="txt_VerificarToken">Verificar Token\n</string>
 </resources>
