@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <TextView
@@ -41,7 +42,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tvNombre"
+        android:id="@+id/tvComputo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
@@ -63,18 +64,14 @@
         android:background="@drawable/borde_vistappal"
         >
 
-        <ImageView
-            android:id="@+id/imagen1"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop"
-            android:layout_marginEnd="8dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerEquipos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:clipToPadding="false"
+            tools:listitem="@layout/item_equipo" />
 
-        <ImageView
-            android:id="@+id/imagen2"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop" />
     </LinearLayout>
 
 

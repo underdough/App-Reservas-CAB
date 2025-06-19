@@ -7,16 +7,21 @@ import com.google.android.material.navigation.NavigationView
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.amkj.appreservascab.Adaptadores.AdapterEquipos
 import com.amkj.appreservascab.Adapters.AdapterAmbientes
 import com.amkj.appreservascab.Modelos.ModeloAmbientes
 import com.amkj.appreservascab.databinding.ActivityVistaPrincipalBinding
+import com.amkj.appreservascab.servicios.RetrofitClient
+import kotlinx.coroutines.launch
 
 class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -66,6 +71,31 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 }
             }
         })
+
+        binding.lyAmbientesPpal.recyclerEquipos.layoutManager = LinearLayoutManager(this,
+            LinearLayoutManager.HORIZONTAL,false)
+        lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.instance.obtenerEquipos()
+                val responseBody = response.body()
+                Log.d("DEBUG_EQUIPOS", "JSON recibido: ${response.raw()}")
+
+                if (response.isSuccessful && responseBody != null) {
+                    val equipos = responseBody
+                    binding.lyAmbientesPpal.recyclerEquipos.adapter = AdapterEquipos(equipos)
+                } else {
+                    Log.e("ERROR", "Error al obtener equipos: ${response.errorBody()?.string()}")
+                }
+
+                if (response.isSuccessful && response.body() != null) {
+                    val equipos = response.body()!!
+                    binding.lyAmbientesPpal.recyclerEquipos.adapter = AdapterEquipos(equipos)
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@VistaPrincipal, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+
 
         // Esta diablura abre el menu de opciones
         binding.ibMenu.setOnClickListener {
