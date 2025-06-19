@@ -134,6 +134,16 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 return true
             }
 
+            R.id.nav_crear_equipo->{
+                try {
+                    val intent = Intent(this, CrearEquipos::class.java)
+                    startActivity(intent)
+                } catch (e: Exception){
+                    e.printStackTrace()
+                }
+                return true
+            }
+
             R.id.nav_cerrar_Sesion -> {
                 val sharedPreferences = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
                 val editor = sharedPreferences.edit()

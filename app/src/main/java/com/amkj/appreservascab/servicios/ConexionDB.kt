@@ -1,10 +1,12 @@
 package com.amkj.appreservascab.servicios
 
 
+import com.amkj.appreservascab.Modelos.ModeloActualizarContrasena
 import com.amkj.appreservascab.Modelos.ModeloCorreo
 import com.amkj.appreservascab.Modelos.ModeloUsuarios
 import com.amkj.appreservascab.Modelos.ModeloVerificarToken
 import com.amkj.appreservascab.Modelos.RespuestaCodigo
+import com.amkj.appreservascab.Modelos.RespuestaContraNue
 import com.amkj.appreservascab.Modelos.RespuestaVerificacion
 import retrofit2.Response
 import retrofit2.http.Body
@@ -18,7 +20,7 @@ import retrofit2.http.Query
 
 interface ConexionDB {
     companion object {
-        const val URL = "http://192.168.134.46:80/phpGestionReservas/"
+        const val URL = "http://192.168.1.23:80/phpGestionReservas/"
     }
 
     @POST("consultaUsuario.php")
@@ -37,5 +39,5 @@ interface ConexionDB {
     suspend fun verificarToken(@Body datos: ModeloVerificarToken): Response<RespuestaVerificacion>
 
     @PUT("actualizarContrasena.php")
-    suspend fun actualizarContrasena(@Body usuario: ModeloUsuarios): Response<RespuestaCodigo>
+    suspend fun actualizarContrasena(@Body datos: ModeloActualizarContrasena): Response<RespuestaContraNue>
 }

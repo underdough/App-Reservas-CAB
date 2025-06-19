@@ -1,10 +1,13 @@
 package com.amkj.appreservascab
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.amkj.appreservascab.Modelos.ModeloActualizarContrasena
 import com.amkj.appreservascab.databinding.ActivityCambiarContrasenaBinding
 import com.amkj.appreservascab.Modelos.ModeloUsuarios
 import com.amkj.appreservascab.Usuarios.SesionUsuarioPrefs
@@ -20,6 +23,8 @@ class CambiarContrasena : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val correoRecibido = intent.getStringExtra("correo_usuario") ?: ""
+        Log.d("amkj", "Correo recibido por intent: $correoRecibido")
 
         // Iniciar preferencias para obtener datos del usuario
         SesionUsuarioPrefs.iniciar(this)
@@ -47,15 +52,13 @@ class CambiarContrasena : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Crear objeto con los datos completos desde SharedPreferences
-            val usuarioActualizado = ModeloUsuarios(
-                id = SesionUsuarioPrefs.obtenerId(),
-                nombre = SesionUsuarioPrefs.obtenerNombre(),
-                correo = SesionUsuarioPrefs.obtenerCorreo(),
-                contrasena = nuevaContra,
-                rol = SesionUsuarioPrefs.obtenerRol(),
-                bloque = SesionUsuarioPrefs.obtenerBloque()
+
+            val usuarioActualizado = ModeloActualizarContrasena(
+                correo = correoRecibido,
+                contrasena = nuevaContra
             )
+
+
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {
@@ -63,7 +66,10 @@ class CambiarContrasena : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         if (response.isSuccessful && response.body() != null) {
                             Toast.makeText(this@CambiarContrasena, "Contraseña actualizada", Toast.LENGTH_LONG).show()
-                            finish()
+                            val intent = Intent(this@CambiarContrasena, MainActivity::class.java)
+                            startActivity(intent)
+                            Log.d("amkj", "Datos enviados: $usuarioActualizado")
+
                         } else {
                             Toast.makeText(this@CambiarContrasena, "Error al actualizar", Toast.LENGTH_LONG).show()
                         }

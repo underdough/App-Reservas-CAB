@@ -1,6 +1,6 @@
 package com.amkj.appreservascab.Modelos
 
-data class RespuestaCodigo(
+data class RespuestaContraNue (
+    val success: Boolean,
     val message: String?,
-    val error: String?
 )

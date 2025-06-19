@@ -51,4 +51,8 @@
     <string name="bienvenido">¡Bienvenid@!</string>
     <string name="txt_notificacion">Notificacion</string>
     <string name="disrecursos">Recursos Disponinbles</string>
+    <string name="txtCrearequipo">Crear equipos</string>
+    <string name="imagen">Imagen</string>
+    <string name="txtmarca">Marca:</string>
+    <string name="txtmodelo">Modelo:</string>
 </resources>

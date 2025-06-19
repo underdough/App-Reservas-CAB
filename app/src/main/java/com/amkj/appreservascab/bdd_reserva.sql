@@ -111,7 +111,8 @@ CREATE TABLE `usuarios` (
   `correo` varchar(100) DEFAULT NULL,
   `contrasena` varchar(64) DEFAULT NULL,
   `rol` enum('aprendiz','instructor','admin') NOT NULL DEFAULT 'aprendiz',
-  `codigo_verificacion` int(6) DEFAULT NULL
+  `codigo_verificacion` int(6) DEFAULT NULL,
+   `telefono` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --

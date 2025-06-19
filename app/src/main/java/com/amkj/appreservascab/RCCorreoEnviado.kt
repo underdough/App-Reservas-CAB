@@ -2,6 +2,7 @@ package com.amkj.appreservascab
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +30,7 @@ class RCCorreoEnviado : AppCompatActivity() {
             insets
         }
 
+
         binding.btnVerificar.setOnClickListener {
             val tokenIngresado = binding.etToken.text.toString().trim()
             val correo = intent.getStringExtra("correo_usuario") ?: ""
@@ -38,6 +40,12 @@ class RCCorreoEnviado : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Debe ingresar el token y haber enviado el correo previamente", Toast.LENGTH_SHORT).show()
             }
+
+            startActivity(
+                Intent(this, CambiarContrasena::class.java)
+                    .putExtra("correo_usuario", correo)
+            )
+
         }
     }
 
@@ -63,6 +71,7 @@ class RCCorreoEnviado : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 Toast.makeText(this@RCCorreoEnviado, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                Log.e("amkj", "Error: ${e.message}")
             }
         }
     }

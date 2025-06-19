@@ -30,12 +30,10 @@ class PerfilAprendizInstru : AppCompatActivity() {
         //  Obtener datos guardados localmente (SharedPreferences)
         val prefs = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
         val usuario = ModeloUsuarios(
-            id = prefs.getString("id", "") ?: "",
             correo = prefs.getString("correo", null),
             contrasena = prefs.getString("contrasena", null),
             nombre = prefs.getString("nombre", "Nombre no disponible") ?: "Nombre no disponible",
             rol = prefs.getString("rol", "Rol no asignado") ?: "Rol no asignado",
-            bloque = prefs.getString("bloque", null)
         )
 
         // Mostrar nombre en el TextView del activity principal

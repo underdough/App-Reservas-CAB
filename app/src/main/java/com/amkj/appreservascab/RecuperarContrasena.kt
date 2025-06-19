@@ -2,6 +2,7 @@ package com.amkj.appreservascab
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -50,7 +51,9 @@ class RecuperarContrasena : AppCompatActivity() {
 
         lifecycleScope.launch {
             try {
+
                 val response = api.enviarToken(ModeloCorreo(correo))
+
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body?.message != null) {
@@ -63,11 +66,13 @@ class RecuperarContrasena : AppCompatActivity() {
                     } else {
                         Toast.makeText(this@RecuperarContrasena, body?.error ?: "Error desconocido", Toast.LENGTH_LONG).show()
                     }
+
                 } else {
                     Toast.makeText(this@RecuperarContrasena, "Error del servidor", Toast.LENGTH_LONG).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(this@RecuperarContrasena, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                Log.e("amkj","Error: ${e.message}")
             }
         }
     }
