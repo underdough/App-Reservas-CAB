@@ -96,10 +96,20 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             }
         }
 
-
         // Esta diablura abre el menu de opciones
         binding.ibMenu.setOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.END)
+        }
+
+        // NUEVO: Listener para el icono de notificaciones
+        binding.ibNotifcacion.setOnClickListener {
+            try {
+                val intent = Intent(this, ActividadNotificaciones::class.java)
+                startActivity(intent)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this, "Error al abrir notificaciones", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // Obtener referencia del layout del menú lateral
@@ -107,17 +117,14 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         val tvUserName = headerView.findViewById<TextView>(R.id.tvUserName)
         val tvUserSubtitle = headerView.findViewById<TextView>(R.id.tvUserSubtitle)
 
-// Obtener nombre y rol del usuario desde SharedPreferences
+        // Obtener nombre y rol del usuario desde SharedPreferences
         val sharedPref = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
         val nombre = sharedPref.getString("nombre", "Nombre Usuario")
         val rol = sharedPref.getString("rol", "Rol Desconocido")
 
-// Mostrar en los TextView del menú lateral
+        // Mostrar en los TextView del menú lateral
         tvUserName.text = nombre
         tvUserSubtitle.text = rol
-
-
-
     }
 
     // redirecciones
@@ -156,8 +163,8 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             R.id.nav_quejas -> {
                 // hagan la actividad de quejas
                 try {
-                 val intent = Intent(this, QuejasNovedades::class.java)
-                 startActivity(intent)
+                    val intent = Intent(this, QuejasNovedades::class.java)
+                    startActivity(intent)
                 } catch (e: Exception){
                     e.printStackTrace()
                 }
@@ -192,8 +199,6 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         }
         return false
     }
-
-
 
     // Manejar el botón de retroceso para cerrar el drawer si está abierto
     @Deprecated("Deprecated in Java")

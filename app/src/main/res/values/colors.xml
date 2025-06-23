@@ -7,4 +7,6 @@
     <color name="txt_color">#7A7A7A</color>
     <color name="colorBtnCancela">#A6A6A6</color>
     <color name="transparente">#00000000</color>
+    <color name="gris">#ccc</color>
+    <color name= "rojo">#D32F2F</color>
 </resources>
