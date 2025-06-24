@@ -22,6 +22,9 @@
             android:name=".CrearEquipos"
             android:exported="false" />
         <activity
+            android:name=".CrearAmbiente"
+            android:exported="false" />
+        <activity
             android:name=".PerfilAprendizInstru"
             android:exported="false" />
         <activity

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:layout_height="match_parent"
+    android:id="@+id/mainlyCrearAmbiente"
+    tools:context=".CrearAmbiente">
+
+
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="15dp"
+        android:text="@string/txtCrearAmbiente"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvinfoNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/nombreAmbiente"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="24sp"/>
+
+    <EditText
+        android:id="@+id/etNombreAmbiente"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="20dp"
+        android:textColorHint="@color/txt_color"
+        android:shadowColor="@color/black"
+        android:textSize="18dp"
+        android:textColor="@color/black"
+        android:hint="Ingresa el nombre del ambiente"
+        android:inputType="textEmailAddress"
+        android:fontFamily="@font/poppins"
+        android:autofillHints="emailAddress"/>
+
+
+    <TextView
+        android:id="@+id/tvDescripcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/descripcionDetallada"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="24sp"/>
+
+    <EditText
+        android:id="@+id/etDescripcion"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="20dp"
+        android:textColorHint="@color/txt_color"
+        android:shadowColor="@color/black"
+        android:textSize="18dp"
+        android:textColor="@color/black"
+        android:hint="Describe el ambiente..."
+        android:inputType="textEmailAddress"
+        android:fontFamily="@font/poppins"
+        android:autofillHints="emailAddress"/>
+
+
+    <TextView
+        android:id="@+id/tvImgAmbiente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/imagenAmbiente"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="24sp"/>
+
+    <ImageView
+        android:id="@+id/miImagen"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="120dp"
+        android:background="#CCCCCC"/>
+
+    <Button
+        android:id="@+id/btnIniciar"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="20pt"
+        android:backgroundTint="@color/colorBtns"
+        android:text="@string/txtCrearAmbiente"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/white" />
+
+
+
+</LinearLayout>
