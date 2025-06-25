@@ -1,10 +1,14 @@
 package com.amkj.appreservascab.Modelos
 
-data class ModeloEquipos (
-    val id: String? = null,
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+data class ModeloEquipos(
+    val id: Int,
     val marca: String,
     val modelo: String,
     val descripcion: String,
-    val imagen: String, // Puede ser una URL o base64
-    val disponible: Boolean = true
-)
+    val imagen: String
+) : Parcelable
+

@@ -1,10 +1,12 @@
 package com.amkj.appreservascab.Modelos
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class ModeloAmbientes(
-    val id: String? = null,
-    var nombre:String,
-    var descripcion:String,
-    var imagen: String,
-    var disponible: Boolean = true
-)
+    val id: Int,
+    val nombre: String,
+    val descripcion: String,
+    val imagen: String
+) : Parcelable

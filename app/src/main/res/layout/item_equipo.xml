@@ -54,6 +54,24 @@
                 android:layout_marginTop="8dp"
                 android:text="Descripción"
                 android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                >
+
+                <ImageButton
+                    android:id="@+id/ibirReservas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_reservar"
+                    android:background="@color/transparente"
+                    />
+
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

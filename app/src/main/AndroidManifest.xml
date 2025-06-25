@@ -19,6 +19,12 @@
         android:theme="@style/Theme.AppReservasCAB"
         tools:targetApi="31">
         <activity
+            android:name=".DetalleEquipo"
+            android:exported="false" />
+        <activity
+            android:name=".DetalleAmbiente"
+            android:exported="false" />
+        <activity
             android:name=".CrearEquipos"
             android:exported="false" />
         <activity
