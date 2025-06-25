@@ -13,6 +13,8 @@
 
     <item android:id="@+id/nav_perfil"
         android:title="Perfil" />
+    <item android:id="@+id/nav_crear_ambiente"
+        android:title="Crear ambiente" />
     <item android:id="@+id/nav_crear_equipo"
         android:title="Crear equipo" />
     <item android:id="@+id/nav_cerrar_Sesion"

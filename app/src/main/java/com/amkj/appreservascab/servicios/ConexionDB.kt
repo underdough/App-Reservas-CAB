@@ -2,12 +2,14 @@ package com.amkj.appreservascab.servicios
 
 
 import com.amkj.appreservascab.Modelos.ModeloActualizarContrasena
+import com.amkj.appreservascab.Modelos.ModeloAmbientes
 import com.amkj.appreservascab.Modelos.ModeloCorreo
 import com.amkj.appreservascab.Modelos.ModeloEquipos
 import com.amkj.appreservascab.Modelos.ModeloUsuarios
 import com.amkj.appreservascab.Modelos.ModeloVerificarToken
 import com.amkj.appreservascab.Modelos.RespuestaCodigo
 import com.amkj.appreservascab.Modelos.RespuestaContraNue
+import com.amkj.appreservascab.Modelos.RespuestaInsertarAmbiente
 import com.amkj.appreservascab.Modelos.RespuestaInsertarEquipo
 import com.amkj.appreservascab.Modelos.RespuestaVerificacion
 import okhttp3.MultipartBody
@@ -22,7 +24,7 @@ import retrofit2.http.Part
 
 interface ConexionDB {
     companion object {
-        const val URL = "http://92.168.201.70/phpGestionReservas/"
+        const val URL = "http://192.168.1.23:80/phpGestionReservas/"
     }
 
     @POST("consultaUsuario.php")
@@ -55,4 +57,14 @@ interface ConexionDB {
     @GET("obtenerEquiposDisponibles.php")
     suspend fun obtenerEquipos(): Response<List<ModeloEquipos>>
 
+    @Multipart
+    @POST("insertarAmbiente.php")
+    suspend fun insertarAmbiente(
+        @Part("nombreAmbiente") nombreAmbiente: RequestBody,
+        @Part("descripcion") descripcion: RequestBody,
+        @Part imagen: MultipartBody.Part?
+    ): Response<RespuestaInsertarAmbiente>
+
+    @GET("obtenerAmbientesDisponibles.php")
+    suspend fun obtenerAmbiente(): Response<List<ModeloAmbientes>>
 }

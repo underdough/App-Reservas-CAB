@@ -2,7 +2,9 @@ package com.amkj.appreservascab.Modelos
 
 
 data class ModeloAmbientes(
-    var ambiente:String,
-//    var descripcion:String,
-//    var imagen: Int
+    val id: String? = null,
+    var nombre:String,
+    var descripcion:String,
+    var imagen: String,
+    var disponible: Boolean = true
 )

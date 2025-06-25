@@ -41,8 +41,7 @@ class RCCorreoEnviado : AppCompatActivity() {
                 Toast.makeText(this, "Debe ingresar el token y haber enviado el correo previamente", Toast.LENGTH_SHORT).show()
             }
 
-            startActivity(
-                Intent(this, CambiarContrasena::class.java)
+            startActivity(Intent(this, CambiarContrasena::class.java)
                     .putExtra("correo_usuario", correo)
             )
 

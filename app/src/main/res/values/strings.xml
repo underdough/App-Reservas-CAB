@@ -33,7 +33,7 @@
     <string name="imgItem">equipos</string>
     <string name="ambiente">Ambientes</string>
     <string name="txtSolicitudReservas">Solicitud de reservas</string>
-    <string name="nombreAmbiente">Ambiente:</string>
+    <string name="nombreAmbiente">Nombre del Ambiente:</string>
     <string name="fecha">Fecha:</string>
     <string name="jornada">Jornada:</string>
     <string name="Mañana">Mañana</string>
@@ -51,4 +51,10 @@
     <string name="bienvenido">¡Bienvenid@!</string>
     <string name="txt_notificacion">Notificacion</string>
     <string name="disrecursos">Recursos Disponinbles</string>
+    <string name="txtCrearequipo">Crear Equipo</string>
+    <string name="txtmarca">Marca del Equipo:</string>
+    <string name="txtmodelo">Modelo del equipo</string>
+    <string name="imagen">Imagen de equipo:</string>
+    <string name="txtCrearAmbiente">Crear ambiente</string>
+    <string name="imagenAmbiente">Imagen ambiente:</string>
 </resources>

@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.amkj.appreservascab.databinding.ActivityMainBinding
 import com.amkj.appreservascab.servicios.ConexionDB
-import com.amkj.appreservascab.Modelos.ModeloUsuarios
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +50,6 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener // Detiene la ejecución si hay campos vacíos
             }
 
-            // ✅ Ahora sí puedes usar correo y contrasena dentro del scope
             CoroutineScope(Dispatchers.IO).launch {
 
                 try {
@@ -117,11 +115,11 @@ class MainActivity : AppCompatActivity() {
         binding.tvOlvidaste.setOnClickListener {
             startActivity(Intent(this, RecuperarContrasena::class.java))
         }
-        }
     }
 fun md5(input: String): String {
     val bytes = MessageDigest.getInstance("MD5").digest(input.toByteArray())
     return bytes.joinToString("") { "%02x".format(it) }
+}
 }
 
 

@@ -27,7 +27,7 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     private lateinit var binding: ActivityVistaPrincipalBinding
     private lateinit var adaptador: AdapterAmbientes
-    private lateinit var listaOriginal: ArrayList<ModeloAmbientes>
+//    private lateinit var listaAmbientes: List<ModeloAmbientes>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,39 +38,63 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         // CORRECCIÓN: Usar el ID correcto del NavigationView
         binding.VistaNavegacionxd.setNavigationItemSelectedListener(this)
 
-        // Datos de ejemplo
-        listaOriginal = arrayListOf(
-            ModeloAmbientes("Auditorio"),
-            ModeloAmbientes("Laboratorio"),
-            ModeloAmbientes("Biblioteca"),
-            ModeloAmbientes("Ambiente A1"),
-            ModeloAmbientes("Ambiente B2")
-        )
+//        // Datos de ejemplo
+//        listaOriginal = arrayListOf(
+//            ModeloAmbientes("Auditorio"),
+//            ModeloAmbientes("Laboratorio"),
+//            ModeloAmbientes("Biblioteca"),
+//            ModeloAmbientes("Ambiente A1"),
+//            ModeloAmbientes("Ambiente B2")
+//        )
 
-        adaptador = AdapterAmbientes(ArrayList(listaOriginal))
-        binding.rvLista.layoutManager = LinearLayoutManager(this)
-        binding.rvLista.adapter = adaptador
-        binding.rvLista.visibility = View.GONE
+//        adaptador = AdapterAmbientes((listaAmbientes))
+//        binding.rvLista.layoutManager = LinearLayoutManager(this)
+//        binding.rvLista.adapter = adaptador
+//        binding.rvLista.visibility = View.GONE
 
-        binding.etBuscar.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
+//        binding.etBuscar.addTextChangedListener(object : TextWatcher {
+//            override fun afterTextChanged(s: Editable?) {}
+//
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                val texto = s.toString()
+//                if (texto.isNotEmpty()) {
+//                    binding.rvLista.visibility = View.VISIBLE
+//                    val listaFiltrada = ArrayList(listaAmbientes.filter {
+//                        it.nombre.contains(texto, ignoreCase = true)
+//                    })
+//                    adaptador.filtrar(listaFiltrada)
+//                } else {
+//                    binding.rvLista.visibility = View.GONE
+//
+//                }
+//            }
+//        })
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        binding.lyAmbientesPpal.recyclerAmbientes.layoutManager = LinearLayoutManager(this,
+            LinearLayoutManager.HORIZONTAL,false)
+        lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.instance.obtenerAmbiente()
+                val responseBody = response.body()
+                Log.d("DEBUG_AMBIENTE", "JSON recibido: ${response.raw()}")
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val texto = s.toString()
-                if (texto.isNotEmpty()) {
-                    binding.rvLista.visibility = View.VISIBLE
-                    val listaFiltrada = ArrayList(listaOriginal.filter {
-                        it.ambiente.contains(texto, ignoreCase = true)
-                    })
-                    adaptador.filtrar(listaFiltrada)
+                if (response.isSuccessful && responseBody != null) {
+                    val ambientes = responseBody
+                    binding.lyAmbientesPpal.recyclerAmbientes.adapter = AdapterAmbientes(ambientes)
                 } else {
-                    binding.rvLista.visibility = View.GONE
-
+                    Log.e("ERROR", "Error al obtener equipos: ${response.errorBody()?.string()}")
                 }
+
+                if (response.isSuccessful && response.body() != null) {
+                    val ambientes = response.body()!!
+                    binding.lyAmbientesPpal.recyclerEquipos.adapter = AdapterAmbientes(ambientes)
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@VistaPrincipal, "Error: ${e.message}", Toast.LENGTH_LONG).show()
             }
-        })
+        }
 
         binding.lyAmbientesPpal.recyclerEquipos.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.HORIZONTAL,false)
@@ -167,6 +191,16 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             R.id.nav_crear_equipo->{
                 try {
                     val intent = Intent(this, CrearEquipos::class.java)
+                    startActivity(intent)
+                } catch (e: Exception){
+                    e.printStackTrace()
+                }
+                return true
+            }
+
+            R.id.nav_crear_ambiente->{
+                try {
+                    val intent = Intent(this, CrearAmbiente::class.java)
                     startActivity(intent)
                 } catch (e: Exception){
                     e.printStackTrace()

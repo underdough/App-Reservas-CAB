@@ -52,7 +52,7 @@
         android:shadowColor="@color/black"
         android:textSize="18dp"
         android:textColor="@color/black"
-        android:hint="Pon la marca aquí ..."
+        android:hint="Lenovo, HP, ..."
         android:inputType="textEmailAddress"
         android:fontFamily="@font/poppins"
         android:autofillHints="emailAddress"/>
@@ -78,7 +78,7 @@
         android:shadowColor="@color/black"
         android:textSize="18dp"
         android:textColor="@color/black"
-        android:hint="Pon el modelo aquí..."
+        android:hint="HP21123..."
         android:inputType="textEmailAddress"
         android:fontFamily="@font/poppins"
         android:autofillHints="emailAddress"/>
@@ -104,7 +104,7 @@
         android:shadowColor="@color/black"
         android:textSize="18dp"
         android:textColor="@color/black"
-        android:hint="Describe tu queja aquí ..."
+        android:hint="Pon tu descripción aquí ..."
         android:inputType="textEmailAddress"
         android:fontFamily="@font/poppins"
         android:autofillHints="emailAddress"/>
