@@ -5,6 +5,8 @@ import com.amkj.appreservascab.Modelos.ModeloActualizarContrasena
 import com.amkj.appreservascab.Modelos.ModeloAmbientes
 import com.amkj.appreservascab.Modelos.ModeloCorreo
 import com.amkj.appreservascab.Modelos.ModeloEquipos
+import com.amkj.appreservascab.Modelos.ModeloReserva
+import com.amkj.appreservascab.Modelos.ModeloReservaEquipo
 import com.amkj.appreservascab.Modelos.ModeloUsuarios
 import com.amkj.appreservascab.Modelos.ModeloVerificarToken
 import com.amkj.appreservascab.Modelos.RespuestaCodigo
@@ -21,10 +23,14 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.http.Query
+
 
 interface ConexionDB {
     companion object {
-        const val URL = "http://192.168.1.23:80/phpGestionReservas/"
+        const val URL = "http://192.168.199.46:80/phpGestionReservas/"
     }
 
     @POST("consultaUsuario.php")
@@ -67,4 +73,19 @@ interface ConexionDB {
 
     @GET("obtenerAmbientesDisponibles.php")
     suspend fun obtenerAmbiente(): Response<List<ModeloAmbientes>>
+
+    @POST("guardarReserva.php")
+    fun guardarReserva(@Body reserva: ModeloReserva): Call<ResponseBody>
+
+    @GET("obtenerReservas.php")
+    fun obtenerReservas(@Body solicitante: Map<String, String>): Call<List<ModeloReserva>>
+
+    @POST("guardarReservaEquipos.php")
+    fun guardarReservaEquipo(@Body reserva: ModeloReservaEquipo): Call<ResponseBody>
+
+    @GET("obtenerReservasEquipos.php")
+    fun obtenerReservasEquipo(@Body solicitante: Map<String, String>): Call<List<ModeloReservaEquipo>>
+
+
+
 }

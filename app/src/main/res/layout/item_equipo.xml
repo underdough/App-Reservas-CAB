@@ -5,12 +5,14 @@
     android:layout_margin="8dp"
     android:elevation="4dp"
     android:padding="8dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/transparente">
 
     <LinearLayout
         android:layout_width="250dp"
         android:layout_height="120dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/gris">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -37,7 +39,8 @@
                 android:layout_height="wrap_content"
                 android:text="Marca"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/tvModelo"
@@ -45,7 +48,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Modelo"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:textColor="@color/black"/>
 
             <TextView
                 android:id="@+id/tvDescripcion"
@@ -53,7 +57,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Descripción"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:textColor="@color/black"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"

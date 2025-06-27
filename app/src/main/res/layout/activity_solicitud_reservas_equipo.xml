@@ -4,15 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@android:color/white"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/mainlySolicitudReservasEquipo">
 
+
+    <ImageButton
+        android:id="@+id/ibAtras"
+        android:background="@android:color/transparent"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_flecha_volver"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="@string/txtVolver" />
 
     <TextView
         android:id="@+id/tvTitulo"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="20dp"
+
         android:layout_marginEnd="15dp"
         android:text="@string/txtSolicitudReservas"
         android:textAlignment="center"
@@ -25,20 +36,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="@string/nombreEquipo"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="24sp"/>
 
     <TextView
-        android:id="@+id/tvNomUser"
+        android:id="@+id/tvInfoMarca"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginTop="15dp"
         android:textColor="@color/txt_color"
-        android:textSize="28sp"/>
+        android:textSize="28sp" />
 
     <TextView
         android:id="@+id/tvReferencia"
@@ -58,7 +69,7 @@
         android:layout_marginStart="80dp"
         android:layout_marginTop="15dp"
         android:textColor="@color/txt_color"
-        android:textSize="28sp"/>
+        android:textSize="28sp" />
 
 
     <TextView
@@ -66,20 +77,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:text="@string/SolicitadoPor"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="24sp"/>
 
     <TextView
-        android:id="@+id/tvInfoTelefono"
+        android:id="@+id/tvNomUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginTop="15dp"
         android:textColor="@color/txt_color"
-        android:textSize="28sp"/>
+        android:textSize="28sp" />
 
     <TextView
         android:id="@+id/tvFecha"
@@ -102,6 +113,16 @@
         android:background="@android:color/transparent"
         android:src="@drawable/ic_calendario"
         android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/tvFechaSeleccionada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvJornada"
@@ -152,22 +173,11 @@
 
 
     <ImageButton
-        android:id="@+id/btnCancelar"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginHorizontal="210dp"
-        android:layout_marginTop="15dp"
-        android:backgroundTint="@color/colorBtnCancela"
-        android:textAlignment="center"
-        android:src="@drawable/ic_cancelar"
-        android:textColor="@color/white" />
-
-    <ImageButton
         android:id="@+id/btnGuardar"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginHorizontal="300dp"
-        android:layout_marginTop="-70dp"
+        android:layout_marginTop="10dp"
         android:backgroundTint="@color/colorBtns"
         android:textAlignment="center"
         android:src="@drawable/ic_guardar"

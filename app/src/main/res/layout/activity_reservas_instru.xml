@@ -6,6 +6,15 @@
     android:background="@android:color/white"
     android:layout_height="match_parent">
 
+    <ImageButton
+        android:id="@+id/ibAtras"
+        android:background="@android:color/transparent"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_flecha_volver"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:contentDescription="@string/txtVolver" />
 
     <TextView
         android:id="@+id/tvTitulo"
@@ -49,17 +58,11 @@
     </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView1"
+        android:id="@+id/rvReservas"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:padding="8dp"
-        android:clipToPadding="false"
-        android:scrollbars="horizontal"
-        tools:listitem="@layout/activity_ambientes">
+        android:layout_height="match_parent"
+        android:padding="16dp" />
 
-    </androidx.recyclerview.widget.RecyclerView>
 
 
     <androidx.recyclerview.widget.RecyclerView

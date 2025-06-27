@@ -114,6 +114,17 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         }
 
 
+        binding.ibNotifcacion.setOnClickListener {
+            try {
+                val intent = Intent(this, ActividadNotificaciones::class.java)
+                startActivity(intent)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this, "Error al abrir notificaciones", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
         // Menú lateral
         binding.ibMenu.setOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.END)
@@ -130,7 +141,6 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_reserva -> startActivity(Intent(this, SolicitudReservas::class.java))
             R.id.nav_mi_reservas -> startActivity(Intent(this, InstruMisReservas::class.java))
             R.id.nav_perfil -> startActivity(Intent(this, PerfilAprendizInstru::class.java))
             R.id.nav_quejas -> startActivity(Intent(this, QuejasNovedades::class.java))

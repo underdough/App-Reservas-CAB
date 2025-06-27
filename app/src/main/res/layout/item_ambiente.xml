@@ -5,12 +5,14 @@
     android:layout_margin="8dp"
     android:elevation="4dp"
     android:padding="8dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/gris">
 
     <LinearLayout
         android:layout_width="250dp"
         android:layout_height="120dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/gris">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -35,6 +37,7 @@
                 android:id="@+id/tvNombreAmbiente"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="Nombre"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -46,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Descripción"
+                android:textColor="@color/black"
                 android:textSize="14sp" />
 
             <LinearLayout

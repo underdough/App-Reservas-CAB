@@ -26,7 +26,7 @@ class AdapterAmbientes(
             binding.tvNombreAmbiente.text = ambiente.nombre
             binding.tvDescripcion.text = ambiente.descripcion
 
-            val urlImagen = "http://192.168.1.23/phpGestionReservas/" + ambiente.imagen
+            val urlImagen = "http://192.168.199.46/phpGestionReservas/" + ambiente.imagen
             Glide.with(binding.root.context)
                 .load(urlImagen)
                 .placeholder(R.drawable.imagen_error)
@@ -40,6 +40,7 @@ class AdapterAmbientes(
             binding.ibirReservas.setOnClickListener {
                 val context = binding.root.context
                 val intent = Intent(context, SolicitudReservas::class.java)
+                intent.putExtra("ambiente", ambiente)
                 context.startActivity(intent)
             }
 
