@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainlyCrearUsuario"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CrearUsuario"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+
+    <ImageButton
+        android:id="@+id/ibVolver"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/txtVolver"
+        android:src="@drawable/ic_flecha_volver" />
+
+
+
+        <TextView
+            android:id="@+id/txt_tituloCrearUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Crear usuario"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txt_subtitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Completa todos los campos"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+
+    <LinearLayout
+        android:id="@+id/llCampos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="10dp"
+        >
+
+        <TextView
+            android:id="@+id/tvNombreUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Nombre"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/etNombreUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/borde_edittext"
+            android:padding="10dp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/black"
+            android:inputType="textPersonName"
+            android:hint="Jorge Andrés Querubin"
+            />
+
+
+        <TextView
+            android:id="@+id/tvNumDocumento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Número de Documento"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/etNumDocumento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/borde_edittext"
+            android:padding="10dp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/black"
+            android:inputType="number"
+            android:hint="1234567890"
+            android:maxLength="20"/>
+
+        <TextView
+            android:id="@+id/tvCrearCorreo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Correo"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/etCorreo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/borde_edittext"
+            android:padding="10dp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/black"
+            android:hint="Ej: usuario@email.com"
+            android:inputType="textEmailAddress"
+            android:maxLength="100"/>
+
+
+        <TextView
+            android:id="@+id/tvContrasena"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contraseña"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/etContrasena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/borde_edittext"
+                android:padding="10dp"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/black"
+                android:hint="Mínimo 6 caracteres"
+                android:inputType="textPassword"
+                android:maxLength="64"/>
+
+            <ImageView
+                android:id="@+id/ivVerContra"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="16dp"
+                android:contentDescription="@string/verContra"
+                android:src="@drawable/ic_ojo_cerrado"
+                android:focusable="true"
+                android:clickable="true"/>
+        </FrameLayout>
+        <TextView
+            android:id="@+id/tvTelefono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Teléfono"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/etTelefono"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/borde_edittext"
+            android:padding="10dp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/black"
+            android:hint="Ej: 312XXXXXXX"
+            android:inputType="phone"
+            android:maxLength="10"/>
+
+        <TextView
+            android:id="@+id/tvRol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rol"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black"/>
+
+        <Spinner
+            android:id="@+id/spRol"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            />
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp">
+
+        <Button
+            android:id="@+id/btnCrearUsuario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crear Usuario"
+            android:backgroundTint="@color/btn_sena"
+            android:paddingHorizontal="90dp"
+            android:paddingVertical="15dp"
+            />
+    </LinearLayout>
+
+
+
+
+
+
+</LinearLayout>

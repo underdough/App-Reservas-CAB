@@ -142,7 +142,7 @@
         android:layout_marginStart="55dp">
 
         <CheckBox
-            android:id="@+id/checkMañana"
+            android:id="@+id/checkManana"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/Mañana"

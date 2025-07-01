@@ -146,6 +146,7 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             R.id.nav_quejas -> startActivity(Intent(this, QuejasNovedades::class.java))
             R.id.nav_crear_equipo -> startActivity(Intent(this, CrearEquipos::class.java))
             R.id.nav_crear_ambiente -> startActivity(Intent(this, CrearAmbiente::class.java))
+            R.id.nav_crear_usuario -> startActivity(Intent(this, CrearUsuario::class.java))
             R.id.nav_cerrar_Sesion -> {
                 val sharedPreferences = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
                 sharedPreferences.edit().clear().apply()

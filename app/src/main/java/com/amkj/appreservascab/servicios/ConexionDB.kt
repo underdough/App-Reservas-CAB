@@ -7,6 +7,7 @@ import com.amkj.appreservascab.Modelos.ModeloCorreo
 import com.amkj.appreservascab.Modelos.ModeloEquipos
 import com.amkj.appreservascab.Modelos.ModeloReserva
 import com.amkj.appreservascab.Modelos.ModeloReservaEquipo
+import com.amkj.appreservascab.Modelos.ModeloUsuarioCrear
 import com.amkj.appreservascab.Modelos.ModeloUsuarios
 import com.amkj.appreservascab.Modelos.ModeloVerificarToken
 import com.amkj.appreservascab.Modelos.RespuestaCodigo
@@ -14,6 +15,8 @@ import com.amkj.appreservascab.Modelos.RespuestaContraNue
 import com.amkj.appreservascab.Modelos.RespuestaInsertarAmbiente
 import com.amkj.appreservascab.Modelos.RespuestaInsertarEquipo
 import com.amkj.appreservascab.Modelos.RespuestaVerificacion
+import com.amkj.appreservascab.Modelos.SolicitudDisponibilidadRequest
+import com.amkj.appreservascab.Modelos.ValidacionEquipoRequest
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -30,7 +33,7 @@ import retrofit2.http.Query
 
 interface ConexionDB {
     companion object {
-        const val URL = "http://192.168.199.46:80/phpGestionReservas/"
+        const val URL = "http://192.168.1.23:80/phpGestionReservas/"
     }
 
     @POST("consultaUsuario.php")
@@ -77,14 +80,24 @@ interface ConexionDB {
     @POST("guardarReserva.php")
     fun guardarReserva(@Body reserva: ModeloReserva): Call<ResponseBody>
 
-    @GET("obtenerReservas.php")
-    fun obtenerReservas(@Body solicitante: Map<String, String>): Call<List<ModeloReserva>>
+    @POST("obtenerReservas.php")
+    fun obtenerReservas(@Body usuario: Map<String, Int>): Call<List<ModeloReserva>>
 
-    @POST("guardarReservaEquipos.php")
+    @POST("validarDisponibilidadAmbiente.php")
+    fun validarDisponibilidadAmbiente(@Body datos :SolicitudDisponibilidadRequest): Call<Map<String, Boolean>>
+
+
+    @POST("guardarReservaEquipo.php")
     fun guardarReservaEquipo(@Body reserva: ModeloReservaEquipo): Call<ResponseBody>
 
-    @GET("obtenerReservasEquipos.php")
-    fun obtenerReservasEquipo(@Body solicitante: Map<String, String>): Call<List<ModeloReservaEquipo>>
+    @POST("obtenerReservaEquipo.php")
+    fun obtenerReservasEquipo(@Body body: Map<String, Int>): Call<List<ModeloReservaEquipo>>
+
+    @POST("validarDisponibilidadEquipo.php")
+    fun validarDisponibilidadEquipo(@Body datos: ValidacionEquipoRequest): Call<Map<String, Boolean>>
+
+    @POST("crearUsuario.php")
+    fun crearUsuario(@Body usuario: ModeloUsuarioCrear): Call<Map<String, Any>>
 
 
 

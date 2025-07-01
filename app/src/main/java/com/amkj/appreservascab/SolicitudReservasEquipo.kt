@@ -4,161 +4,172 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.amkj.appreservascab.Modelos.ModeloAmbientes
-import com.amkj.appreservascab.Modelos.ModeloEquipos
-import com.amkj.appreservascab.Modelos.ModeloReserva
-import com.amkj.appreservascab.Modelos.ModeloReservaEquipo
-import com.amkj.appreservascab.databinding.ActivitySolicitudReservasBinding
+import com.amkj.appreservascab.Modelos.*
 import com.amkj.appreservascab.databinding.ActivitySolicitudReservasEquipoBinding
 import com.amkj.appreservascab.servicios.RetrofitClient
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.*
 
 class SolicitudReservasEquipo : AppCompatActivity() {
+
     private lateinit var binding: ActivitySolicitudReservasEquipoBinding
+    private var fechaSeleccionada: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySolicitudReservasEquipoBinding.inflate(layoutInflater)
-        enableEdgeToEdge()
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainlySolicitudReservasEquipo)) { v, insets ->
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.mainlySolicitudReservasEquipo) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
         val equipo = intent.getParcelableExtra<ModeloEquipos>("equipo")
-        binding.tvInfoMarca.text = equipo?.marca
-        binding.tvInfoReferencia.text= equipo?.modelo
-
-
-
         val sharedPref = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
-        val solicitante = sharedPref.getString("nombre", null)
+        val nombreUsuario = sharedPref.getString("nombre", "") ?: ""
 
-
-        binding.tvNomUser.text = solicitante
-
-
-        val checkbBoxes = listOf(
-            binding.checkMaAna,
-            binding.checkTarde,
-            binding.checkNoche
-        )
-
-        for (checkBox in checkbBoxes) {
-            checkBox.setOnCheckedChangeListener { _, _ ->
-                val seleccionadas = checkbBoxes.count { it.isChecked }
-                if (seleccionadas > 1) {
-                    checkBox.isChecked = false
-                    Toast.makeText(
-                        this,
-                        "Solo puedes seleccionar hasta 2 jornadas",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
+        if (equipo != null) {
+            binding.tvInfoMarca.text = equipo.marca
+            binding.tvInfoReferencia.text = equipo.modelo
+            binding.tvNombreEquipo.text = equipo.descripcion
+            binding.tvNomUser.text = nombreUsuario
         }
 
         binding.btnCalendario.setOnClickListener {
             val calendar = Calendar.getInstance()
-
-            val datePicker = DatePickerDialog(
-                this,
-                { _, year, month, dayOfMonth ->
-                    val fechaSeleccionada = Calendar.getInstance()
-                    fechaSeleccionada.set(year, month, dayOfMonth)
-
-                    // Formatea la fecha seleccionada
-                    val formatoFecha = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                    val fechaFormateada = formatoFecha.format(fechaSeleccionada.time)
-
-                    // Muestra la fecha seleccionada en un TextView (puedes crear uno si deseas)
-                    binding.tvFechaSeleccionada.text = "Reserva la fecha: $fechaFormateada"
-                },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-            )
-
-            // Deshabilitar fechas anteriores
-            datePicker.datePicker.minDate = System.currentTimeMillis()
-
-            datePicker.show()
+            DatePickerDialog(this, { _, year, month, day ->
+                fechaSeleccionada = String.format("%04d-%02d-%02d", year, month + 1, day)
+                binding.tvFechaSeleccionada.text = fechaSeleccionada
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
+        val checkBoxes = listOf(binding.checkManana, binding.checkTarde, binding.checkNoche)
+        checkBoxes.forEach { checkBox ->
+            checkBox.setOnCheckedChangeListener { _, _ ->
+                if (checkBoxes.count { it.isChecked } > 2) {
+                    checkBox.isChecked = false
+                    Toast.makeText(this, "Máximo 2 jornadas permitidas", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
         binding.btnGuardar.setOnClickListener {
-            val equipo = intent.getParcelableExtra<ModeloEquipos>("marca")
-            val solicitante = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
-                .getString("nombre", "") ?: ""
-            val fecha =
-                binding.tvFechaSeleccionada.text.toString().removePrefix("Reserva la fecha: ")
-                    .trim()
-
-            val jornadas = mutableListOf<String>()
-            if (binding.checkMaAna.isChecked) jornadas.add("Mañana")
-            if (binding.checkTarde.isChecked) jornadas.add("Tarde")
-            if (binding.checkNoche.isChecked) jornadas.add("Noche")
-
-            if (fecha.isEmpty() || jornadas.isEmpty() || equipo == null) {
-                Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
+            if (equipo == null || fechaSeleccionada.isEmpty()) {
+                Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            val jornadas = mutableListOf<String>()
+            if (binding.checkManana.isChecked) jornadas.add("Mañana")
+            if (binding.checkTarde.isChecked) jornadas.add("Tarde")
+            if (binding.checkNoche.isChecked) jornadas.add("Noche")
+
+            if (jornadas.isEmpty()) {
+                Toast.makeText(this, "Selecciona al menos una jornada", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val usuarioId = sharedPref.getInt("id", -1)
+
             val reserva = ModeloReservaEquipo(
-                marca  = equipo.marca,
-                modelo = equipo.modelo,
-                nombre = solicitante,
-                fecha = fecha,
-                jornadas = jornadas,
+                equipo_id = equipo.id,
+                usuario_id = usuarioId,
+                elemento_id = equipo.id,
+                fecha = fechaSeleccionada,
+                motivo = "Reserva de equipo",
+                jornadas = jornadas.joinToString(", "),
+                estado = "pendiente",
+                equipo_nombre = equipo.descripcion,
+                equipo_imagen = equipo.imagen
             )
 
-            val call = RetrofitClient.instance.guardarReservaEquipo(reserva)
-            call.enqueue(object : retrofit2.Callback<ResponseBody> {
-                override fun onResponse(
-                    call: retrofit2.Call<ResponseBody>,
-                    response: retrofit2.Response<ResponseBody>
-                ) {
-                    if (response.isSuccessful) {
+            val datos = ValidacionEquipoRequest(
+                equipo_id = equipo.id,
+                fecha = fechaSeleccionada,
+                jornadas = reserva.jornadas
+            )
+
+            val gson = com.google.gson.Gson()
+            Log.d("EquipoReservaDebug", "ValidaciónEquipoRequest JSON: ${gson.toJson(datos)}")
+
+            RetrofitClient.instance.validarDisponibilidadEquipo(datos)
+                .enqueue(object : Callback<Map<String, Boolean>> {
+                    override fun onResponse(
+                        call: Call<Map<String, Boolean>>,
+                        response: Response<Map<String, Boolean>>
+                    ) {
+                        Log.d("EquipoReservaDebug", "Código respuesta validación: ${response.code()}")
+                        Log.d("EquipoReservaDebug", "Cuerpo respuesta: ${response.body()}")
+                        Log.d("EquipoReservaDebug", "ErrorBody: ${response.errorBody()?.string()}")
+
+                        val disponible = response.body()?.get("disponible") ?: false
+                        if (!disponible) {
+                            Toast.makeText(
+                                this@SolicitudReservasEquipo,
+                                "Este equipo ya tiene una reserva aceptada en esa jornada",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.d("EquipoReservaDebug", "Resultado validación: NO DISPONIBLE")
+                            return
+                        }
+
+                        Log.d("EquipoReservaDebug", "Resultado validación: DISPONIBLE")
+                        Log.d("EquipoReservaDebug", "Enviando reservaEquipo JSON: ${gson.toJson(reserva)}")
+
+                        RetrofitClient.instance.guardarReservaEquipo(reserva)
+                            .enqueue(object : Callback<ResponseBody> {
+                                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                                    Log.d("EquipoReservaDebug", "guardarReservaEquipo código: ${response.code()}")
+                                    Log.d("EquipoReservaDebug", "Body: ${response.body()?.string()}")
+
+                                    if (response.isSuccessful) {
+                                        Toast.makeText(
+                                            this@SolicitudReservasEquipo,
+                                            "Reserva enviada con éxito",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        finish()
+                                    } else {
+                                        Toast.makeText(
+                                            this@SolicitudReservasEquipo,
+                                            "Error al guardar reserva",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                                    Log.e("EquipoReservaDebug", "Fallo en guardar reserva: ${t.message}", t)
+                                    Toast.makeText(
+                                        this@SolicitudReservasEquipo,
+                                        "Error al guardar: ${t.message}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            })
+                    }
+
+                    override fun onFailure(call: Call<Map<String, Boolean>>, t: Throwable) {
+                        Log.e("EquipoReservaDebug", "Error en validación: ${t.message}", t)
                         Toast.makeText(
                             this@SolicitudReservasEquipo,
-                            "Reserva exitosa",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        finish()
-                    } else {
-                        Toast.makeText(
-                            this@SolicitudReservasEquipo,
-                            "Error en el servidor",
+                            "Error de red al validar disponibilidad",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    Log.d("ReservaDebug", "Cuerpo: ${response.body()}")
-                    Log.d("ReservaDebug", "Código: ${response.code()}")
-                    Log.d("ReservaDebug", "ErrorBody: ${response.errorBody()?.string()}")
-
-                }
-
-                override fun onFailure(call: retrofit2.Call<ResponseBody>, t: Throwable) {
-                    Toast.makeText(this@SolicitudReservasEquipo, "Fallo: ${t.message}", Toast.LENGTH_LONG)
-                        .show()
-                }
-            })
-
-
+                })
         }
+
         binding.ibAtras.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
-
     }
 }

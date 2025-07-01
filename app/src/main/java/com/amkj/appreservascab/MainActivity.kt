@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
                             if (usuarioValido!=null) {
                                 val sharedPref = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
                                 with(sharedPref.edit()) {
+                                    putInt("id", usuarioValido.id)
                                     putString("nombre", usuarioValido.nombre)
                                     putString("rol", usuarioValido.rol)
                                     putString("correo", usuarioValido.correo)

@@ -6,6 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
+
     private val gson = GsonBuilder()
         .setLenient()  // Permite parsear JSON malformado o menos estricto
         .create()
@@ -16,6 +17,7 @@ object RetrofitClient {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
+    val servicioApi: ConexionDB = retrofit.create(ConexionDB::class.java)
 
     val instance: ConexionDB by lazy {
         retrofit.create(ConexionDB::class.java)

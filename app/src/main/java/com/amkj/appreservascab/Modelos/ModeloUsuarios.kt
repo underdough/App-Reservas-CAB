@@ -1,7 +1,7 @@
 package com.amkj.appreservascab.Modelos
 
 data class ModeloUsuarios(
-//    val id: String,
+    val id: Int = 0,
     val correo: String?,
     val contrasena: String?,
     val nombre: String,

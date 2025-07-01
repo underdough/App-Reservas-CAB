@@ -14,6 +14,8 @@
         android:title="Crear ambiente" />
     <item android:id="@+id/nav_crear_equipo"
         android:title="Crear equipo" />
+    <item android:id="@+id/nav_crear_usuario"
+        android:title="Crear Usuario" />
     <item android:id="@+id/nav_cerrar_Sesion"
         android:title="Cerrar sesion" />
 

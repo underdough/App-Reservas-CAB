@@ -1,35 +1,47 @@
-package com.amkj.appreservascab.Adapters
+package com.amkj.appreservascab.Adaptadores
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.amkj.appreservascab.Adaptadores.AdapterReservas
-import com.amkj.appreservascab.Modelos.ModeloReserva
 import com.amkj.appreservascab.Modelos.ModeloReservaEquipo
 import com.amkj.appreservascab.databinding.ItemReservaBinding
-import com.amkj.appreservascab.databinding.ItemReservaEquipoBinding
+import com.bumptech.glide.Glide
+import com.amkj.appreservascab.R
 
-class AdapterReservasEquipo(private val reservasEquipo: List<ModeloReservaEquipo>) :
+class AdapterReservasEquipo(private val reservas: List<ModeloReservaEquipo>) :
     RecyclerView.Adapter<AdapterReservasEquipo.ReservaViewHolder>() {
 
-    inner class ReservaViewHolder(val binding: ItemReservaEquipoBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(reservaEquipo: ModeloReservaEquipo) {
-            binding.tvMarca.text = reservaEquipo.marca
-            binding.tvModelo.text = reservaEquipo.modelo
-            binding.tvNombre.text = reservaEquipo.nombre
-            binding.tvFecha.text = reservaEquipo.fecha
-            binding.tvJornadas.text = reservaEquipo.jornadas.joinToString(", ")
+    inner class ReservaViewHolder(val binding: ItemReservaBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(reserva: ModeloReservaEquipo) {
+            // Mostrar nombre del equipo
+            binding.tvNombreAmbiente.text = "Equipo: ${reserva.equipo_nombre ?: "Desconocido"}"
+
+            // Mostrar fecha de reserva
+            binding.tvFecha.text = "Fecha: ${reserva.fecha}"
+
+            // Mostrar jornadas
+            binding.tvJornadas.text = "Jornadas: ${reserva.jornadas}"
+
+            // Cargar imagen con Glide
+            val url = "http://192.168.0.9:80/phpGestionReservas/${reserva.equipo_imagen ?: ""}"
+            Glide.with(binding.root.context)
+                .load(url)
+                .placeholder(R.drawable.placeholder_portatil)
+                .error(R.drawable.imagen_error)
+                .into(binding.ivAmbiente)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReservaViewHolder {
-        val binding = ItemReservaEquipoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemReservaBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ReservaViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ReservaViewHolder, position: Int) {
-        holder.bind(reservasEquipo[position])
+        holder.bind(reservas[position])
     }
 
-    override fun getItemCount(): Int = reservasEquipo.size
+    override fun getItemCount(): Int = reservas.size
 }
