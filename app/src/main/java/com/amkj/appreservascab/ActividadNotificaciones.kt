@@ -7,11 +7,15 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.amkj.appreservascab.Adapters.AdaptadorNotificaciones
 import com.amkj.appreservascab.Modelos.Notificacion
 import com.amkj.appreservascab.Modelos.TipoNotificacion
+import com.amkj.appreservascab.Repository.NotificacionesRepository
+import kotlinx.coroutines.launch
 
 class ActividadNotificaciones : AppCompatActivity() {
 
@@ -20,9 +24,17 @@ class ActividadNotificaciones : AppCompatActivity() {
     private var txtTituloNotificaciones: TextView? = null
     private var recyclerNotificaciones: RecyclerView? = null
     private var contenedorEstadoVacio: LinearLayout? = null
+    private var swipeRefresh: SwipeRefreshLayout? = null
+    private var contenedorCargando: LinearLayout? = null
+    private var contenedorError: LinearLayout? = null
+    private var btnReintentar: TextView? = null
 
-    // Adaptador
+    // Adaptador y repositorio
     private var adaptadorNotificaciones: AdaptadorNotificaciones? = null
+    private val notificacionesRepository = NotificacionesRepository()
+
+    // ID del usuario actual - obtenlo de SharedPreferences, Intent, etc.
+    private var userId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +42,13 @@ class ActividadNotificaciones : AppCompatActivity() {
         try {
             setContentView(R.layout.activity_notificaciones)
 
+            // Obtener ID del usuario (ajusta según tu implementación)
+            userId = obtenerIdUsuarioActual()
+
             inicializarVistas()
             configurarRecyclerView()
             configurarListeners()
+            configurarSwipeRefresh()
             cargarNotificaciones()
 
         } catch (e: Exception) {
@@ -48,6 +64,10 @@ class ActividadNotificaciones : AppCompatActivity() {
             txtTituloNotificaciones = findViewById(R.id.txt_titulo_notificaciones)
             recyclerNotificaciones = findViewById(R.id.recycler_notificaciones)
             contenedorEstadoVacio = findViewById(R.id.contenedor_estado_vacio)
+            swipeRefresh = findViewById(R.id.swipe_refresh)
+            contenedorCargando = findViewById(R.id.contenedor_cargando)
+            contenedorError = findViewById(R.id.contenedor_error)
+            btnReintentar = findViewById(R.id.btn_reintentar)
         } catch (e: Exception) {
             e.printStackTrace()
             throw Exception("Error al inicializar vistas: ${e.message}")
@@ -66,8 +86,7 @@ class ActividadNotificaciones : AppCompatActivity() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            // Si el adaptador no existe, usar datos simples
-            Toast.makeText(this, "Adaptador no disponible, usando vista simple", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Error al configurar RecyclerView", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -75,43 +94,88 @@ class ActividadNotificaciones : AppCompatActivity() {
         btnRegresar?.setOnClickListener {
             finish()
         }
+
+        btnReintentar?.setOnClickListener {
+            cargarNotificaciones()
+        }
+    }
+
+    private fun configurarSwipeRefresh() {
+        swipeRefresh?.setOnRefreshListener {
+            cargarNotificaciones()
+        }
     }
 
     private fun cargarNotificaciones() {
-        try {
-            // Crear datos de prueba
-            val notificacionesPrueba = crearNotificacionesPrueba()
-            mostrarNotificaciones(notificacionesPrueba)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            // Mostrar estado vacío si hay error
-            mostrarEstadoVacio()
+        if (userId == 0) {
+            mostrarError("Usuario no identificado")
+            return
+        }
+
+        mostrarCargando()
+
+        lifecycleScope.launch {
+            try {
+                val resultado = notificacionesRepository.obtenerNotificaciones(userId)
+
+                resultado.fold(
+                    onSuccess = { notificaciones ->
+                        mostrarNotificaciones(notificaciones)
+                    },
+                    onFailure = { error ->
+                        mostrarError("Error al cargar notificaciones: ${error.message}")
+                    }
+                )
+            } catch (e: Exception) {
+                mostrarError("Error inesperado: ${e.message}")
+            } finally {
+                swipeRefresh?.isRefreshing = false
+            }
         }
     }
 
     private fun mostrarNotificaciones(notificaciones: List<Notificacion>) {
         try {
+            ocultarTodosLosEstados()
+
             if (notificaciones.isEmpty()) {
                 mostrarEstadoVacio()
             } else {
-                // Mostrar lista de notificaciones
                 recyclerNotificaciones?.visibility = View.VISIBLE
-                contenedorEstadoVacio?.visibility = View.GONE
                 adaptadorNotificaciones?.submitList(notificaciones)
             }
 
-            // Actualizar título con número de notificaciones no leídas
             actualizarTitulo(notificaciones)
         } catch (e: Exception) {
             e.printStackTrace()
-            mostrarEstadoVacio()
+            mostrarError("Error al mostrar notificaciones")
         }
     }
 
+    private fun mostrarCargando() {
+        ocultarTodosLosEstados()
+        contenedorCargando?.visibility = View.VISIBLE
+        txtTituloNotificaciones?.text = "Cargando notificaciones..."
+    }
+
+    private fun mostrarError(mensaje: String) {
+        ocultarTodosLosEstados()
+        contenedorError?.visibility = View.VISIBLE
+        txtTituloNotificaciones?.text = "Error"
+        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
+    }
+
     private fun mostrarEstadoVacio() {
-        recyclerNotificaciones?.visibility = View.GONE
+        ocultarTodosLosEstados()
         contenedorEstadoVacio?.visibility = View.VISIBLE
         txtTituloNotificaciones?.text = "Notificaciones"
+    }
+
+    private fun ocultarTodosLosEstados() {
+        recyclerNotificaciones?.visibility = View.GONE
+        contenedorEstadoVacio?.visibility = View.GONE
+        contenedorCargando?.visibility = View.GONE
+        contenedorError?.visibility = View.GONE
     }
 
     private fun actualizarTitulo(notificaciones: List<Notificacion>) {
@@ -130,7 +194,7 @@ class ActividadNotificaciones : AppCompatActivity() {
 
     private fun alHacerClickNotificacion(notificacion: Notificacion) {
         try {
-            // Marcar como leída si no lo está
+            // Marcar como leída en el servidor si no lo está
             if (!notificacion.esLeida) {
                 marcarComoLeida(notificacion)
             }
@@ -160,17 +224,33 @@ class ActividadNotificaciones : AppCompatActivity() {
     }
 
     private fun marcarComoLeida(notificacion: Notificacion) {
-        try {
-            adaptadorNotificaciones?.marcarComoLeida(notificacion)
-            adaptadorNotificaciones?.currentList?.let { actualizarTitulo(it) }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        lifecycleScope.launch {
+            try {
+                val resultado = notificacionesRepository.marcarComoLeida(notificacion.id)
+
+                resultado.fold(
+                    onSuccess = {
+                        // Actualizar localmente la notificación
+                        adaptadorNotificaciones?.marcarComoLeida(notificacion)
+                        // Actualizar el título con el nuevo conteo
+                        adaptadorNotificaciones?.currentList?.let { actualizarTitulo(it) }
+                    },
+                    onFailure = { error ->
+                        // Log del error, pero no mostrar al usuario ya que es secundario
+                        println("Error al marcar como leída: ${error.message}")
+                    }
+                )
+            } catch (e: Exception) {
+                println("Error al marcar como leída: ${e.message}")
+            }
         }
     }
 
     private fun abrirDetallesReserva(idReserva: Int?) {
         if (idReserva != null) {
+            // Implementar navegación a detalles de reserva
             mostrarMensaje("Abriendo detalles de reserva #$idReserva")
+            // Intent hacia ActividadDetallesReserva, por ejemplo
         }
     }
 
@@ -178,52 +258,21 @@ class ActividadNotificaciones : AppCompatActivity() {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
     }
 
-    // Función temporal para crear datos de prueba
-    private fun crearNotificacionesPrueba(): List<Notificacion> {
-        return try {
-            val ahora = System.currentTimeMillis()
+    private fun obtenerIdUsuarioActual(): Int {
+        // Implementa según tu sistema de autenticación
+        // Ejemplos:
 
-            listOf(
-                Notificacion(
-                    id = 1,
-                    idUsuario = 101,
-                    nombreUsuario = "Kevin chen",
-                    avatarUsuario = null,
-                    tipoNotificacion = TipoNotificacion.SOLICITUD_RESERVA,
-                    mensaje = "solicitó un ambiente",
-                    descripcionCompleta = null,
-                    fechaCreacion = ahora - (4 * 60 * 60 * 1000),
-                    esLeida = false,
-                    idReserva = 1001
-                ),
-                Notificacion(
-                    id = 2,
-                    idUsuario = 102,
-                    nombreUsuario = "María",
-                    avatarUsuario = null,
-                    tipoNotificacion = TipoNotificacion.RESERVA_CANCELADA,
-                    mensaje = "canceló la reserva de un ambiente",
-                    descripcionCompleta = null,
-                    fechaCreacion = ahora - (4 * 60 * 60 * 1000),
-                    esLeida = false,
-                    idReserva = 1002
-                ),
-                Notificacion(
-                    id = 3,
-                    idUsuario = 103,
-                    nombreUsuario = "Felipe",
-                    avatarUsuario = null,
-                    tipoNotificacion = TipoNotificacion.RESERVA_CONFIRMADA,
-                    mensaje = "reservó el ambiente e4",
-                    descripcionCompleta = null,
-                    fechaCreacion = ahora - (4 * 60 * 60 * 1000),
-                    esLeida = true,
-                    idReserva = 1003
-                )
-            )
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emptyList()
-        }
+        // Desde SharedPreferences:
+        // val prefs = getSharedPreferences("user", Context.MODE_PRIVATE)
+        // return prefs.getInt("user_id", 0)
+
+        // Desde Intent:
+        // return intent.getIntExtra("user_id", 0)
+
+        // Desde una sesión global:
+        // return SessionManager.getCurrentUserId()
+
+        // Por ahora, retorna un valor por defecto - CAMBIA ESTO
+        return 1 // Temporal - reemplaza con tu lógica real
     }
 }

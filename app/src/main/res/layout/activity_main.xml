@@ -1,89 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:padding="30dp"
     tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/tvSena"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="50pt"
+        android:layout_width="230dp"
+        android:layout_height="230dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/ic_sena"
+        android:contentDescription="@string/logo_sena"
         android:textColor="@color/black"
-        android:contentDescription="@string/logo_sena"/>
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5" />
 
     <EditText
         android:id="@+id/etEmail"
-        android:layout_width="350dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="30pt"
-        android:textColorHint="@color/txt_color"
-        android:textColor="@color/black"
+        android:layout_marginTop="32dp"
+        android:autofillHints="emailAddress"
+        android:fontFamily="@font/poppins"
         android:hint="@string/txtcorreo_electronico"
         android:inputType="textEmailAddress"
-        android:fontFamily="@font/poppins"
-        android:autofillHints="emailAddress"/>
+        android:minHeight="48dp"
+        android:paddingHorizontal="16dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/txt_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSena"
+        app:layout_constraintWidth_max="400dp" />
 
     <FrameLayout
-        android:layout_width="350dp"
+        android:id="@+id/framePassword"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="10pt">
+        android:layout_marginTop="16dp"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="@+id/etEmail"
+        app:layout_constraintStart_toStartOf="@+id/etEmail"
+        app:layout_constraintTop_toBottomOf="@+id/etEmail">
 
         <EditText
             android:id="@+id/etContra"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:autofillHints="password"
+            android:fontFamily="@font/poppins"
             android:hint="@string/contra"
             android:inputType="textPassword"
-            android:fontFamily="@font/poppins"
-            android:textColor="@color/black"
-            android:textColorHint="@color/txt_color"
+            android:paddingStart="16dp"
             android:paddingEnd="50dp"
-            android:autofillHints="password"/>
+            android:textColor="@color/black"
+            android:textColorHint="@color/txt_color" />
 
         <ImageView
             android:id="@+id/ivVerContra"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="12dp"
             android:contentDescription="@string/verContra"
             android:src="@drawable/ic_ojo_cerrado" />
     </FrameLayout>
 
     <Button
         android:id="@+id/btnIniciar"
-        android:layout_width="350dp"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="20pt"
+        android:layout_marginTop="24dp"
         android:backgroundTint="@color/colorBtns"
-        android:text="@string/inicioSesion"
         android:fontFamily="@font/poppins"
-        android:textColor="@color/white" />
+        android:minHeight="48dp"
+        android:text="@string/inicioSesion"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/framePassword"
+        app:layout_constraintStart_toStartOf="@+id/framePassword"
+        app:layout_constraintTop_toBottomOf="@+id/framePassword" />
 
     <TextView
         android:id="@+id/tvOlvidaste"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="5pt"
+        android:layout_marginTop="8dp"
         android:background="@color/white"
-        android:textStyle="italic"
+        android:contextClickable="true"
+        android:minHeight="48dp"
         android:text="@string/olvidaste"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
-        android:contextClickable="true"
-        android:textSize="15sp" />
-</LinearLayout>
+        android:textSize="15sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="@+id/btnIniciar"
+        app:layout_constraintStart_toStartOf="@+id/btnIniciar"
+        app:layout_constraintTop_toBottomOf="@+id/btnIniciar" />
 
-
+</androidx.constraintlayout.widget.ConstraintLayout>
