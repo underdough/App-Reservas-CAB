@@ -9,7 +9,7 @@ import java.lang.reflect.Type
 
 object RetrofitClient {
 
-    private const val BASE_URL = "https://tu-servidor.com/api/" // Cambia por tu URL
+    private const val BASE_URL = "https://192.168.58.251/phpGestionReservas/" // Cambia por tu URL
 
     // Deserializador personalizado para TipoNotificacion
     private val tipoNotificacionDeserializer = object : JsonDeserializer<TipoNotificacion> {

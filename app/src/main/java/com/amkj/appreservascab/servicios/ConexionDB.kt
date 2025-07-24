@@ -33,7 +33,7 @@ import retrofit2.http.Query
 
 interface ConexionDB {
     companion object {
-        const val URL = "http://192.168.0.14:80/phpGestionReservas/"
+        const val URL = "http://10.6.122.147/phpGestionReservas/"
     }
 
     @POST("consultaUsuario.php")
