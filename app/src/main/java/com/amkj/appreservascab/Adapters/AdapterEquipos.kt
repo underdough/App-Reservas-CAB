@@ -23,7 +23,7 @@ class AdapterEquipos(
             binding.tvModelo.text = equipo.modelo
             binding.tvDescripcion.text = equipo.descripcion
 
-            val url = "http://192.168.1.23:80/phpGestionReservas/${equipo.imagen}"
+            val url = "http://192.168.58.251/phpGestionReservas/${equipo.imagen}"
             Glide.with(binding.root.context)
                 .load(url)
                 .placeholder(R.drawable.imagen_error)

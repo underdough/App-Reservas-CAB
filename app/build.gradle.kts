@@ -77,6 +77,11 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0") // Usa una versión compatible
 
 //    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+    implementation("androidx.core:core-ktx:1.16.0")
+
+    implementation("com.google.firebase:firebase-messaging-ktx:24.1.2")
+    // Importa el Firebase BoM (controla las versiones de todas las libs de Firebase)
+    implementation(platform("com.google.firebase:firebase-bom:34.0.0"))  // usa la última versión disponible
 
 
 }
