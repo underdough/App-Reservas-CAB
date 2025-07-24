@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ActividadNotificaciones"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:id="@+id/mainlyNotificaciones">
 
     <!-- Header con título y botón de regreso -->
     <LinearLayout

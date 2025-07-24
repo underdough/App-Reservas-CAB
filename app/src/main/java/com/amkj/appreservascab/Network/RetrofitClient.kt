@@ -9,7 +9,7 @@ import java.lang.reflect.Type
 
 object RetrofitClient {
 
-    private const val BASE_URL = "https://tu-servidor.com/api/" // Cambia por tu URL
+    internal const val BASE_URL = "http://192.168.1.5:80/phpGestionReservas/" // Cambia por tu URL
 
     // Deserializador personalizado para TipoNotificacion
     private val tipoNotificacionDeserializer = object : JsonDeserializer<TipoNotificacion> {
@@ -26,7 +26,7 @@ object RetrofitClient {
         }
     }
 
-    private val gson = GsonBuilder()
+    internal val gson = GsonBuilder()
         .registerTypeAdapter(TipoNotificacion::class.java, tipoNotificacionDeserializer)
         .create()
 

@@ -30,7 +30,7 @@ class AdapterReservas(private val reservas: List<ModeloReserva>) :
 
             val imagenUrl = reserva.ambiente_imagen
             if (!imagenUrl.isNullOrEmpty()) {
-                val url = "http://192.168.0.9/phpGestionReservas/imagenesAmbientes/$imagenUrl"
+                val url = "http://192.168.1.5/phpGestionReservas/imagenesAmbientes/$imagenUrl"
                 Glide.with(binding.ivAmbiente.context)
                     .load(url)
                     .placeholder(R.drawable.placeholder_ambiente)

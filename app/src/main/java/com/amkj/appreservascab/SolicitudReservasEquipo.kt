@@ -26,6 +26,8 @@ class SolicitudReservasEquipo : AppCompatActivity() {
         binding = ActivitySolicitudReservasEquipoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        Log.d("EquipoReservaDebug", "Pantalla cargada correctamente")
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.mainlySolicitudReservasEquipo) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -37,10 +39,13 @@ class SolicitudReservasEquipo : AppCompatActivity() {
         val nombreUsuario = sharedPref.getString("nombre", "") ?: ""
 
         if (equipo != null) {
+            Log.d("EquipoReservaDebug", "Equipo recibido: ${equipo.descripcion} (${equipo.id})")
             binding.tvInfoMarca.text = equipo.marca
             binding.tvInfoReferencia.text = equipo.modelo
             binding.tvNombreEquipo.text = equipo.descripcion
             binding.tvNomUser.text = nombreUsuario
+        } else {
+            Log.e("EquipoReservaDebug", "No se recibió equipo en el intent")
         }
 
         binding.btnCalendario.setOnClickListener {
@@ -48,6 +53,7 @@ class SolicitudReservasEquipo : AppCompatActivity() {
             DatePickerDialog(this, { _, year, month, day ->
                 fechaSeleccionada = String.format("%04d-%02d-%02d", year, month + 1, day)
                 binding.tvFechaSeleccionada.text = fechaSeleccionada
+                Log.d("EquipoReservaDebug", "Fecha seleccionada: $fechaSeleccionada")
             }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
@@ -62,8 +68,11 @@ class SolicitudReservasEquipo : AppCompatActivity() {
         }
 
         binding.btnGuardar.setOnClickListener {
+            Log.d("EquipoReservaDebug", "Botón guardar presionado")
+
             if (equipo == null || fechaSeleccionada.isEmpty()) {
                 Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
+                Log.e("EquipoReservaDebug", "Campos faltantes: equipo=${equipo != null}, fecha=$fechaSeleccionada")
                 return@setOnClickListener
             }
 
@@ -74,10 +83,12 @@ class SolicitudReservasEquipo : AppCompatActivity() {
 
             if (jornadas.isEmpty()) {
                 Toast.makeText(this, "Selecciona al menos una jornada", Toast.LENGTH_SHORT).show()
+                Log.e("EquipoReservaDebug", "Ninguna jornada seleccionada")
                 return@setOnClickListener
             }
 
             val usuarioId = sharedPref.getInt("id", -1)
+            Log.d("EquipoReservaDebug", "ID usuario: $usuarioId")
 
             val reserva = ModeloReservaEquipo(
                 equipo_id = equipo.id,
@@ -98,17 +109,14 @@ class SolicitudReservasEquipo : AppCompatActivity() {
             )
 
             val gson = com.google.gson.Gson()
-            Log.d("EquipoReservaDebug", "ValidaciónEquipoRequest JSON: ${gson.toJson(datos)}")
+            Log.d("EquipoReservaDebug", "Solicitud Validación JSON: ${gson.toJson(datos)}")
 
             RetrofitClient.instance.validarDisponibilidadEquipo(datos)
                 .enqueue(object : Callback<Map<String, Boolean>> {
-                    override fun onResponse(
-                        call: Call<Map<String, Boolean>>,
-                        response: Response<Map<String, Boolean>>
-                    ) {
+                    override fun onResponse(call: Call<Map<String, Boolean>>, response: Response<Map<String, Boolean>>) {
                         Log.d("EquipoReservaDebug", "Código respuesta validación: ${response.code()}")
-                        Log.d("EquipoReservaDebug", "Cuerpo respuesta: ${response.body()}")
-                        Log.d("EquipoReservaDebug", "ErrorBody: ${response.errorBody()?.string()}")
+                        Log.d("EquipoReservaDebug", "Cuerpo validación: ${response.body()}")
+                        Log.d("EquipoReservaDebug", "ErrorBody validación: ${response.errorBody()?.string()}")
 
                         val disponible = response.body()?.get("disponible") ?: false
                         if (!disponible) {
@@ -122,13 +130,14 @@ class SolicitudReservasEquipo : AppCompatActivity() {
                         }
 
                         Log.d("EquipoReservaDebug", "Resultado validación: DISPONIBLE")
-                        Log.d("EquipoReservaDebug", "Enviando reservaEquipo JSON: ${gson.toJson(reserva)}")
+                        Log.d("EquipoReservaDebug", "ReservaEquipo JSON a enviar: ${gson.toJson(reserva)}")
 
                         RetrofitClient.instance.guardarReservaEquipo(reserva)
                             .enqueue(object : Callback<ResponseBody> {
                                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                                    Log.d("EquipoReservaDebug", "guardarReservaEquipo código: ${response.code()}")
-                                    Log.d("EquipoReservaDebug", "Body: ${response.body()?.string()}")
+                                    val bodyString = response.body()?.string()
+                                    Log.d("EquipoReservaDebug", "Código guardarReservaEquipo: ${response.code()}")
+                                    Log.d("EquipoReservaDebug", "Body guardarReservaEquipo: $bodyString")
 
                                     if (response.isSuccessful) {
                                         Toast.makeText(
@@ -136,6 +145,7 @@ class SolicitudReservasEquipo : AppCompatActivity() {
                                             "Reserva enviada con éxito",
                                             Toast.LENGTH_SHORT
                                         ).show()
+                                        Log.d("EquipoReservaDebug", "Reserva enviada correctamente")
                                         finish()
                                     } else {
                                         Toast.makeText(
@@ -143,6 +153,7 @@ class SolicitudReservasEquipo : AppCompatActivity() {
                                             "Error al guardar reserva",
                                             Toast.LENGTH_SHORT
                                         ).show()
+                                        Log.e("EquipoReservaDebug", "Error HTTP guardarReservaEquipo: ${response.code()} - $bodyString")
                                     }
                                 }
 
@@ -158,7 +169,7 @@ class SolicitudReservasEquipo : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<Map<String, Boolean>>, t: Throwable) {
-                        Log.e("EquipoReservaDebug", "Error en validación: ${t.message}", t)
+                        Log.e("EquipoReservaDebug", "Fallo en validación: ${t.message}", t)
                         Toast.makeText(
                             this@SolicitudReservasEquipo,
                             "Error de red al validar disponibilidad",

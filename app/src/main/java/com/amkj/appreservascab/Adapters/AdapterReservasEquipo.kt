@@ -25,7 +25,7 @@ class AdapterReservasEquipo(private val reservas: List<ModeloReservaEquipo>) :
             binding.tvJornadas.text = "Jornadas: ${reserva.jornadas}"
 
             // Cargar imagen con Glide
-            val url = "http://192.168.0.9:80/phpGestionReservas/${reserva.equipo_imagen ?: ""}"
+            val url = "http://192.168.1.5:80/phpGestionReservas/${reserva.equipo_imagen ?: ""}"
             Glide.with(binding.root.context)
                 .load(url)
                 .placeholder(R.drawable.placeholder_portatil)

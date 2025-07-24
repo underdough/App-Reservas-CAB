@@ -1,21 +1,21 @@
 package com.amkj.appreservascab.Modelos
 
-// Ajusta el package según tu proyecto
+
 
 /**
  * Data class que representa una notificación del sistema de reservas
  */
-data class Notificacion(
+data class  Notificacion(
     val id: Int,
     val idUsuario: Int,
     val nombreUsuario: String,
-    val avatarUsuario: String?, // URL del avatar, puede ser null
+    val avatarUsuario: String?,
     val tipoNotificacion: TipoNotificacion,
     val mensaje: String,
-    val descripcionCompleta: String?, // Descripción adicional si es necesaria
-    val fechaCreacion: Long, // Timestamp en milisegundos
+    val descripcionCompleta: String?,
+    val fechaCreacion: Long,
     val esLeida: Boolean = false,
-    val idReserva: Int? = null, // ID de la reserva relacionada (si aplica)
+    val idReserva: Int? = null,
     val datosAdicionales: String? = null // JSON con información extra si es necesario
 )
 
@@ -24,15 +24,15 @@ data class Notificacion(
  */
 enum class TipoNotificacion(val icono: Int, val descripcion: String) {
     SOLICITUD_RESERVA(
-        icono = android.R.drawable.ic_dialog_email, // Temporal - reemplaza con tu icono
+        icono = android.R.drawable.ic_dialog_email, // Temporal, toca remplazari conos
         descripcion = "solicitó un ambiente"
     ),
     RESERVA_CONFIRMADA(
-        icono = android.R.drawable.ic_dialog_info, // Temporal - reemplaza con tu icono
+        icono = android.R.drawable.ic_dialog_info, // Temporal -
         descripcion = "confirmó la reserva"
     ),
     RESERVA_CANCELADA(
-        icono = android.R.drawable.ic_dialog_alert, // Temporal - reemplaza con tu icono
+        icono = android.R.drawable.ic_dialog_alert, // Temporal
         descripcion = "canceló la reserva de un ambiente"
     ),
     RESERVA_MODIFICADA(
@@ -40,7 +40,7 @@ enum class TipoNotificacion(val icono: Int, val descripcion: String) {
         descripcion = "modificó una reserva"
     ),
     MENSAJE_SISTEMA(
-        icono = android.R.drawable.ic_dialog_info, // Temporal - reemplaza con tu icono
+        icono = android.R.drawable.ic_dialog_info, // Temporal
         descripcion = "mensaje del sistema"
     )
 }
