@@ -11,11 +11,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amkj.appreservascab.Adaptadores.AdapterEquipos
-import com.amkj.appreservascab.Adapters.*
+import com.amkj.appreservascab.Adapters.AdapterAmbientes
 import com.amkj.appreservascab.Modelos.ModeloAmbientes
 import com.amkj.appreservascab.Modelos.ModeloEquipos
 import com.amkj.appreservascab.databinding.ActivityVistaPrincipalBinding
@@ -28,6 +27,8 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private lateinit var binding: ActivityVistaPrincipalBinding
     private var listaAmbientes: List<ModeloAmbientes> = listOf()
     private var listaEquipos: List<ModeloEquipos> = listOf()
+    private lateinit var adapterAmbientes: AdapterAmbientes
+    private lateinit var adapterEquipos: AdapterEquipos
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +37,26 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         binding.VistaNavegacionxd.setNavigationItemSelectedListener(this)
 
-        // Configurar búsqueda
+        // LayoutManagers
+        binding.lyAmbientesPpal.recyclerAmbientes.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.lyAmbientesPpal.recyclerEquipos.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        // Adapters iniciales vacíos
+        adapterAmbientes = AdapterAmbientes(listaAmbientes) { ambiente ->
+            val intent = Intent(this, DetalleAmbiente::class.java)
+            intent.putExtra("ambiente", ambiente)
+            startActivity(intent)
+        }
+        adapterEquipos = AdapterEquipos(listaEquipos) { equipo ->
+            val intent = Intent(this, DetalleEquipo::class.java)
+            intent.putExtra("equipo", equipo)
+            startActivity(intent)
+        }
+
+        binding.lyAmbientesPpal.recyclerAmbientes.adapter = adapterAmbientes
+        binding.lyAmbientesPpal.recyclerEquipos.adapter = adapterEquipos
+
+        // Buscar mientras se escribe
         binding.etBuscar.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -44,88 +64,44 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val query = s.toString().trim().lowercase()
 
-                val ambientesFiltrados = listaAmbientes.filter {
-                    it.nombre.lowercase().contains(query)
-                }
-
-                val equiposFiltrados = listaEquipos.filter {
-                    it.marca.lowercase().contains(query) || it.modelo.lowercase().contains(query)
-                }
-
-                val listaBusqueda = ambientesFiltrados.map { ItemBusqueda.Ambiente(it) } +
-                        equiposFiltrados.map { ItemBusqueda.Equipo(it) }
-
-                val adaptadorBusqueda = AdapterBusqueda(listaBusqueda) { recurso ->
-                    when (recurso) {
-                        is ItemBusqueda.Ambiente -> {
-                            val intent = Intent(this@VistaPrincipal, DetalleAmbiente::class.java)
-                            intent.putExtra("ambiente", recurso.data)
-                            startActivity(intent)
-                        }
-                        is ItemBusqueda.Equipo -> {
-                            val intent = Intent(this@VistaPrincipal, DetalleEquipo::class.java)
-                            intent.putExtra("equipo", recurso.data)
-                            startActivity(intent)
-                        }
-                    }
-                }
-
-                binding.rvLista.adapter = adaptadorBusqueda
-                binding.rvLista.visibility = if (query.isNotEmpty()) View.VISIBLE else View.GONE
+                adapterAmbientes.filtrar(query)
+                adapterEquipos.filtrar(query)
             }
         })
 
-        // RecyclerView horizontales
-        binding.lyAmbientesPpal.recyclerAmbientes.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.lyAmbientesPpal.recyclerEquipos.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
+        // Obtener ambientes
         lifecycleScope.launch {
             try {
                 val response = RetrofitClient.instance.obtenerAmbiente()
                 if (response.isSuccessful && response.body() != null) {
-                    listaAmbientes = response.body()!! //  Guardamos para la búsqueda
-                    binding.lyAmbientesPpal.recyclerAmbientes.adapter =
-                        AdapterAmbientes(listaAmbientes) { ambiente ->
-                            val intent = Intent(this@VistaPrincipal, DetalleAmbiente::class.java)
-                            intent.putExtra("ambiente", ambiente)
-                            startActivity(intent)
-                        }
+                    listaAmbientes = response.body()!!
+                    adapterAmbientes.setListaCompleta(listaAmbientes)
+                    adapterAmbientes.filtrar("") // inicializa con todo
                 }
             } catch (e: Exception) {
                 Toast.makeText(this@VistaPrincipal, "Error: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
 
+        // Obtener equipos
         lifecycleScope.launch {
             try {
                 val response = RetrofitClient.instance.obtenerEquipos()
                 if (response.isSuccessful && response.body() != null) {
-                    listaEquipos = response.body()!! // Guardamos para la búsqueda
-                    binding.lyAmbientesPpal.recyclerEquipos.adapter =
-                        AdapterEquipos(listaEquipos) { equipo ->
-                            val intent = Intent(this@VistaPrincipal, DetalleEquipo::class.java)
-                            intent.putExtra("equipo", equipo)
-                            startActivity(intent)
-                        }
+                    listaEquipos = response.body()!!
+                    adapterEquipos.setListaCompleta(listaEquipos)
+                    adapterEquipos.filtrar("") // inicializa con todo
                 }
             } catch (e: Exception) {
                 Toast.makeText(this@VistaPrincipal, "Error: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
 
-
         binding.ibNotifcacion.setOnClickListener {
-            try {
-                val intent = Intent(this, ActividadNotificaciones::class.java)
-                startActivity(intent)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Toast.makeText(this, "Error al abrir notificaciones", Toast.LENGTH_SHORT).show()
-            }
+            val intent = Intent(this, ActividadNotificaciones::class.java)
+            startActivity(intent)
         }
 
-
-        // Menú lateral
         binding.ibMenu.setOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.END)
         }
@@ -137,6 +113,11 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         val sharedPref = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
         tvUserName.text = sharedPref.getString("nombre", "Nombre Usuario")
         tvUserSubtitle.text = sharedPref.getString("rol", "Rol Desconocido")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        verificarNotificacionesNoLeidas()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -165,6 +146,27 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             binding.drawerLayout.closeDrawer(GravityCompat.END)
         } else {
             super.onBackPressed()
+        }
+    }
+
+    private fun verificarNotificacionesNoLeidas() {
+        val sharedPref = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
+        val usuarioId = sharedPref.getInt("id", -1)
+        if (usuarioId == -1) return
+
+        lifecycleScope.launch {
+            try {
+                val notificaciones = RetrofitClient.instance.obtenerNotificaciones(
+                    mapOf("usuario_id" to usuarioId)
+                )
+                val noLeidas = notificaciones.count { it.leida == 0 }
+
+                val contador = findViewById<TextView>(R.id.contadorNotificaciones)
+                contador.text = if (noLeidas > 99) "99+" else noLeidas.toString()
+                contador.visibility = if (noLeidas > 0) View.VISIBLE else View.GONE
+            } catch (e: Exception) {
+                Log.e("Notificaciones", "Error al obtener notificaciones", e)
+            }
         }
     }
 }

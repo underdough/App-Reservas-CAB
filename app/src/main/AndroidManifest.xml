@@ -26,7 +26,7 @@
             android:exported="false" />
         <activity
             android:name=".ActividadNotificaciones"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".DetalleEquipo"
             android:exported="false" />

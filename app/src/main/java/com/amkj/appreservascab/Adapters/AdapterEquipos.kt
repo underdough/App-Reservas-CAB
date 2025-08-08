@@ -11,7 +11,7 @@ import com.amkj.appreservascab.SolicitudReservasEquipo
 import com.bumptech.glide.Glide
 
 class AdapterEquipos(
-    private val listaEquipos: List<ModeloEquipos>,
+    private var listaEquipos: List<ModeloEquipos>,
     private val onItemClick: (ModeloEquipos) -> Unit
 ) : RecyclerView.Adapter<AdapterEquipos.EquipoViewHolder>() {
 
@@ -23,7 +23,7 @@ class AdapterEquipos(
             binding.tvModelo.text = equipo.modelo
             binding.tvDescripcion.text = equipo.descripcion
 
-            val url = "http://192.168.1.5:80/phpGestionReservas/${equipo.imagen}"
+            val url = "https://cf7e2811433e.ngrok-free.app/phpGestionReservas/${equipo.imagen}"
             Glide.with(binding.root.context)
                 .load(url)
                 .placeholder(R.drawable.imagen_error)
@@ -42,6 +42,22 @@ class AdapterEquipos(
             }
         }
     }
+    fun filtrar(query: String) {
+        val filtrada = listaEquiposOriginal.filter {
+            it.marca.contains(query, ignoreCase = true) || it.modelo.contains(query, ignoreCase = true)
+        }
+        listaEquipos = filtrada
+        notifyDataSetChanged()
+    }
+
+    private var listaEquiposOriginal: List<ModeloEquipos> = listOf()
+
+    fun setListaCompleta(lista: List<ModeloEquipos>) {
+        listaEquiposOriginal = lista
+        listaEquipos = lista
+        notifyDataSetChanged()
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EquipoViewHolder {
         val binding = ItemEquipoBinding.inflate(LayoutInflater.from(parent.context), parent, false)

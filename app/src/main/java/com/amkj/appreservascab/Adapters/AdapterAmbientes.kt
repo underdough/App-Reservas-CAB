@@ -26,7 +26,7 @@ class AdapterAmbientes(
             binding.tvNombreAmbiente.text = ambiente.nombre
             binding.tvDescripcion.text = ambiente.descripcion
 
-            val urlImagen = "http://192.168.1.5/phpGestionReservas/" + ambiente.imagen
+            val urlImagen = "https://cf7e2811433e.ngrok-free.app/phpGestionReservas/" + ambiente.imagen
             Glide.with(binding.root.context)
                 .load(urlImagen)
                 .placeholder(R.drawable.imagen_error)
@@ -47,6 +47,22 @@ class AdapterAmbientes(
         }
 
     }
+    fun filtrar(query: String) {
+        val filtrada = listaAmbientesOriginal.filter {
+            it.nombre.contains(query, ignoreCase = true)
+        }
+        listaAmbientes = filtrada
+        notifyDataSetChanged()
+    }
+
+    private var listaAmbientesOriginal: List<ModeloAmbientes> = listOf()
+
+    fun setListaCompleta(lista: List<ModeloAmbientes>) {
+        listaAmbientesOriginal = lista
+        listaAmbientes = lista
+        notifyDataSetChanged()
+    }
+
 
 //    val tv_nombre_buscar = itemView.findViewById<TextView>(R.id.tv_nombre_buscar)
 

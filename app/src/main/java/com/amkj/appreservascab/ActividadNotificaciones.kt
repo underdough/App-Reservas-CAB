@@ -1,114 +1,51 @@
 package com.amkj.appreservascab
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.amkj.appreservascab.Adapters.AdaptadorNotificaciones
+import com.amkj.appreservascab.Adapters.NotificacionesAdapter
+import com.amkj.appreservascab.databinding.ActivityNotificacionesBinding
 import com.amkj.appreservascab.Modelos.Notificacion
-import com.amkj.appreservascab.Modelos.TipoNotificacion
-import com.amkj.appreservascab.Repository.NotificacionesRepository
+import com.amkj.appreservascab.servicios.RetrofitClient
 import kotlinx.coroutines.launch
 
 class ActividadNotificaciones : AppCompatActivity() {
 
-    // Elementos de la interfaz
-    private var btnRegresar: ImageButton? = null
-    private var txtTituloNotificaciones: TextView? = null
-    private var recyclerNotificaciones: RecyclerView? = null
-    private var contenedorEstadoVacio: LinearLayout? = null
-    private var swipeRefresh: SwipeRefreshLayout? = null
-    private var contenedorCargando: LinearLayout? = null
-    private var contenedorError: LinearLayout? = null
-    private var btnReintentar: TextView? = null
-
-    // Adaptador y repositorio
-    private var adaptadorNotificaciones: AdaptadorNotificaciones? = null
-    private val notificacionesRepository = NotificacionesRepository()
-
-    // ID del usuario actual - obtenlo de SharedPreferences, Intent, etc.
-    private var userId: Int = 0
+    private lateinit var binding: ActivityNotificacionesBinding
+    private lateinit var adapter: NotificacionesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityNotificacionesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        try {
-            setContentView(R.layout.activity_notificaciones)
+        binding.recyclerNotificaciones.layoutManager = LinearLayoutManager(this)
 
-            // Obtener ID del usuario (ajusta según tu implementación)
-            userId = obtenerIdUsuarioActual()
-
-            inicializarVistas()
-            configurarRecyclerView()
-            configurarListeners()
-            configurarSwipeRefresh()
-            cargarNotificaciones()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "Error al cargar la actividad: ${e.message}", Toast.LENGTH_LONG).show()
-            finish()
-        }
-    }
-
-    private fun inicializarVistas() {
-        try {
-            btnRegresar = findViewById(R.id.btn_regresar)
-            txtTituloNotificaciones = findViewById(R.id.txt_titulo_notificaciones)
-            recyclerNotificaciones = findViewById(R.id.recycler_notificaciones)
-            contenedorEstadoVacio = findViewById(R.id.contenedor_estado_vacio)
-            swipeRefresh = findViewById(R.id.swipe_refresh)
-            contenedorCargando = findViewById(R.id.contenedor_cargando)
-            contenedorError = findViewById(R.id.contenedor_error)
-            btnReintentar = findViewById(R.id.btn_reintentar)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw Exception("Error al inicializar vistas: ${e.message}")
-        }
-    }
-
-    private fun configurarRecyclerView() {
-        try {
-            adaptadorNotificaciones = AdaptadorNotificaciones { notificacion ->
-                alHacerClickNotificacion(notificacion)
-            }
-
-            recyclerNotificaciones?.apply {
-                layoutManager = LinearLayoutManager(this@ActividadNotificaciones)
-                adapter = adaptadorNotificaciones
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "Error al configurar RecyclerView", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun configurarListeners() {
-        btnRegresar?.setOnClickListener {
+        // Botón regresar
+        binding.btnRegresar.setOnClickListener {
             finish()
         }
 
-        btnReintentar?.setOnClickListener {
-            cargarNotificaciones()
-        }
-    }
+        cargarNotificaciones()
 
-    private fun configurarSwipeRefresh() {
-        swipeRefresh?.setOnRefreshListener {
+        binding.swipeRefresh.setOnRefreshListener {
+            binding.swipeRefresh.isRefreshing = false
             cargarNotificaciones()
         }
     }
 
     private fun cargarNotificaciones() {
-        if (userId == 0) {
-            mostrarError("Usuario no identificado")
+        val sharedPref = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
+        val usuarioId = sharedPref.getInt("id", -1)
+        Log.d("UsuarioPrefs", "ID del usuario guardado: $usuarioId")
+
+        if (usuarioId == -1) {
+            Toast.makeText(this, "No se pudo obtener el usuario", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -116,163 +53,155 @@ class ActividadNotificaciones : AppCompatActivity() {
 
         lifecycleScope.launch {
             try {
-                val resultado = notificacionesRepository.obtenerNotificaciones(userId)
-
-                resultado.fold(
-                    onSuccess = { notificaciones ->
-                        mostrarNotificaciones(notificaciones)
-                    },
-                    onFailure = { error ->
-                        mostrarError("Error al cargar notificaciones: ${error.message}")
-                    }
+                val respuesta = RetrofitClient.instance.obtenerNotificaciones(
+                    mapOf("usuario_id" to usuarioId)
                 )
+
+                Log.d("NotificacionesDebug", "Cantidad de notificaciones recibidas: ${respuesta.size}")
+                respuesta.forEach {
+                    Log.d("NotificacionesDebug", "Notificación -> ID: ${it.id}, Mensaje: ${it.mensaje}")
+                }
+
+                if (respuesta.isNotEmpty()) {
+                    adapter = NotificacionesAdapter(respuesta) { notificacion ->
+                        mostrarDialogoAcciones(notificacion)
+                    }
+                    binding.recyclerNotificaciones.adapter = adapter
+                    mostrarContenido()
+                } else {
+                    mostrarVacio()
+                }
+
             } catch (e: Exception) {
-                mostrarError("Error inesperado: ${e.message}")
-            } finally {
-                swipeRefresh?.isRefreshing = false
+                e.printStackTrace()
+                Log.e("NotificacionesDebug", "Error cargando notificaciones", e)
+                mostrarError()
             }
         }
     }
 
-    private fun mostrarNotificaciones(notificaciones: List<Notificacion>) {
-        try {
-            ocultarTodosLosEstados()
+    private fun mostrarDialogoAcciones(notificacion: Notificacion) {
+        val sharedPref = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
+        val rolUsuario = sharedPref.getString("rol", "") ?: ""
 
-            if (notificaciones.isEmpty()) {
-                mostrarEstadoVacio()
-            } else {
-                recyclerNotificaciones?.visibility = View.VISIBLE
-                adaptadorNotificaciones?.submitList(notificaciones)
-            }
+        val adminId = sharedPref.getInt("id", -1)
 
-            actualizarTitulo(notificaciones)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            mostrarError("Error al mostrar notificaciones")
+        val opciones = if (rolUsuario == "admin") {
+            arrayOf("Marcar como leída", "Aceptar reserva", "Rechazar reserva")
+        } else {
+            arrayOf("Marcar como leída")
         }
-    }
 
-    private fun mostrarCargando() {
-        ocultarTodosLosEstados()
-        contenedorCargando?.visibility = View.VISIBLE
-        txtTituloNotificaciones?.text = "Cargando notificaciones..."
-    }
-
-    private fun mostrarError(mensaje: String) {
-        ocultarTodosLosEstados()
-        contenedorError?.visibility = View.VISIBLE
-        txtTituloNotificaciones?.text = "Error"
-        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
-    }
-
-    private fun mostrarEstadoVacio() {
-        ocultarTodosLosEstados()
-        contenedorEstadoVacio?.visibility = View.VISIBLE
-        txtTituloNotificaciones?.text = "Notificaciones"
-    }
-
-    private fun ocultarTodosLosEstados() {
-        recyclerNotificaciones?.visibility = View.GONE
-        contenedorEstadoVacio?.visibility = View.GONE
-        contenedorCargando?.visibility = View.GONE
-        contenedorError?.visibility = View.GONE
-    }
-
-    private fun actualizarTitulo(notificaciones: List<Notificacion>) {
-        try {
-            val noLeidas = notificaciones.count { !it.esLeida }
-            txtTituloNotificaciones?.text = if (noLeidas > 0) {
-                "Notificaciones ($noLeidas)"
-            } else {
-                "Notificaciones"
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            txtTituloNotificaciones?.text = "Notificaciones"
-        }
-    }
-
-    private fun alHacerClickNotificacion(notificacion: Notificacion) {
-        try {
-            // Marcar como leída en el servidor si no lo está
-            if (!notificacion.esLeida) {
-                marcarComoLeida(notificacion)
-            }
-
-            // Manejar la acción según el tipo de notificación
-            when (notificacion.tipoNotificacion) {
-                TipoNotificacion.SOLICITUD_RESERVA -> {
-                    abrirDetallesReserva(notificacion.idReserva)
-                }
-                TipoNotificacion.RESERVA_CONFIRMADA -> {
-                    mostrarMensaje("Reserva confirmada por ${notificacion.nombreUsuario}")
-                }
-                TipoNotificacion.RESERVA_CANCELADA -> {
-                    mostrarMensaje("Reserva cancelada por ${notificacion.nombreUsuario}")
-                }
-                TipoNotificacion.RESERVA_MODIFICADA -> {
-                    abrirDetallesReserva(notificacion.idReserva)
-                }
-                TipoNotificacion.MENSAJE_SISTEMA -> {
-                    mostrarMensaje(notificacion.descripcionCompleta ?: notificacion.mensaje)
+        AlertDialog.Builder(this)
+            .setTitle("Acciones para la notificación")
+            .setItems(opciones) { _, which ->
+                when (which) {
+                    0 -> marcarComoLeida(notificacion.id)
+                    1 -> if (rolUsuario == "admin") {
+                        actualizarEstadoReserva(
+                            notificacion.tipo_reserva,
+                            notificacion.reserva_id,
+                            "aprobada",
+                            adminId
+                        )
+                    }
+                    2 -> if (rolUsuario == "admin") {
+                        actualizarEstadoReserva(
+                            notificacion.tipo_reserva,
+                            notificacion.reserva_id,
+                            "rechazada",
+                            adminId
+                        )
+                    }
                 }
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            mostrarMensaje("Error al procesar notificación")
-        }
+            .show()
     }
 
-    private fun marcarComoLeida(notificacion: Notificacion) {
+
+
+
+    private fun marcarComoLeida(idNotificacion: Int) {
         lifecycleScope.launch {
             try {
-                val resultado = notificacionesRepository.marcarComoLeida(notificacion.id)
-
-                resultado.fold(
-                    onSuccess = {
-                        // Actualizar localmente la notificación
-                        adaptadorNotificaciones?.marcarComoLeida(notificacion)
-                        // Actualizar el título con el nuevo conteo
-                        adaptadorNotificaciones?.currentList?.let { actualizarTitulo(it) }
-                    },
-                    onFailure = { error ->
-                        // Log del error, pero no mostrar al usuario ya que es secundario
-                        println("Error al marcar como leída: ${error.message}")
-                    }
-                )
+                val response = RetrofitClient.instance.marcarNotificacionLeida(mapOf("id" to idNotificacion))
+                if (response.isSuccessful) {
+                    Log.d("Notif", "Marcada como leída")
+                    cargarNotificaciones()
+                } else {
+                    Toast.makeText(this@ActividadNotificaciones, "No se pudo marcar como leída", Toast.LENGTH_SHORT).show()
+                }
             } catch (e: Exception) {
-                println("Error al marcar como leída: ${e.message}")
+                e.printStackTrace()
+                Toast.makeText(this@ActividadNotificaciones, "Error al marcar como leída", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun abrirDetallesReserva(idReserva: Int?) {
-        if (idReserva != null) {
-            // Implementar navegación a detalles de reserva
-            mostrarMensaje("Abriendo detalles de reserva #$idReserva")
-            // Intent hacia ActividadDetallesReserva, por ejemplo
+    private fun actualizarEstadoReserva(tipo: String, reservaId: Int, nuevoEstado: String, adminId: Int) {
+        lifecycleScope.launch {
+            try {
+                Log.d("ActualizarEstado", "Enviando datos: tipo=$tipo, reservaId=$reservaId, nuevoEstado=$nuevoEstado, aprobado_por=$adminId")
+
+                val respuesta = RetrofitClient.instance.actualizarEstadoReserva(
+                    mapOf(
+                        "tipo_reserva" to tipo,
+                        "reserva_id" to reservaId,
+                        "nuevo_estado" to nuevoEstado,
+                        "aprobado_por" to adminId
+                    )
+                )
+
+                Log.d("ActualizarEstado", "Respuesta recibida: $respuesta")
+
+                Toast.makeText(
+                    this@ActividadNotificaciones,
+                    respuesta["mensaje"] ?: "Estado actualizado",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                cargarNotificaciones()
+
+            } catch (e: Exception) {
+                Log.e("ActualizarEstado", "Error actualizando estado", e)
+                Toast.makeText(this@ActividadNotificaciones, "Fallo al actualizar estado", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
-    private fun mostrarMensaje(mensaje: String) {
-        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
+
+
+    private fun mostrarCargando() {
+        binding.contenedorCargando.visibility = View.VISIBLE
+        binding.contenedorEstadoVacio.visibility = View.GONE
+        binding.contenedorError.visibility = View.GONE
+        binding.recyclerNotificaciones.visibility = View.GONE
     }
 
-    private fun obtenerIdUsuarioActual(): Int {
-        // Implementa según tu sistema de autenticación
-        // Ejemplos:
+    private fun mostrarContenido() {
+        binding.contenedorCargando.visibility = View.GONE
+        binding.contenedorEstadoVacio.visibility = View.GONE
+        binding.contenedorError.visibility = View.GONE
+        binding.recyclerNotificaciones.visibility = View.VISIBLE
+    }
 
-        // Desde SharedPreferences:
-        // val prefs = getSharedPreferences("user", Context.MODE_PRIVATE)
-        // return prefs.getInt("user_id", 0)
+    private fun mostrarVacio() {
+        binding.contenedorCargando.visibility = View.GONE
+        binding.contenedorEstadoVacio.visibility = View.VISIBLE
+        binding.contenedorError.visibility = View.GONE
+        binding.recyclerNotificaciones.visibility = View.GONE
 
-        // Desde Intent:
-        // return intent.getIntExtra("user_id", 0)
+        Toast.makeText(this, "No hay notificaciones nuevas", Toast.LENGTH_SHORT).show()
+    }
 
-        // Desde una sesión global:
-        // return SessionManager.getCurrentUserId()
+    private fun mostrarError() {
+        binding.contenedorCargando.visibility = View.GONE
+        binding.contenedorEstadoVacio.visibility = View.GONE
+        binding.contenedorError.visibility = View.VISIBLE
+        binding.recyclerNotificaciones.visibility = View.GONE
 
-        // Por ahora, retorna un valor por defecto - CAMBIA ESTO
-        return 1 // Temporal - reemplaza con tu lógica real
+        binding.btnReintentar.setOnClickListener {
+            cargarNotificaciones()
+        }
     }
 }

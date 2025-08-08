@@ -90,22 +90,19 @@ class SolicitudReservasEquipo : AppCompatActivity() {
             val usuarioId = sharedPref.getInt("id", -1)
             Log.d("EquipoReservaDebug", "ID usuario: $usuarioId")
 
-            val reserva = ModeloReservaEquipo(
-                equipo_id = equipo.id,
-                usuario_id = usuarioId,
+            val reservaRequest = ReservaEquipoRequest(
                 elemento_id = equipo.id,
+                usuario_id = usuarioId,
                 fecha = fechaSeleccionada,
-                motivo = "Reserva de equipo",
                 jornadas = jornadas.joinToString(", "),
-                estado = "pendiente",
-                equipo_nombre = equipo.descripcion,
-                equipo_imagen = equipo.imagen
+                motivo = "Reserva de equipo",
+                estado = "pendiente"
             )
 
             val datos = ValidacionEquipoRequest(
                 equipo_id = equipo.id,
                 fecha = fechaSeleccionada,
-                jornadas = reserva.jornadas
+                jornadas = reservaRequest.jornadas
             )
 
             val gson = com.google.gson.Gson()
@@ -130,9 +127,9 @@ class SolicitudReservasEquipo : AppCompatActivity() {
                         }
 
                         Log.d("EquipoReservaDebug", "Resultado validación: DISPONIBLE")
-                        Log.d("EquipoReservaDebug", "ReservaEquipo JSON a enviar: ${gson.toJson(reserva)}")
+                        Log.d("EquipoReservaDebug", "ReservaEquipo JSON a enviar: ${gson.toJson(reservaRequest)}")
 
-                        RetrofitClient.instance.guardarReservaEquipo(reserva)
+                        RetrofitClient.instance.guardarReservaEquipo(reservaRequest)
                             .enqueue(object : Callback<ResponseBody> {
                                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                                     val bodyString = response.body()?.string()

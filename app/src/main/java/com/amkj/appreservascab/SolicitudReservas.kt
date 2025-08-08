@@ -140,7 +140,7 @@ class SolicitudReservas : AppCompatActivity() {
                 fecha_hora_fin = fechaHoraFin,
                 motivo = "Reserva de ambiente",
                 jornadas = jornadas.joinToString(", "),
-                id = 0,
+                id_reserva = 0,
                 ambiente_nombre = ambiente.nombre,
                 ambiente_imagen = null
             )

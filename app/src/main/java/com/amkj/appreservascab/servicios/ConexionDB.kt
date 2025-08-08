@@ -1,6 +1,7 @@
 package com.amkj.appreservascab.servicios
 
 
+import com.amkj.appreservascab.Modelos.EliminarReservaRequest
 import com.amkj.appreservascab.Modelos.ModeloActualizarContrasena
 import com.amkj.appreservascab.Modelos.ModeloAmbientes
 import com.amkj.appreservascab.Modelos.ModeloCorreo
@@ -10,6 +11,8 @@ import com.amkj.appreservascab.Modelos.ModeloReservaEquipo
 import com.amkj.appreservascab.Modelos.ModeloUsuarioCrear
 import com.amkj.appreservascab.Modelos.ModeloUsuarios
 import com.amkj.appreservascab.Modelos.ModeloVerificarToken
+import com.amkj.appreservascab.Modelos.Notificacion
+import com.amkj.appreservascab.Modelos.ReservaEquipoRequest
 import com.amkj.appreservascab.Modelos.RespuestaCodigo
 import com.amkj.appreservascab.Modelos.RespuestaContraNue
 import com.amkj.appreservascab.Modelos.RespuestaInsertarAmbiente
@@ -28,12 +31,14 @@ import retrofit2.http.PUT
 import retrofit2.http.Part
 import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Query
 
 
 interface ConexionDB {
     companion object {
-        const val URL = "http://192.168.1.5:80/phpGestionReservas/"
+        const val URL = "https://cf7e2811433e.ngrok-free.app/phpGestionReservas/"
     }
 
     @POST("consultaUsuario.php")
@@ -88,7 +93,7 @@ interface ConexionDB {
 
 
     @POST("guardarReservaEquipo.php")
-    fun guardarReservaEquipo(@Body reserva: ModeloReservaEquipo): Call<ResponseBody>
+    fun guardarReservaEquipo(@Body reserva: ReservaEquipoRequest): Call<ResponseBody>
 
     @POST("obtenerReservaEquipo.php")
     fun obtenerReservasEquipo(@Body body: Map<String, Int>): Call<List<ModeloReservaEquipo>>
@@ -98,6 +103,27 @@ interface ConexionDB {
 
     @POST("crearUsuario.php")
     fun crearUsuario(@Body usuario: ModeloUsuarioCrear): Call<Map<String, Any>>
+
+    @POST("obtener_notificaciones.php")
+    suspend fun obtenerNotificaciones(@Body body: Map<String, Int>): List<Notificacion>
+
+    @POST("marcar_notificacion_leida.php")
+    suspend fun marcarNotificacionLeida(@Body datos: Map<String, Int>): retrofit2.Response<Unit>
+
+    @POST("actualizar_estado_reserva.php")
+    suspend fun actualizarEstadoReserva(
+        @Body cuerpo: Map<String, @JvmSuppressWildcards Any>
+    ): Map<String, String>
+
+    @POST("eliminar_reserva.php")
+    fun eliminarReserva(@Body body: EliminarReservaRequest): Call<Map<String, String>>
+
+
+
+
+
+
+
 
 
 

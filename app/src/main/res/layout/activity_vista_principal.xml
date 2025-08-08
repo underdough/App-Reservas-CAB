@@ -60,14 +60,35 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="20dp">
 
-                        <ImageButton
-                            android:id="@+id/ibNotifcacion"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:contentDescription="@string/txt_notificacion"
-                            android:src="@drawable/ic_notificacion"
-                            android:background="@color/transparente"
-                            android:scaleType="fitCenter"/>
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageButton
+                                android:id="@+id/ibNotifcacion"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:contentDescription="@string/txt_notificacion"
+                                android:src="@drawable/ic_notificacion"
+                                android:background="@color/transparente"
+                                android:scaleType="fitCenter" />
+
+                            <TextView
+                                android:id="@+id/contadorNotificaciones"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_alignEnd="@id/ibNotifcacion"
+                                android:layout_alignTop="@id/ibNotifcacion"
+                                android:layout_marginEnd="4dp"
+                                android:layout_marginTop="2dp"
+                                android:background="@drawable/circle_red"
+                                android:textColor="@android:color/white"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:gravity="center"
+                                android:visibility="gone" />
+                        </RelativeLayout>
+
 
                         <ImageButton
                             android:id="@+id/ibMenu"
