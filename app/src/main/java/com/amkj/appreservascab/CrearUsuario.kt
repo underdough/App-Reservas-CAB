@@ -21,6 +21,17 @@ class CrearUsuario : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 🚫 Bloqueo por rol (candado en la Activity)
+        val rolSesion = (getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
+            .getString("rol", "") ?: "").lowercase()
+        val esAdmin = (rolSesion == "admin" || rolSesion == "administrador")
+        if (!esAdmin) {
+            Toast.makeText(this, "Acceso denegado: se requiere rol administrador.", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
         enableEdgeToEdge()
         binding = ActivityCrearUsuarioBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -61,18 +72,16 @@ class CrearUsuario : AppCompatActivity() {
             val telefono = binding.etTelefono.text.toString().trim()
             val correo = binding.etCorreo.text.toString().trim()
             val contrasena = binding.etContrasena.text.toString().trim()
-            val rol = binding.spRol.selectedItem.toString() // <-- Aquí obtienes el rol seleccionado
-
+            val rolSeleccionado = binding.spRol.selectedItem.toString()
 
             if (contrasena.length < 6) {
                 Toast.makeText(this, "La contraseña debe tener mínimo 6 caracteres", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-
-
-            // Validaciones básicas
-            if (numDocumento.isEmpty() || nombre.isEmpty() || telefono.isEmpty() || correo.isEmpty() || contrasena.isEmpty() || rol.isEmpty()) {
+            if (numDocumento.isEmpty() || nombre.isEmpty() || telefono.isEmpty() ||
+                correo.isEmpty() || contrasena.isEmpty() || rolSeleccionado.isEmpty()
+            ) {
                 Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -83,24 +92,28 @@ class CrearUsuario : AppCompatActivity() {
                 telefono = telefono,
                 correo = correo,
                 contrasena = contrasena,
-                rol = rol
+                rol = rolSeleccionado
             )
 
-            RetrofitClient.servicioApi.crearUsuario(nuevoUsuario).enqueue(object : Callback<Map<String, Any>> {
-                override fun onResponse(call: Call<Map<String, Any>>, response: Response<Map<String, Any>>) {
-                    if (response.isSuccessful && response.body()?.get("success") == true) {
-                        Toast.makeText(this@CrearUsuario, "Usuario creado correctamente", Toast.LENGTH_SHORT).show()
-                        finish()
-                    } else {
-                        val mensaje = response.body()?.get("error") ?: "Error al crear usuario"
-                        Toast.makeText(this@CrearUsuario, mensaje.toString(), Toast.LENGTH_SHORT).show()
+            RetrofitClient.servicioApi.crearUsuario(nuevoUsuario)
+                .enqueue(object : Callback<Map<String, Any>> {
+                    override fun onResponse(
+                        call: Call<Map<String, Any>>,
+                        response: Response<Map<String, Any>>
+                    ) {
+                        if (response.isSuccessful && response.body()?.get("success") == true) {
+                            Toast.makeText(this@CrearUsuario, "Usuario creado correctamente", Toast.LENGTH_SHORT).show()
+                            finish()
+                        } else {
+                            val mensaje = response.body()?.get("error") ?: "Error al crear usuario"
+                            Toast.makeText(this@CrearUsuario, mensaje.toString(), Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<Map<String, Any>>, t: Throwable) {
-                    Toast.makeText(this@CrearUsuario, "Error de red: ${t.message}", Toast.LENGTH_SHORT).show()
-                }
-            })
+                    override fun onFailure(call: Call<Map<String, Any>>, t: Throwable) {
+                        Toast.makeText(this@CrearUsuario, "Error de red: ${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
         }
     }
 }

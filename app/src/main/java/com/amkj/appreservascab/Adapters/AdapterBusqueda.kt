@@ -23,12 +23,12 @@ class AdapterBusqueda(
             when (item) {
                 is ItemBusqueda.Ambiente -> {
                     binding.tvNombre.text = item.data.nombre
-                    val url = "https://cf7e2811433e.ngrok-free.app/phpGestionReservas/${item.data.imagen}"
+                    val url = "https://671946254f0b.ngrok-free.app/phpGestionReservas/${item.data.imagen}"
                     Glide.with(binding.root.context).load(url).into(binding.ivRecurso)
                 }
                 is ItemBusqueda.Equipo -> {
                     binding.tvNombre.text = "${item.data.marca} ${item.data.modelo}"
-                    val url = "https://cf7e2811433e.ngrok-free.app/phpGestionReservas/${item.data.imagen}"
+                    val url = "https://671946254f0b.ngrok-free.app/phpGestionReservas/${item.data.imagen}"
                     Glide.with(binding.root.context).load(url).into(binding.ivRecurso)
                 }
             }

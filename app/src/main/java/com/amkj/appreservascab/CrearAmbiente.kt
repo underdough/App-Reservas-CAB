@@ -10,9 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.amkj.appreservascab.CrearEquipos
 import com.amkj.appreservascab.databinding.ActivityCrearAmbienteBinding
-import com.amkj.appreservascab.databinding.ActivityCrearEquiposBinding
 import com.amkj.appreservascab.servicios.RetrofitClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +28,18 @@ class CrearAmbiente : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 🚫 Bloqueo por rol (candado en la Activity)
+        val rol = (getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
+            .getString("rol", "") ?: "").lowercase()
+
+        val esAdmin = (rol == "admin" || rol == "administrador")
+        if (!esAdmin) {
+            Toast.makeText(this, "Acceso denegado: se requiere rol administrador.", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
         binding = ActivityCrearAmbienteBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
@@ -49,11 +59,11 @@ class CrearAmbiente : AppCompatActivity() {
 
         // Botón Guardar
         binding.btnIniciar.setOnClickListener {
-            val nombreAmbiente = binding.etNombreAmbiente.text.toString().trim().toUpperCase()
+            val nombreAmbiente = binding.etNombreAmbiente.text.toString().trim().uppercase()
             val descripcion = binding.etDescripcion.text.toString().trim()
             val imagen = imageUri?.let { convertirUriABase64(it) } ?: ""
 
-            if (nombreAmbiente.isEmpty()|| descripcion.isEmpty() || imagen.isEmpty()) {
+            if (nombreAmbiente.isEmpty() || descripcion.isEmpty() || imagen.isEmpty()) {
                 Toast.makeText(this, "Completa todos los campos e imagen", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -66,7 +76,6 @@ class CrearAmbiente : AppCompatActivity() {
             val requestFile = bytes?.let { it.toRequestBody("imagenesAmbientes/*".toMediaTypeOrNull()) }
             val imagenPart = requestFile?.let { MultipartBody.Part.createFormData("imagen", "ambiente.jpg", it) }
 
-
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val response = RetrofitClient.instance.insertarAmbiente(
@@ -74,7 +83,6 @@ class CrearAmbiente : AppCompatActivity() {
                         descripcion = descripcionRB,
                         imagen = imagenPart
                     )
-
 
                     if (!response.isSuccessful) {
                         val errorText = response.errorBody()?.string()
@@ -93,7 +101,6 @@ class CrearAmbiente : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(this@CrearAmbiente, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                         Log.e("amkj","Error: ${e.message}")
-
                     }
                 }
             }
@@ -110,8 +117,6 @@ class CrearAmbiente : AppCompatActivity() {
         val bytes = inputStream?.readBytes()
         return Base64.encodeToString(bytes, Base64.NO_WRAP)
     }
-
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

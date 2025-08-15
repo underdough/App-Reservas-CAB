@@ -30,6 +30,10 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private lateinit var adapterAmbientes: AdapterAmbientes
     private lateinit var adapterEquipos: AdapterEquipos
 
+    // Header del drawer
+    private lateinit var tvUserName: TextView
+    private lateinit var tvUserSubtitle: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityVistaPrincipalBinding.inflate(layoutInflater)
@@ -37,11 +41,21 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         binding.VistaNavegacionxd.setNavigationItemSelectedListener(this)
 
-        // LayoutManagers
-        binding.lyAmbientesPpal.recyclerAmbientes.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.lyAmbientesPpal.recyclerEquipos.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        // Header del drawer
+        val headerView = binding.VistaNavegacionxd.getHeaderView(0)
+        tvUserName = headerView.findViewById(R.id.tvUserName)
+        tvUserSubtitle = headerView.findViewById(R.id.tvUserSubtitle)
 
-        // Adapters iniciales vacíos
+        refreshDrawerHeader()
+        aplicarReglasDeMenuPorRol() // ⬅ Oculta/mostrar según rol (incluye Crear Usuario)
+
+        // Layouts horizontales
+        binding.lyAmbientesPpal.recyclerAmbientes.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.lyAmbientesPpal.recyclerEquipos.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        // Adapters
         adapterAmbientes = AdapterAmbientes(listaAmbientes) { ambiente ->
             val intent = Intent(this, DetalleAmbiente::class.java)
             intent.putExtra("ambiente", ambiente)
@@ -52,85 +66,101 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             intent.putExtra("equipo", equipo)
             startActivity(intent)
         }
-
         binding.lyAmbientesPpal.recyclerAmbientes.adapter = adapterAmbientes
         binding.lyAmbientesPpal.recyclerEquipos.adapter = adapterEquipos
 
-        // Buscar mientras se escribe
+        // Búsqueda en vivo
         binding.etBuscar.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val query = s.toString().trim().lowercase()
-
-                adapterAmbientes.filtrar(query)
-                adapterEquipos.filtrar(query)
+                val q = s.toString().trim().lowercase()
+                adapterAmbientes.filtrar(q)
+                adapterEquipos.filtrar(q)
             }
         })
 
-        // Obtener ambientes
+        // Cargar ambientes
         lifecycleScope.launch {
             try {
-                val response = RetrofitClient.instance.obtenerAmbiente()
-                if (response.isSuccessful && response.body() != null) {
-                    listaAmbientes = response.body()!!
+                val resp = RetrofitClient.instance.obtenerAmbiente()
+                if (resp.isSuccessful && resp.body() != null) {
+                    listaAmbientes = resp.body()!!
                     adapterAmbientes.setListaCompleta(listaAmbientes)
-                    adapterAmbientes.filtrar("") // inicializa con todo
+                    adapterAmbientes.filtrar("")
                 }
             } catch (e: Exception) {
                 Toast.makeText(this@VistaPrincipal, "Error: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
 
-        // Obtener equipos
+        // Cargar equipos
         lifecycleScope.launch {
             try {
-                val response = RetrofitClient.instance.obtenerEquipos()
-                if (response.isSuccessful && response.body() != null) {
-                    listaEquipos = response.body()!!
+                val resp = RetrofitClient.instance.obtenerEquipos()
+                if (resp.isSuccessful && resp.body() != null) {
+                    listaEquipos = resp.body()!!
                     adapterEquipos.setListaCompleta(listaEquipos)
-                    adapterEquipos.filtrar("") // inicializa con todo
+                    adapterEquipos.filtrar("")
                 }
             } catch (e: Exception) {
                 Toast.makeText(this@VistaPrincipal, "Error: ${e.message}", Toast.LENGTH_LONG).show()
             }
         }
 
+        // Notificaciones
         binding.ibNotifcacion.setOnClickListener {
-            val intent = Intent(this, ActividadNotificaciones::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, ActividadNotificaciones::class.java))
         }
 
+        // Abrir drawer (lado derecho)
         binding.ibMenu.setOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.END)
         }
-
-        val headerView = binding.VistaNavegacionxd.getHeaderView(0)
-        val tvUserName = headerView.findViewById<TextView>(R.id.tvUserName)
-        val tvUserSubtitle = headerView.findViewById<TextView>(R.id.tvUserSubtitle)
-
-        val sharedPref = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
-        tvUserName.text = sharedPref.getString("nombre", "Nombre Usuario")
-        tvUserSubtitle.text = sharedPref.getString("rol", "Rol Desconocido")
     }
 
     override fun onResume() {
         super.onResume()
+        refreshDrawerHeader()
+        aplicarReglasDeMenuPorRol() // ⬅ Revalida al volver (por si cambió el usuario)
         verificarNotificacionesNoLeidas()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val esAdmin = esUsuarioAdmin()
+
         when (item.itemId) {
             R.id.nav_mi_reservas -> startActivity(Intent(this, InstruMisReservas::class.java))
-            R.id.nav_perfil -> startActivity(Intent(this, PerfilAprendizInstru::class.java))
-            R.id.nav_quejas -> startActivity(Intent(this, QuejasNovedades::class.java))
-            R.id.nav_crear_equipo -> startActivity(Intent(this, CrearEquipos::class.java))
-            R.id.nav_crear_ambiente -> startActivity(Intent(this, CrearAmbiente::class.java))
-            R.id.nav_crear_usuario -> startActivity(Intent(this, CrearUsuario::class.java))
+            R.id.nav_perfil      -> startActivity(Intent(this, PerfilAprendizInstru::class.java))
+            R.id.nav_quejas      -> startActivity(Intent(this, QuejasNovedades::class.java))
+
+            R.id.nav_crear_equipo -> {
+                if (!esAdmin) {
+                    Toast.makeText(this, "No tienes permisos para crear equipos.", Toast.LENGTH_SHORT).show()
+                    binding.drawerLayout.closeDrawer(GravityCompat.END)
+                    return true
+                }
+                startActivity(Intent(this, CrearEquipos::class.java))
+            }
+            R.id.nav_crear_ambiente -> {
+                if (!esAdmin) {
+                    Toast.makeText(this, "No tienes permisos para crear ambientes.", Toast.LENGTH_SHORT).show()
+                    binding.drawerLayout.closeDrawer(GravityCompat.END)
+                    return true
+                }
+                startActivity(Intent(this, CrearAmbiente::class.java))
+            }
+            R.id.nav_crear_usuario -> { // ⬅ BLOQUEO NUEVO
+                if (!esAdmin) {
+                    Toast.makeText(this, "No tienes permisos para crear usuarios.", Toast.LENGTH_SHORT).show()
+                    binding.drawerLayout.closeDrawer(GravityCompat.END)
+                    return true
+                }
+                startActivity(Intent(this, CrearUsuario::class.java))
+            }
             R.id.nav_cerrar_Sesion -> {
-                val sharedPreferences = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
-                sharedPreferences.edit().clear().apply()
+                val shared = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
+                shared.edit().clear().apply()
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
@@ -138,6 +168,7 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 finish()
             }
         }
+        binding.drawerLayout.closeDrawer(GravityCompat.END)
         return true
     }
 
@@ -168,5 +199,31 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 Log.e("Notificaciones", "Error al obtener notificaciones", e)
             }
         }
+    }
+
+    /** Header del drawer */
+    private fun refreshDrawerHeader() {
+        val sharedPref = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
+        val nombre = sharedPref.getString("nombre", "Nombre Usuario")
+        val rol = sharedPref.getString("rol", "Rol Desconocido")
+        tvUserName.text = nombre ?: "Nombre Usuario"
+        tvUserSubtitle.text = rol ?: "Rol Desconocido"
+    }
+
+    /** Oculta/ muestra menú según rol (incluye Crear Usuario) */
+    private fun aplicarReglasDeMenuPorRol() {
+        val menu = binding.VistaNavegacionxd.menu
+        val esAdmin = esUsuarioAdmin()
+
+        menu.findItem(R.id.nav_crear_equipo)?.isVisible = esAdmin
+        menu.findItem(R.id.nav_crear_ambiente)?.isVisible = esAdmin
+        menu.findItem(R.id.nav_crear_usuario)?.isVisible = esAdmin // ⬅ NUEVO
+    }
+
+    /** ¿Usuario actual es admin? */
+    private fun esUsuarioAdmin(): Boolean {
+        val sharedPref = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
+        val rol = (sharedPref.getString("rol", "") ?: "").lowercase()
+        return rol == "admin" || rol == "administrador"
     }
 }

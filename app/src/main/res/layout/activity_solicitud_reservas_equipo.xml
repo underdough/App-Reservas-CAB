@@ -124,52 +124,84 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
+    <!-- === Disponibilidad del día (mostrar antes de seleccionar jornada) === -->
     <TextView
-        android:id="@+id/tvJornada"
+        android:id="@+id/tvDisponibilidadTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="16dp"
+        android:text="Disponibilidad del día"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black" />
+
+    <ProgressBar
+        android:id="@+id/pbDisponibilidad"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvEstadoDia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:text="@string/jornada"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="24sp"/>
+        android:layout_marginTop="8dp"
+        android:text="Selecciona una fecha para ver disponibilidad"
+        android:textSize="16sp"
+        android:textColor="@color/black" />
 
-
+    <!-- Badges de jornadas -->
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginStart="55dp">
+        android:id="@+id/contenedorBadges"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
 
-        <CheckBox
-            android:id="@+id/checkManana"
+        <TextView
+            android:id="@+id/badgeManana"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Mañana"
-            android:layout_marginStart="4dp"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:buttonTint="@color/btn_sena" />
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:layout_marginEnd="8dp"
+            android:text="Mañana"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/bg_badge_neutral"/>
 
-        <CheckBox
-            android:id="@+id/checkTarde"
+        <TextView
+            android:id="@+id/badgeTarde"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Tarde"
-            android:layout_marginStart="20dp"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:buttonTint="@color/btn_sena" />
-        <CheckBox
-            android:id="@+id/checkNoche"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:layout_marginEnd="8dp"
+            android:text="Tarde"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/bg_badge_neutral"/>
+
+        <TextView
+            android:id="@+id/badgeNoche"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Noche"
-            android:layout_marginStart="20dp"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:buttonTint="@color/btn_sena" />
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:text="Noche"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/bg_badge_neutral"/>
     </LinearLayout>
+
 
 
     <ImageButton

@@ -22,7 +22,7 @@ class DetalleAmbiente : AppCompatActivity() {
             binding.tvNombre.text = ambiente.nombre
             binding.tvDescripcion.text = ambiente.descripcion
 
-            val urlImagen = "https://cf7e2811433e.ngrok-free.app/phpGestionReservas/${ambiente.imagen}"
+            val urlImagen = "http://192.168.1.3/phpGestionReservas/${ambiente.imagen}"
             Glide.with(this)
                 .load(urlImagen)
                 .into(binding.ivAmbiente)

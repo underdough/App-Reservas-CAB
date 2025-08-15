@@ -42,8 +42,7 @@
             android:text="@string/nombreAmbiente"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:textSize="24sp"
-            />
+            android:textSize="24sp"/>
 
         <TextView
             android:id="@+id/tvNombreAmbiente"
@@ -84,6 +83,7 @@
             android:textSize="20sp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="8dp"/>
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -99,6 +99,7 @@
                 android:src="@drawable/ic_calendario"
                 android:contentDescription="Seleccionar fecha de inicio"
                 android:layout_marginEnd="10dp"/>
+
             <TextView
                 android:id="@+id/tvFechaInicio"
                 android:layout_width="wrap_content"
@@ -116,6 +117,7 @@
                 android:src="@drawable/ic_reloj"
                 android:contentDescription="Seleccionar hora de inicio"
                 android:layout_marginEnd="10dp"/>
+
             <TextView
                 android:id="@+id/tvHoraInicio"
                 android:layout_width="wrap_content"
@@ -135,6 +137,7 @@
             android:textSize="20sp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="8dp"/>
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -150,6 +153,7 @@
                 android:src="@drawable/ic_calendario"
                 android:contentDescription="Seleccionar fecha de fin"
                 android:layout_marginEnd="10dp"/>
+
             <TextView
                 android:id="@+id/tvFechaFin"
                 android:layout_width="wrap_content"
@@ -158,6 +162,7 @@
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 android:layout_marginEnd="20dp"/>
+
             <ImageButton
                 android:id="@+id/btnHoraFin"
                 android:layout_width="50dp"
@@ -166,6 +171,7 @@
                 android:src="@drawable/ic_reloj"
                 android:contentDescription="Seleccionar hora de fin"
                 android:layout_marginEnd="10dp"/>
+
             <TextView
                 android:id="@+id/tvHoraFin"
                 android:layout_width="wrap_content"
@@ -175,53 +181,78 @@
                 android:textColor="@color/black"/>
         </LinearLayout>
 
-        <!-- Jornada -->
+        <!-- === Disponibilidad del rango === -->
         <TextView
-            android:id="@+id/tvJornada"
+            android:id="@+id/tvDisponibilidadTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Disponibilidad del rango"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="16dp"/>
+
+        <ProgressBar
+            android:id="@+id/pbDisponibilidad"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvEstadoRango"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/jornada"
+            android:text="Selecciona fecha inicio y fin para ver disponibilidad"
+            android:textSize="16sp"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="24sp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="4dp"/>
+            android:layout_marginTop="8dp" />
 
+        <!-- Jornadas como badges (sin CheckBox) -->
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_marginBottom="16dp">
+            android:id="@+id/contenedorBadges"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
-            <CheckBox
-                android:id="@+id/checkManana"
+            <TextView
+                android:id="@+id/badgeManana"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/Mañana"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:buttonTint="@color/btn_sena"
-                android:layout_marginEnd="16dp"/>
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:layout_marginEnd="8dp"
+                android:text="Mañana"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_badge_neutral"/>
 
-            <CheckBox
-                android:id="@+id/checkTarde"
+            <TextView
+                android:id="@+id/badgeTarde"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/Tarde"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:buttonTint="@color/btn_sena"
-                android:layout_marginEnd="16dp"/>
-            <CheckBox
-                android:id="@+id/checkNoche"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:layout_marginEnd="8dp"
+                android:text="Tarde"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_badge_neutral"/>
+
+            <TextView
+                android:id="@+id/badgeNoche"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/Noche"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:buttonTint="@color/btn_sena" />
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:text="Noche"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_badge_neutral"/>
         </LinearLayout>
 
         <!-- Guardar -->

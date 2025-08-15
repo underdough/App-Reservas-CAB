@@ -1,6 +1,7 @@
 package com.amkj.appreservascab.servicios
 
 
+import com.amkj.appreservascab.Modelos.ActualizarDatosUsario
 import com.amkj.appreservascab.Modelos.EliminarReservaRequest
 import com.amkj.appreservascab.Modelos.ModeloActualizarContrasena
 import com.amkj.appreservascab.Modelos.ModeloAmbientes
@@ -13,6 +14,7 @@ import com.amkj.appreservascab.Modelos.ModeloUsuarios
 import com.amkj.appreservascab.Modelos.ModeloVerificarToken
 import com.amkj.appreservascab.Modelos.Notificacion
 import com.amkj.appreservascab.Modelos.ReservaEquipoRequest
+import com.amkj.appreservascab.Modelos.RespuestaActualizarUsuario
 import com.amkj.appreservascab.Modelos.RespuestaCodigo
 import com.amkj.appreservascab.Modelos.RespuestaContraNue
 import com.amkj.appreservascab.Modelos.RespuestaInsertarAmbiente
@@ -20,6 +22,7 @@ import com.amkj.appreservascab.Modelos.RespuestaInsertarEquipo
 import com.amkj.appreservascab.Modelos.RespuestaVerificacion
 import com.amkj.appreservascab.Modelos.SolicitudDisponibilidadRequest
 import com.amkj.appreservascab.Modelos.ValidacionEquipoRequest
+import com.amkj.appreservascab.models.DisponibilidadResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -31,17 +34,15 @@ import retrofit2.http.PUT
 import retrofit2.http.Part
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Query
 
 
 interface ConexionDB {
     companion object {
-        const val URL = "https://cf7e2811433e.ngrok-free.app/phpGestionReservas/"
+        const val URL = "https://671946254f0b.ngrok-free.app/phpGestionReservas/"
     }
 
-    @POST("consultaUsuario.php")
+    @GET("consultaUsuario.php")
     suspend fun consultaUsuario(): Response<List<ModeloUsuarios>>
 
     @POST("insertarUsuario.php")
@@ -49,6 +50,12 @@ interface ConexionDB {
 
     @PUT("modificarUsuario.php")
     suspend fun modificarUsuario(@Body mReservas: ModeloUsuarios): Response<ModeloUsuarios>
+
+    @POST("actualizar_usuario.php")
+    suspend fun actualizarUsuario(@Body req: ActualizarDatosUsario): Response<RespuestaActualizarUsuario>
+
+    @GET("obtener_usuario.php")
+    suspend fun obtenerUsuario(@Body body: Int): Response<RespuestaActualizarUsuario>
 
     @POST("enviarToken.php")
     suspend fun enviarToken(@Body correo: ModeloCorreo): Response<RespuestaCodigo>
@@ -89,7 +96,7 @@ interface ConexionDB {
     fun obtenerReservas(@Body usuario: Map<String, Int>): Call<List<ModeloReserva>>
 
     @POST("validarDisponibilidadAmbiente.php")
-    fun validarDisponibilidadAmbiente(@Body datos :SolicitudDisponibilidadRequest): Call<Map<String, Boolean>>
+    fun validarDisponibilidadAmbiente(@Body datos: SolicitudDisponibilidadRequest): Call<Map<String, Boolean>>
 
 
     @POST("guardarReservaEquipo.php")
@@ -118,13 +125,33 @@ interface ConexionDB {
     @POST("eliminar_reserva.php")
     fun eliminarReserva(@Body body: EliminarReservaRequest): Call<Map<String, String>>
 
+    // Ambientes: rango obligatorio (si no envías, el backend asume por defecto)
+    @GET("disponibilidadAmbiente.php")
+    fun disponibilidadAmbiente(
+        @Query("ambiente_id") ambienteId: Int,
+        @Query("desde") desde: String,
+        @Query("hasta") hasta: String
+    ): Call<DisponibilidadResponse>
 
+    // Equipos: día único (tu caso actual)
+    @GET("disponibilidadEquipo.php")
+    fun disponibilidadEquipoDia(
+        @Query("elemento_id") elementoId: Int,
+        @Query("fecha") fecha: String
+    ): Call<DisponibilidadResponse>
 
-
-
-
-
-
-
-
+    // Equipos: rango (opcional si quieres pintar un mes)
+    @GET("disponibilidadEquipo.php")
+    fun disponibilidadEquipoRango(
+        @Query("elemento_id") elementoId: Int,
+        @Query("desde") desde: String,
+        @Query("hasta") hasta: String
+    ): Call<DisponibilidadResponse>
 }
+
+
+
+
+
+
+

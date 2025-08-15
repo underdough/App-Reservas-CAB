@@ -23,7 +23,7 @@ class AdapterEquipos(
             binding.tvModelo.text = equipo.modelo
             binding.tvDescripcion.text = equipo.descripcion
 
-            val url = "https://cf7e2811433e.ngrok-free.app/phpGestionReservas/${equipo.imagen}"
+            val url = "https://671946254f0b.ngrok-free.app/phpGestionReservas/${equipo.imagen}"
             Glide.with(binding.root.context)
                 .load(url)
                 .placeholder(R.drawable.imagen_error)

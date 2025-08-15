@@ -88,6 +88,8 @@ class MainActivity : AppCompatActivity() {
                                     putString("nombre", usuarioValido.nombre)
                                     putString("rol", usuarioValido.rol)
                                     putString("correo", usuarioValido.correo)
+                                    usuarioValido.telefono?.let { putString("telefono", it) } // <= solo si viene
+
                                     apply()
                                 }
                                 val intent = Intent(this@MainActivity, VistaPrincipal::class.java)

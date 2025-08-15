@@ -24,7 +24,7 @@ class DetalleEquipo : AppCompatActivity() {
             binding.tvModelo.text = equipo.modelo
             binding.tvDescripcion.text = equipo.descripcion
 
-            val urlImagen = "https://cf7e2811433e.ngrok-free.app/phpGestionReservas/" + equipo.imagen
+            val urlImagen = "http://192.168.1.3/phpGestionReservas/" + equipo.imagen
             Glide.with(this)
                 .load(urlImagen)
                 .into(binding.ivEquipo)

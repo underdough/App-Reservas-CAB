@@ -28,7 +28,7 @@ class AdapterReservas(
 
             val imagenNombre = reserva.ambiente_imagen
             if (!imagenNombre.isNullOrEmpty()) {
-                val url = "https://cf7e2811433e.ngrok-free.app/phpGestionReservas/imagenesAmbientes/$imagenNombre"
+                val url = "https://671946254f0b.ngrok-free.app/phpGestionReservas/$imagenNombre"
                 Glide.with(b.ivAmbiente.context)
                     .load(url)
                     .placeholder(R.drawable.placeholder_ambiente)

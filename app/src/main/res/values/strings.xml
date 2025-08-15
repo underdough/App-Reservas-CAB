@@ -57,4 +57,5 @@
     <string name="imagen">Imagen de equipo:</string>
     <string name="txtCrearAmbiente">Crear ambiente</string>
     <string name="imagenAmbiente">Imagen ambiente:</string>
+    <string name="rol">Rol:</string>
 </resources>
