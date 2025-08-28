@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootQuejas"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/verde_fondo"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <!-- Header (título + exportar) -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="@drawable/bg_panel">
+
+        <TextView
+            android:id="@+id/tvTitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Módulo de Quejas"
+            android:textStyle="bold"
+            android:textColor="@color/verde_oscuro"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btnExportarPdf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="Exportar PDF"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/btn_sena" />
+    </RelativeLayout>
+
+    <!-- Buscador -->
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:queryHint="Buscar por asunto, estado o fecha" />
+
+    <!-- Formulario nueva queja -->
+    <LinearLayout
+        android:id="@+id/cardNuevaQueja"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_panel"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Asunto"
+            android:textColor="@color/texto_primario"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etAsunto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences"
+            android:maxLines="1"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/texto_primario" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Descripción"
+            android:textColor="@color/texto_primario"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/etDescripcion"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="top|start"
+            android:inputType="textMultiLine"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/texto_primario" />
+
+
+        <!-- Botón y preview del adjunto -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/btnAdjuntar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Adjuntar imagen"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/btn_sena"
+                />
+
+            <ImageView
+                android:id="@+id/ivAdjunto"
+                android:layout_width="300dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/placeholder_ambiente"/>
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btnNuevaQueja"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Enviar queja"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/btn_sena" />
+
+    </LinearLayout>
+
+    <!-- Lista -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:padding="4dp"
+        android:layout_weight="1"/>
+</LinearLayout>
