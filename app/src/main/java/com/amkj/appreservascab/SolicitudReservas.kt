@@ -46,41 +46,62 @@ class SolicitudReservas : AppCompatActivity() {
     private var ambienteIdParaCalendario: Int = 0
 
     // === Selector calendario: recibe fecha y 1..2 jornadas ===
-    private val seleccionarFechaJornada =
+    val seleccionarFechaJornada =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
             if (res.resultCode != Activity.RESULT_OK) return@registerForActivityResult
             val data = res.data ?: return@registerForActivityResult
 
-            val fecha = data.getStringExtra(CalendarioDisponibilidadFragment.EXTRA_FECHA) ?: return@registerForActivityResult
-            val codes = data.getStringArrayListExtra(CalendarioDisponibilidadFragment.EXTRA_JORNADAS_LIST)
-            val fallbackCode = data.getStringExtra(CalendarioDisponibilidadFragment.EXTRA_JORNADA)
+            // 1) ¿Vino RANGO?
+            val desde = data.getStringExtra(CalendarioDisponibilidadFragment.EXTRA_FECHA_DESDE)
+            val hasta = data.getStringExtra(CalendarioDisponibilidadFragment.EXTRA_FECHA_HASTA)
 
+            // Códigos de jornadas (M/T/N)
+            val codesArr = data.getStringArrayListExtra(CalendarioDisponibilidadFragment.EXTRA_JORNADAS_LIST)
+            val fallback = data.getStringExtra(CalendarioDisponibilidadFragment.EXTRA_JORNADA)
             val codigos: List<String> = when {
-                !codes.isNullOrEmpty()        -> codes.toList()
-                !fallbackCode.isNullOrEmpty() -> listOf(fallbackCode!!)
-                else                          -> emptyList()
+                !codesArr.isNullOrEmpty()    -> codesArr.toList()
+                !fallback.isNullOrEmpty()    -> listOf(fallback!!)
+                else                         -> emptyList()
             }
-            if (codigos.isEmpty()) return@registerForActivityResult
 
-            // 1) Rango = 1 día
-            fechaInicioSeleccionada = fecha
-            fechaFinSeleccionada = fecha
-            binding.tvFechaInicio.text = fecha
-            binding.tvFechaFin.text = fecha
+            if (!desde.isNullOrEmpty() && !hasta.isNullOrEmpty()) {
+                // === RANGO ===
+                applyRangoSeleccionado(desde, hasta)
 
-            // 2) Horas sugeridas (combina una o dos jornadas)
+                // Ajusta horas combinadas y selección de badges
+                setHorasPorJornadas(codigos)
+                jornadasSeleccionadas.clear()
+                jornadasSeleccionadas.addAll(codigos.map(::codeToLabel))
+                setTextSeleccion()
+                pintarBadges(neutral = false)
+                setBadgesEnabled(true)
+
+                // Consulta disponibilidad del RANGO (tu flujo actual)
+                binding.pbDisponibilidad.visibility = View.VISIBLE
+                setTextDisponibilidad("Consultando disponibilidad...")
+                val amb = intent.getParcelableExtra<ModeloAmbientes>("ambiente")
+                intentarActualizarDisponibilidad(amb)
+                return@registerForActivityResult
+            }
+
+            // === DÍA ÚNICO (compat) ===
+            val fecha = data.getStringExtra(CalendarioDisponibilidadFragment.EXTRA_FECHA) ?: return@registerForActivityResult
+            applyDiaSeleccionado(fecha)
+
             setHorasPorJornadas(codigos)
-
-            // 3) Selección visible (labels)
             jornadasSeleccionadas.clear()
             jornadasSeleccionadas.addAll(codigos.map(::codeToLabel))
             setTextSeleccion()
+            pintarBadges(neutral = false)
+            setBadgesEnabled(true)
 
-            // 4) Consulta **solo del día**
+            // Consulta disponibilidad del DÍA
             binding.pbDisponibilidad.visibility = View.VISIBLE
             setTextDisponibilidad("Consultando disponibilidad del día...")
             consultarDisponibilidadAmbienteDelDia(ambienteIdParaCalendario, fecha)
         }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -174,6 +195,11 @@ class SolicitudReservas : AppCompatActivity() {
 
         // Calendario mensual (1..2 jornadas)
         binding.btnVerCalendario.setOnClickListener {
+            jornadasSeleccionadas.clear()
+            pintarBadges(neutral = true)
+            setBadgesEnabled(false)
+            setTextSeleccion()
+
             val amb = intent.getParcelableExtra<ModeloAmbientes>("ambiente")
             val id = amb?.id ?: 0
             if (id == 0) {
@@ -187,6 +213,7 @@ class SolicitudReservas : AppCompatActivity() {
             }
             seleccionarFechaJornada.launch(i)
         }
+
 
         // Badges
         binding.badgeManana.setOnClickListener { onBadgeClick("Mañana", binding.badgeManana) }
@@ -287,6 +314,23 @@ class SolicitudReservas : AppCompatActivity() {
 
         binding.ibAtras.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
+
+    /** Pinta SIEMPRE ambos extremos del rango en UI y estado interno */
+    private fun applyRangoSeleccionado(desde: String, hasta: String) {
+        fechaInicioSeleccionada = desde
+        fechaFinSeleccionada    = hasta
+        binding.tvFechaInicio.text = desde
+        binding.tvFechaFin.text    = hasta
+
+        // Mensaje claro en la misma etiqueta de estado:
+        val textoRango = if (desde == hasta) "Día seleccionado: $desde"
+        else "Rango seleccionado: $desde → $hasta"
+        setTextDisponibilidad(textoRango)
+    }
+
+    /** Azúcar: día único = rango de 1 día */
+    private fun applyDiaSeleccionado(fecha: String) = applyRangoSeleccionado(fecha, fecha)
+
 
     // --------- Disponibilidad (DÍA) ---------
     private fun consultarDisponibilidadAmbienteDelDia(ambienteId: Int, fecha: String) {

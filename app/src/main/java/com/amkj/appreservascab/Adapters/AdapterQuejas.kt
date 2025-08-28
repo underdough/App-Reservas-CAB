@@ -16,7 +16,7 @@ class AdapterQuejas(
 
     companion object {
         // Cambia a tu dominio/base si el backend devuelve rutas relativas
-        private const val BASE_URL = "https://emma-essential-mae-singh.trycloudflare.com/phpGestionReservas/"
+        private const val BASE_URL = "https://intensive-shanghai-but-possible.trycloudflare.com/phpGestionReservas/"
         private const val TAG = "ADAPTER_QUEJAS"
     }
 

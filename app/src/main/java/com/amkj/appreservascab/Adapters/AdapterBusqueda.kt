@@ -23,12 +23,12 @@ class AdapterBusqueda(
             when (item) {
                 is ItemBusqueda.Ambiente -> {
                     binding.tvNombre.text = item.data.nombre
-                    val url = "https://emma-essential-mae-singh.trycloudflare.com/phpGestionReservas/${item.data.imagen}"
+                    val url = "https://intensive-shanghai-but-possible.trycloudflare.com/phpGestionReservas/${item.data.imagen}"
                     Glide.with(binding.root.context).load(url).into(binding.ivRecurso)
                 }
                 is ItemBusqueda.Equipo -> {
                     binding.tvNombre.text = "${item.data.marca} ${item.data.modelo}"
-                    val url = "https://emma-essential-mae-singh.trycloudflare.com/phpGestionReservas/${item.data.imagen}"
+                    val url = "https://intensive-shanghai-but-possible.trycloudflare.com/phpGestionReservas/${item.data.imagen}"
                     Glide.with(binding.root.context).load(url).into(binding.ivRecurso)
                 }
             }

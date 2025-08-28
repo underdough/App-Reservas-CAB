@@ -26,7 +26,7 @@ class AdapterAmbientes(
             binding.tvNombreAmbiente.text = ambiente.nombre
             binding.tvDescripcion.text = ambiente.descripcion
 
-            val urlImagen = "https://emma-essential-mae-singh.trycloudflare.com/phpGestionReservas/" + ambiente.imagen
+            val urlImagen = "https://intensive-shanghai-but-possible.trycloudflare.com/phpGestionReservas/" + ambiente.imagen
             Glide.with(binding.root.context)
                 .load(urlImagen)
                 .placeholder(R.drawable.imagen_error)

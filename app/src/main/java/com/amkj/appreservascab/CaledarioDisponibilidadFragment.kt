@@ -38,6 +38,8 @@
             const val EXTRA_JORNADA = "extra_jornada" // compatibilidad hacia atrás (una)
             const val EXTRA_JORNADAS_LIST = "extra_jornadas_list" // ← NUEVO (lista M/T/N)
 
+            const val EXTRA_FECHA_DESDE = "extra_fecha_desde"
+            const val EXTRA_FECHA_HASTA = "extra_fecha_hasta"
 
             fun newInstance(tipo: String, recursoId: Int, returnResult: Boolean = false) =
                 CalendarioDisponibilidadFragment().apply {
@@ -63,6 +65,12 @@
 
         // Cache por mes: YearMonth -> (LocalDate -> DiaEstado)
         private val cacheMes = mutableMapOf<YearMonth, Map<LocalDate, DiaEstado>>()
+
+        // -------- Estados de selección de rango --------
+        private var rangeStart: LocalDate? = null
+        private var rangeEnd: LocalDate? = null
+
+
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
             _binding = FragmentCaledarioDisponibilidadBinding.inflate(inflater, container, false)
@@ -128,6 +136,22 @@
 
             @RequiresApi(Build.VERSION_CODES.O)
             fun bind(day: CalendarDay) {
+                val selected = (selStart == day.date) || (selEnd == day.date)
+                val inRange  = isInRange(day.date)
+
+                item.tvDayNumber.background = null
+                if (selected) {
+                    // color “seleccionado”
+                    item.tvDayNumber.background = circleDrawable(
+                        ContextCompat.getColor(requireContext(), R.color.disponible)
+                    )
+                } else if (inRange) {
+                    // rango (más suave)
+                    val c = ContextCompat.getColor(requireContext(), R.color.disponible)
+                    val translucent = (0x44 shl 24) or (c and 0x00FFFFFF)
+                    item.tvDayNumber.background = circleDrawable(translucent)
+                }
+
                 this.day = day
                 item.tvDayNumber.text = day.date.dayOfMonth.toString()
 
@@ -153,6 +177,24 @@
                 item.pillN.background.setTint(cN)
             }
         }
+
+        private var selStart: LocalDate? = null
+        private var selEnd: LocalDate? = null
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        private fun isInRange(date: LocalDate): Boolean {
+            val s = selStart; val e = selEnd
+            return s != null && e != null && !date.isBefore(s) && !date.isAfter(e)
+        }
+
+        private fun circleDrawable(color: Int): android.graphics.drawable.Drawable {
+            val d = android.graphics.drawable.GradientDrawable()
+            d.shape = android.graphics.drawable.GradientDrawable.OVAL
+            d.setColor(color)
+            return d
+        }
+
+
 
         // -------- Carga con ProgressBar --------
         @RequiresApi(Build.VERSION_CODES.O)
@@ -220,38 +262,29 @@
             }
         }
 
-
-
         @RequiresApi(Build.VERSION_CODES.O)
-        private fun onDayClicked(date: LocalDate) {
-            val dia = cacheMes[date.toYearMonth()]?.get(date)
-
-            // Construye opciones SOLO con jornadas libres
-            val libres = mutableListOf<Pair<String, String>>() // (label, code)
-            if ((dia?.M ?: "libre") == "libre") libres += "Mañana" to "M"
-            if ((dia?.T ?: "libre") == "libre") libres += "Tarde"  to "T"
-            if ((dia?.N ?: "libre") == "libre") libres += "Noche"  to "N"
+        private fun abrirPickerJornadasParaRango(desde: LocalDate, hasta: LocalDate) {
+            val libres = interseccionLibresEnRango(desde, hasta) // List<Pair<label,code>>
 
             if (libres.isEmpty()) {
-                Toast.makeText(requireContext(), "No hay jornadas disponibles en $date", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "No hay jornadas libres en todo el rango $desde → $hasta", Toast.LENGTH_LONG).show()
                 return
             }
 
             val labels = libres.map { it.first }.toTypedArray()
             val checked = BooleanArray(labels.size)
-            val seleccion = mutableListOf<String>() // codes
+            val seleccion = mutableListOf<String>() // codes M/T/N
 
             val dlg = androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                .setTitle("Elige 1 o 2 jornadas para $date")
+                .setTitle("Elige 1 o 2 jornadas para $desde → $hasta")
                 .setMultiChoiceItems(labels, checked) { dialog, which, isChecked ->
                     val code = libres[which].second
                     if (isChecked) {
-                        // tope 2
                         if (seleccion.size >= 2) {
                             (dialog as androidx.appcompat.app.AlertDialog).listView.setItemChecked(which, false)
                             Toast.makeText(requireContext(), "Máximo 2 jornadas", Toast.LENGTH_SHORT).show()
-                        } else {
-                            if (!seleccion.contains(code)) seleccion += code
+                        } else if (!seleccion.contains(code)) {
+                            seleccion += code
                         }
                     } else {
                         seleccion.remove(code)
@@ -262,13 +295,256 @@
                         Toast.makeText(requireContext(), "Selecciona al menos una jornada", Toast.LENGTH_SHORT).show()
                         return@setPositiveButton
                     }
-                    irASolicitudMultiple(date.toString(), seleccion)
+                    devolverRangoYJornadas(desde, hasta, seleccion)
                 }
                 .setNegativeButton("Cancelar", null)
                 .create()
 
             dlg.show()
         }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        private fun interseccionLibresEnRango(desde: LocalDate, hasta: LocalDate): List<Pair<String,String>> {
+            val sets = mutableListOf<Set<String>>()
+            var d = desde
+            while (!d.isAfter(hasta)) {
+                val est = cacheMes[d.toYearMonth()]?.get(d)
+                // Si no hay datos para un día, lo tratamos como “sin libres”
+                val libresDia = buildSet {
+                    if (est?.M == "libre") add("Mañana")
+                    if (est?.T == "libre") add("Tarde")
+                    if (est?.N == "libre") add("Noche")
+                }
+                sets += libresDia
+                d = d.plusDays(1)
+            }
+            if (sets.isEmpty()) return emptyList()
+            val inter = sets.reduce { acc, s -> acc.intersect(s) }
+            // Devuelve (label, code)
+            return inter.map { lbl ->
+                when (lbl) {
+                    "Mañana" -> "Mañana" to "M"
+                    "Tarde"  -> "Tarde"  to "T"
+                    "Noche"  -> "Noche"  to "N"
+                    else     -> lbl to lbl
+                }
+            }
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        private fun devolverRangoYJornadas(desde: LocalDate, hasta: LocalDate, jornadasCodes: List<String>) {
+            if (returnResult) {
+                requireActivity().setResult(
+                    Activity.RESULT_OK,
+                    Intent().apply {
+                        putExtra(EXTRA_FECHA_DESDE, desde.toString())
+                        putExtra(EXTRA_FECHA_HASTA, hasta.toString())
+                        putStringArrayListExtra(EXTRA_JORNADAS_LIST, ArrayList(jornadasCodes))
+                        // compat (si alguien antiguo espera una sola jornada):
+                        putExtra(EXTRA_FECHA, desde.toString())
+                        putExtra(EXTRA_JORNADA, jornadasCodes.first())
+                    }
+                )
+                requireActivity().finish()
+                return
+            }
+
+            // Modo directo (si en algún momento lo usas sin returnResult):
+            val jornadasCsv = jornadasCodes.joinToString(",")
+            if (tipo == "equipo") {
+                startActivity(Intent(requireContext(), SolicitudReservasEquipo::class.java).apply {
+                    putExtra("fecha", desde.toString())               // compat
+                    putExtra("jornadas_codes", jornadasCsv)
+                    putExtra("elemento_id", recursoId)
+                    putExtra("fecha_desde", desde.toString())
+                    putExtra("fecha_hasta", hasta.toString())
+                })
+            } else {
+                startActivity(Intent(requireContext(), SolicitudReservas::class.java).apply {
+                    putExtra("fecha", desde.toString())               // compat
+                    putExtra("jornadas_codes", jornadasCsv)
+                    putExtra("ambiente_id", recursoId)
+                    putExtra("fecha_desde", desde.toString())
+                    putExtra("fecha_hasta", hasta.toString())
+                })
+            }
+        }
+
+
+
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        private fun onDayClicked(date: LocalDate) {
+            // 1) Selección de rango
+            when {
+                selStart == null || (selStart != null && selEnd != null) -> {
+                    // Nuevo inicio
+                    selStart = date
+                    selEnd = null
+                    binding.calendarView.notifyCalendarChanged()
+                    Toast.makeText(requireContext(), "Inicio: $date. Ahora selecciona la fecha fin.", Toast.LENGTH_SHORT).show()
+                    return
+                }
+                date.isBefore(selStart) -> {
+                    // Si tocan una fecha anterior, invierte
+                    selEnd = selStart
+                    selStart = date
+                }
+                else -> {
+                    selEnd = date
+                }
+            }
+            binding.calendarView.notifyCalendarChanged()
+
+            // 2) Asegura datos del mes del fin (si aún no está en cache)
+            val endMonth = selEnd!!.toYearMonth()
+            if (!cacheMes.containsKey(endMonth)) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    cargarMes(endMonth)
+                    abrirPickerJornadasParaRango(selStart!!, selEnd!!)
+                }
+            } else {
+                abrirPickerJornadasParaRango(selStart!!, selEnd!!)
+            }
+        }
+
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        private suspend fun promptJornadasParaRango(desde: LocalDate, hasta: LocalDate) {
+            // 1) Consulta de disponibilidad del RANGO y cálculo de intersección
+            val codigosLibres = withContext(Dispatchers.IO) {
+                try {
+                    when (tipo.lowercase(Locale.getDefault())) {
+                        "ambiente" -> interseccionAmbiente(desde, hasta)   // devuelve Set("M","T","N") libres en TODO el rango
+                        else       -> interseccionEquipo(desde, hasta)
+                    }
+                } catch (e: Exception) {
+                    emptySet<String>()
+                }
+            }
+
+            if (codigosLibres.isEmpty()) {
+                Toast.makeText(requireContext(), "No hay jornadas libres entre $desde y $hasta", Toast.LENGTH_LONG).show()
+                return
+            }
+
+            // 2) Diálogo multi-choice con las jornadas libres en TODO el rango
+            val opciones = listOf("M" to "Mañana", "T" to "Tarde", "N" to "Noche")
+                .filter { it.first in codigosLibres }
+
+            val labels = opciones.map { it.second }.toTypedArray()
+            val codes  = opciones.map { it.first }
+            val checked = BooleanArray(labels.size)
+            val seleccion = mutableListOf<String>() // guarda códigos M/T/N
+
+            val dlg = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("Elige 1 o 2 jornadas\n$desde → $hasta")
+                .setMultiChoiceItems(labels, checked) { dialog, which, isChecked ->
+                    val code = codes[which]
+                    if (isChecked) {
+                        if (seleccion.size >= 2) {
+                            (dialog as androidx.appcompat.app.AlertDialog).listView.setItemChecked(which, false)
+                            Toast.makeText(requireContext(), "Máximo 2 jornadas", Toast.LENGTH_SHORT).show()
+                        } else if (!seleccion.contains(code)) {
+                            seleccion += code
+                        }
+                    } else {
+                        seleccion.remove(code)
+                    }
+                }
+                .setPositiveButton("Aceptar") { _, _ ->
+                    if (seleccion.isEmpty()) {
+                        Toast.makeText(requireContext(), "Selecciona al menos una jornada", Toast.LENGTH_SHORT).show()
+                        return@setPositiveButton
+                    }
+                    // 3) Devolver resultado al caller (Activity)
+                    if (returnResult) {
+                        requireActivity().setResult(
+                            Activity.RESULT_OK,
+                            Intent().apply {
+                                putExtra(EXTRA_FECHA_DESDE, desde.toString())
+                                putExtra(EXTRA_FECHA_HASTA,  hasta.toString())
+                                putStringArrayListExtra(EXTRA_JORNADAS_LIST, ArrayList(seleccion))
+                                putExtra(EXTRA_JORNADA, seleccion.first()) // compat
+                            }
+                        )
+                        requireActivity().finish()
+                    } else {
+                        val jornadasCsv = seleccion.joinToString(",")
+                        if (tipo == "equipo") {
+                            startActivity(Intent(requireContext(), SolicitudReservasEquipo::class.java).apply {
+                                putExtra("fecha_desde", desde.toString())
+                                putExtra("fecha_hasta", hasta.toString())
+                                putExtra("jornadas_codes", jornadasCsv)
+                                putExtra("elemento_id", recursoId)
+                            })
+                        } else {
+                            startActivity(Intent(requireContext(), SolicitudReservas::class.java).apply {
+                                putExtra("fecha_desde", desde.toString())
+                                putExtra("fecha_hasta", hasta.toString())
+                                putExtra("jornadas_codes", jornadasCsv)
+                                putExtra("ambiente_id", recursoId)
+                            })
+                        }
+                    }
+                }
+                .setNegativeButton("Cancelar", null)
+                .create()
+
+            dlg.show()
+        }
+
+        // --- Intersecciones por tipo ---
+        @RequiresApi(Build.VERSION_CODES.O)
+        private fun interseccionAmbiente(desde: LocalDate, hasta: LocalDate): Set<String> {
+            val resp = RetrofitClient.instance
+                .disponibilidadAmbiente(ambienteId = recursoId, desde = desde.toString(), hasta = hasta.toString())
+                .execute()
+
+            if (!resp.isSuccessful || resp.body() == null) return emptySet()
+            val dias = resp.body()!!.dias
+
+            // Empezamos con todas y vamos intersectando
+            var inter = setOf("M","T","N")
+            for (d in dias) {
+                val libres = d.libre_en.map { it.trim() }.toSet()
+                val cods = buildSet {
+                    if ("Mañana" in libres) add("M")
+                    if ("Tarde"  in libres) add("T")
+                    if ("Noche"  in libres) add("N")
+                }
+                inter = inter intersect cods
+                if (inter.isEmpty()) break
+            }
+            return inter
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        private fun interseccionEquipo(desde: LocalDate, hasta: LocalDate): Set<String> {
+            val resp = RetrofitClient.servicioApi
+                .disponibilidadEquipoRango(recursoId, desde.toString(), hasta.toString())
+                .execute()
+
+            if (!resp.isSuccessful || resp.body()?.ok != true) return emptySet()
+            val mapa = resp.body()!!.mapa // Map<String, EstadoDiaCod> con M/T/N="libre/ocupado/pendiente"
+
+            var inter = setOf("M","T","N")
+            // Recorremos todos los días del rango
+            var d = desde
+            while (!d.isAfter(hasta)) {
+                val st = mapa[d.toString()]
+                val libres = buildSet {
+                    if (st?.M == "libre") add("M")
+                    if (st?.T == "libre") add("T")
+                    if (st?.N == "libre") add("N")
+                }
+                inter = inter intersect libres
+                if (inter.isEmpty()) break
+                d = d.plusDays(1)
+            }
+            return inter
+        }
+
 
         private fun irASolicitudMultiple(fecha: String, jornadasCodes: List<String>) {
             if (returnResult) {

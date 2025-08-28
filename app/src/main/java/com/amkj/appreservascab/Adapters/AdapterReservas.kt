@@ -18,7 +18,7 @@ class AdapterReservas(
 
     companion object {
         // Tu dominio actual; DEBE terminar con "/"
-        private const val BASE_URL = "https://emma-essential-mae-singh.trycloudflare.com/phpGestionReservas/"
+        private const val BASE_URL = "https://intensive-shanghai-but-possible.trycloudflare.com/phpGestionReservas/"
         private const val TAG = "ADAPTER_RESERVAS"
     }
 

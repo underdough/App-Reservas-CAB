@@ -51,7 +51,7 @@ import retrofit2.http.Streaming
 
 interface ConexionDB {
     companion object {
-        const val URL = "https://emma-essential-mae-singh.trycloudflare.com/phpGestionReservas/"
+        const val URL = "https://intensive-shanghai-but-possible.trycloudflare.com/phpGestionReservas/"
     }
 
     @GET("consultaUsuario.php")

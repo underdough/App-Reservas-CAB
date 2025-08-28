@@ -22,7 +22,7 @@ class DetalleAmbiente : AppCompatActivity() {
             binding.tvNombre.text = ambiente.nombre
             binding.tvDescripcion.text = ambiente.descripcion
 
-            val urlImagen = "https://emma-essential-mae-singh.trycloudflare.com/phpGestionReservas/${ambiente.imagen}"
+            val urlImagen = "https://intensive-shanghai-but-possible.trycloudflare.com/phpGestionReservas/${ambiente.imagen}"
             Glide.with(this)
                 .load(urlImagen)
                 .into(binding.ivAmbiente)
