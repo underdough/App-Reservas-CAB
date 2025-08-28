@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/mainlySolicitudReservas"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Botón atrás y título -->
+        <ImageButton
+            android:id="@+id/ibAtras"
+            android:background="@android:color/transparent"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_flecha_volver"
+            android:contentDescription="@string/txtVolver"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:id="@+id/tvTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/txtSolicitudReservas"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <!-- Info Ambiente y Usuario -->
+        <TextView
+            android:id="@+id/tvAmbiente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nombreAmbiente"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            />
+
+        <TextView
+            android:id="@+id/tvNombreAmbiente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/txt_color"
+            android:textSize="28sp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="30dp"/>
+
+        <TextView
+            android:id="@+id/tvSolicitado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/SolicitadoPor"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="24sp"/>
+
+        <TextView
+            android:id="@+id/tvSolicitante"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/txt_color"
+            android:textSize="28sp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="30dp"/>
+
+        <!-- Selección Fecha y Hora de Inicio -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha y hora de inicio"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="8dp"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <ImageButton
+                android:id="@+id/btnCalendarioInicio"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_calendario"
+                android:contentDescription="Seleccionar fecha de inicio"
+                android:layout_marginEnd="10dp"/>
+            <TextView
+                android:id="@+id/tvFechaInicio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No seleccionada"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_marginEnd="20dp"/>
+
+            <ImageButton
+                android:id="@+id/btnHoraInicio"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_reloj"
+                android:contentDescription="Seleccionar hora de inicio"
+                android:layout_marginEnd="10dp"/>
+            <TextView
+                android:id="@+id/tvHoraInicio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No seleccionada"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <!-- Selección Fecha y Hora de Fin -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha y hora de fin"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="8dp"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <ImageButton
+                android:id="@+id/btnCalendarioFin"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_calendario"
+                android:contentDescription="Seleccionar fecha de fin"
+                android:layout_marginEnd="10dp"/>
+            <TextView
+                android:id="@+id/tvFechaFin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No seleccionada"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_marginEnd="20dp"/>
+            <ImageButton
+                android:id="@+id/btnHoraFin"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_reloj"
+                android:contentDescription="Seleccionar hora de fin"
+                android:layout_marginEnd="10dp"/>
+            <TextView
+                android:id="@+id/tvHoraFin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No seleccionada"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <!-- Jornada -->
+        <TextView
+            android:id="@+id/tvJornada"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/jornada"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="4dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp">
+
+            <CheckBox
+                android:id="@+id/checkManana"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Mañana"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:buttonTint="@color/btn_sena"
+                android:layout_marginEnd="16dp"/>
+
+            <CheckBox
+                android:id="@+id/checkTarde"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Tarde"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:buttonTint="@color/btn_sena"
+                android:layout_marginEnd="16dp"/>
+            <CheckBox
+                android:id="@+id/checkNoche"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Noche"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:buttonTint="@color/btn_sena" />
+        </LinearLayout>
+
+        <!-- Guardar -->
+        <ImageButton
+            android:id="@+id/btnGuardar"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/colorBtns"
+            android:src="@drawable/ic_guardar"
+            android:contentDescription="Guardar reserva" />
+
+    </LinearLayout>
+</ScrollView>

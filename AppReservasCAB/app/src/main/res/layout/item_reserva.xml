@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:padding="10dp"
+    android:elevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/grisoscuro">
+
+        <ImageView
+            android:id="@+id/ivAmbiente"
+            android:layout_width="wrap_content"
+            android:layout_height="130dp"
+            android:scaleType="centerCrop"
+            />
+
+        <TextView
+            android:id="@+id/tvNombreAmbiente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ambiente:"
+            android:textStyle="bold"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/tvFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha:"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/tvJornadas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jornadas:"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/tvEstado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Estado:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainlyReservas"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    tools:context=".InstruMisReservas">
+
+    <ImageButton
+        android:background="@android:color/transparent"
+        android:id="@+id/ibVolver"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_flecha_volver"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:contentDescription="@string/txtVolver" />
+
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/txtMisReservas"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="15dp"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="20dp" />
+
+
+    <FrameLayout
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="10pt">
+
+
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/poppins"
+            android:textColor="@color/black"
+            android:textColorHint="@color/txt_color"
+            android:queryHint="Buscar..."
+            android:iconifiedByDefault="false"/>
+
+        <ImageView
+            android:id="@+id/ivVerContra"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@string/filtrar"
+            android:src="@drawable/ic_filtro" />
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:scrollbars="horizontal"
+        tools:listitem="@layout/item_vistappal">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:scrollbars="horizontal"
+        tools:listitem="@layout/activity_equipos_computo">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+
+
+
+
+</LinearLayout>

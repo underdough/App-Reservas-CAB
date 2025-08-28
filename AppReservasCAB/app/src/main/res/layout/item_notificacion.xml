@@ -1,0 +1,17 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:background="?attr/selectableItemBackground" android:gravity="center_vertical">
+    <!--  Avatar del usuario  -->
+    <androidx.cardview.widget.CardView android:id="@+id/contenedor_avatar" android:layout_width="50dp" android:layout_height="50dp" app:cardCornerRadius="25dp" app:cardElevation="0dp" android:layout_marginEnd="16dp">
+        <ImageView android:id="@+id/img_avatar_usuario" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" android:src="@drawable/ic_user"/>
+    </androidx.cardview.widget.CardView>
+    <!--  Contenido de la notificación  -->
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+        <!--  Texto principal de la notificación  -->
+        <TextView android:id="@+id/txt_mensaje_notificacion" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="14sp" android:textColor="@color/black" android:lineSpacingExtra="2dp" android:maxLines="2" android:ellipsize="end" tools:text="Kevin chen solicitó un ambiente hace 4h"/>
+        <!--  Tiempo transcurrido  -->
+        <TextView android:id="@+id/txt_tiempo_notificacion" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="12sp" android:textColor="@color/gris" android:layout_marginTop="4dp" tools:text="hace 4h"/>
+    </LinearLayout>
+    <!--  Indicador de notificación no leída  -->
+    <View android:id="@+id/indicador_no_leida" android:layout_width="8dp" android:layout_height="8dp" android:layout_marginStart="12dp" android:background="@drawable/circulo_notificacion_nueva" android:visibility="visible"/>
+    <!--  Icono de acción (opcional)  -->
+    <ImageView android:id="@+id/icono_tipo_notificacion" android:layout_width="20dp" android:layout_height="20dp" android:layout_marginStart="8dp" android:src="@drawable/ic_acciones" android:visibility="gone" android:alpha="0.6" tools:visibility="visible"/>
+</LinearLayout>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <ImageButton
+            android:background="@android:color/transparent"
+            android:id="@+id/ibVolver"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_flecha_volver"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="@string/txtVolver" />
+
+        <ImageView
+            android:id="@+id/ivEquipo"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:scaleType="center"
+            android:layout_gravity="center"
+            android:background="@drawable/border_radius_gray"/>
+
+        <TextView
+            android:id="@+id/tvMarca"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Marca"
+            android:textColor="@color/txt_color"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_marginTop="12dp"/>
+
+        <TextView
+            android:id="@+id/tvModelo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Modelo"
+            android:textSize="16sp"
+            android:textColor="@color/txt_color"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvDescripcion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/txt_color"
+            android:text="Descripción del equipo"
+            android:layout_marginTop="8dp"
+            android:textSize="16sp"/>
+    </LinearLayout>
+</ScrollView>

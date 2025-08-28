@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ActividadNotificaciones"
+    android:background="@color/white"
+    android:id="@+id/mainlyNotificaciones">
+
+    <!-- Header con título y botón de regreso -->
+    <LinearLayout
+        android:id="@+id/contenedor_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <ImageButton
+            android:id="@+id/btn_regresar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_flecha_volver"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Regresar"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:id="@+id/txt_titulo_notificaciones"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Notificaciones"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginEnd="40dp" />
+
+    </LinearLayout>
+
+    <!-- Separador -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+    <!-- Contenido principal con FrameLayout para manejar diferentes estados -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- SwipeRefreshLayout con RecyclerView -->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_notificaciones"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:clipToPadding="false"
+                tools:listitem="@layout/item_notificacion" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <!-- Estado vacío -->
+        <LinearLayout
+            android:id="@+id/contenedor_estado_vacio"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            android:padding="32dp">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_user"
+                android:alpha="0.3"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No tienes notificaciones"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Las nuevas notificaciones aparecerán aquí"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:alpha="0.7"
+                android:layout_marginTop="8dp"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <!-- Estado de carga -->
+        <LinearLayout
+            android:id="@+id/contenedor_cargando"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            android:padding="32dp">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cargando notificaciones..."
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <!-- Estado de error -->
+        <LinearLayout
+            android:id="@+id/contenedor_error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            android:padding="32dp">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_user"
+                android:alpha="0.3"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Error al cargar notificaciones"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:id="@+id/btn_reintentar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reintentar"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:padding="12dp"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

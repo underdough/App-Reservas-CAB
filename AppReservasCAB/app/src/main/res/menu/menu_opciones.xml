@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+    <item android:id="@+id/nav_mi_reservas"
+        android:title="Mi reservas" />
+    <item android:id="@+id/nav_quejas"
+        android:title="Quejas" />
+
+    <item android:id="@+id/nav_perfil"
+        android:title="Perfil" />
+    <item android:id="@+id/nav_crear_ambiente"
+        android:title="Crear ambiente" />
+    <item android:id="@+id/nav_crear_equipo"
+        android:title="Crear equipo" />
+    <item android:id="@+id/nav_crear_usuario"
+        android:title="Crear Usuario" />
+    <item android:id="@+id/nav_cerrar_Sesion"
+        android:title="Cerrar sesion" />
+
+
+
+    <!-- Agrega más opciones según necesites -->
+</menu>

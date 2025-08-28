@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/mainlyPerfilAprendizInstru"
+    android:background="@android:color/white"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".PerfilAprendizInstru"
+    >
+
+    <ImageButton
+        android:background="@android:color/transparent"
+        android:id="@+id/ibVolver"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="start"
+        android:src="@drawable/ic_flecha_volver"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:contentDescription="@string/txtVolver" />
+
+
+    <ImageView
+        android:id="@+id/tvUser"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="2pt"
+        android:background="@drawable/ic_user"
+        android:textColor="@color/txt_color"
+        android:layout_gravity="center"
+        android:contentDescription="@string/logo_sena"/>
+
+    <TextView
+        android:id="@+id/tvNomUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:textColor="@color/txt_color"
+        android:layout_gravity="center"
+        android:textSize="34sp"
+        android:textStyle="bold"/>
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:orientation="vertical"
+        tools:listitem="@layout/activity_info_perfil">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+</LinearLayout>

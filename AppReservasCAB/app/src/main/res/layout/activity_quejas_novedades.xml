@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:layout_height="match_parent"
+    android:id="@+id/mainlyQuejasNovedades"
+    tools:context=".QuejasNovedades">
+
+
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:text="@string/txtQuejas"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvinfoNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/nombre"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/tvNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/txt_color"
+        android:textSize="28sp"/>
+
+    <TextView
+        android:id="@+id/tvDescripcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/descripcionDetallada"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="24sp"/>
+
+    <EditText
+        android:id="@+id/etDescripcion"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="20dp"
+        android:textColorHint="@color/txt_color"
+        android:shadowColor="@color/black"
+        android:textSize="18dp"
+        android:textColor="@color/black"
+        android:hint="Describe tu queja aquí ..."
+        android:inputType="textEmailAddress"
+        android:fontFamily="@font/poppins"
+        android:autofillHints="emailAddress"/>
+
+
+    <TextView
+        android:id="@+id/tvEvidencia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/evidencia"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="24sp"/>
+
+    <ImageView
+        android:id="@+id/miImagen"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="100dp"
+        android:background="#CCCCCC"/>
+
+    <Button
+        android:id="@+id/botonSeleccionar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="88dp"
+        android:text="@string/seleccionar"
+        android:layout_marginTop="16dp"/>
+
+
+    <ImageButton
+        android:id="@+id/btnCancelar"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginHorizontal="210dp"
+        android:layout_marginTop="25dp"
+        android:backgroundTint="@color/colorBtnCancela"
+        android:textAlignment="center"
+        android:src="@drawable/ic_cancelar"
+        android:textColor="@color/white" />
+
+    <ImageButton
+        android:id="@+id/btnGuardar"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginHorizontal="300dp"
+        android:layout_marginTop="-70dp"
+        android:backgroundTint="@color/colorBtns"
+        android:textAlignment="center"
+        android:src="@drawable/ic_guardar"
+        android:textColor="@color/white" />
+
+</LinearLayout>

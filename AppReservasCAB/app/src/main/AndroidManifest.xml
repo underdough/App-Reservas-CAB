@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.amkj.appreservascab">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_gr_app"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_gr_app_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppReservasCAB"
+        tools:targetApi="31">
+        <activity
+            android:name=".CrearUsuario"
+            android:exported="false" />
+        <activity
+            android:name=".SolicitudReservasEquipo"
+            android:exported="false" />
+        <activity
+            android:name=".ActividadNotificaciones"
+            android:exported="false" />
+        <activity
+            android:name=".DetalleEquipo"
+            android:exported="false" />
+        <activity
+            android:name=".DetalleAmbiente"
+            android:exported="false" />
+        <activity
+            android:name=".CrearEquipos"
+            android:exported="false" />
+        <activity
+            android:name=".CrearAmbiente"
+            android:exported="false" />
+        <activity
+            android:name=".PerfilAprendizInstru"
+            android:exported="false" />
+        <activity
+            android:name=".QuejasNovedades"
+            android:exported="false" />
+        <activity
+            android:name=".SolicitudReservas"
+            android:exported="false" />
+        <activity
+            android:name=".InstruMisReservas"
+            android:exported="false" />
+        <activity
+            android:name=".VistaPrincipal"
+            android:exported="false" />
+        <activity
+            android:name=".CambiarContrasena"
+            android:exported="false" />
+        <activity
+            android:name=".RCCorreoEnviado"
+            android:exported="false" />
+        <activity
+            android:name=".RecuperarContrasena"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
