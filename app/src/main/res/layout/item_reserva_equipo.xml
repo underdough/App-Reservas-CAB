@@ -3,18 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:elevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/grisoscuro">
 
         <ImageView
-            android:id="@+id/ivEquipo"
-            android:layout_width="100dp"
-            android:layout_height="120dp"
-            android:layout_marginEnd="8dp"
+            android:id="@+id/ivAmbiente"
+            android:layout_width="wrap_content"
+            android:layout_height="130dp"
             android:scaleType="centerCrop"
             />
 
@@ -22,34 +23,46 @@
             android:id="@+id/tvMarca"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Marca: "
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvModelo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Modelo: "
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvNombre"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nombre: "
-            android:textStyle="bold" />
-
+            android:text=""
+            android:textStyle="bold"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/tvFecha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fecha: " />
+            android:text="Fecha:"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/tvJornadas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Jornadas: " />
+            android:text="Jornadas:"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/tvEstado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Estado:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/black"/>
+        <Button
+            android:id="@+id/btnCancelarReserva"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
+            android:layout_marginTop="8dp"
+            android:padding="6dp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/rojo"
+            />
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

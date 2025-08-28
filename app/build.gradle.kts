@@ -77,6 +77,7 @@ dependencies {
 //
     implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0") // Usa una versión compatible
 
+    implementation ("com.kizitonwose.calendar:view:2.5.4")
 //    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
 

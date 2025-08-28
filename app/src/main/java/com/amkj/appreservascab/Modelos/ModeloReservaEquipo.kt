@@ -8,11 +8,15 @@ data class ModeloReservaEquipo(
     val usuario_id: Int,
     val elemento_id: Int,
     @SerializedName("fecha_hora_inicio") val fecha: String,
+    @SerializedName("fecha_hora_fin") val fecha_fin:String,
     val motivo: String,
     val jornadas: String,
     val estado: String,
+
+    @SerializedName("equipo_marca") val equipo_marca: String?,
+    @SerializedName("equipo_modelo") val equipo_modelo: String?,
+    @SerializedName("equipo_imagen")   val equipo_imagen: String?, // URL absoluta (o null si no hay)
     val equipo_nombre: String?,
-    val equipo_imagen: String?
 )
 
 

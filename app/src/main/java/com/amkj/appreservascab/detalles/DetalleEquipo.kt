@@ -24,7 +24,7 @@ class DetalleEquipo : AppCompatActivity() {
             binding.tvModelo.text = equipo.modelo
             binding.tvDescripcion.text = equipo.descripcion
 
-            val urlImagen = "http://192.168.1.3/phpGestionReservas/" + equipo.imagen
+            val urlImagen = "https://emma-essential-mae-singh.trycloudflare.com/phpGestionReservas/" + equipo.imagen
             Glide.with(this)
                 .load(urlImagen)
                 .into(binding.ivEquipo)

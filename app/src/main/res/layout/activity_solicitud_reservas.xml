@@ -84,6 +84,17 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="8dp"/>
 
+        <!-- Botón para abrir calendario mensual -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btnVerCalendario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ver calendario"/>
+        </LinearLayout>
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -181,7 +192,7 @@
                 android:textColor="@color/black"/>
         </LinearLayout>
 
-        <!-- === Disponibilidad del rango === -->
+        <!-- === Disponibilidad del rango / del día === -->
         <TextView
             android:id="@+id/tvDisponibilidadTitulo"
             android:layout_width="match_parent"
@@ -208,7 +219,30 @@
             android:textColor="@color/black"
             android:layout_marginTop="8dp" />
 
-        <!-- Jornadas como badges (sin CheckBox) -->
+
+        <!-- NUEVO: texto para mostrar la selección del usuario -->
+        <TextView
+            android:id="@+id/tvSeleccionDia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tu selección: (ninguna)"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp" />
+
+
+        <!-- NUEVO (opcional Admin): listado de reservas del día -->
+        <TextView
+            android:id="@+id/tvReservasAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            android:layout_marginTop="6dp" />
+
+        <!-- Jornadas como badges -->
         <LinearLayout
             android:id="@+id/contenedorBadges"
             android:layout_width="match_parent"
@@ -227,7 +261,9 @@
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
-                android:background="@drawable/bg_badge_neutral"/>
+                android:background="@drawable/bg_badge_neutral"
+                android:clickable="true"
+                android:focusable="true" />
 
             <TextView
                 android:id="@+id/badgeTarde"
@@ -240,7 +276,9 @@
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
-                android:background="@drawable/bg_badge_neutral"/>
+                android:background="@drawable/bg_badge_neutral"
+                android:clickable="true"
+                android:focusable="true" />
 
             <TextView
                 android:id="@+id/badgeNoche"
@@ -252,19 +290,21 @@
                 android:textStyle="bold"
                 android:textSize="14sp"
                 android:textColor="@android:color/white"
-                android:background="@drawable/bg_badge_neutral"/>
+                android:background="@drawable/bg_badge_neutral"
+                android:clickable="true"
+                android:focusable="true" />
         </LinearLayout>
 
         <!-- Guardar -->
         <ImageButton
             android:id="@+id/btnGuardar"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="10dp"
             android:backgroundTint="@color/colorBtns"
-            android:src="@drawable/ic_guardar"
-            android:contentDescription="Guardar reserva" />
+            android:contentDescription="Guardar reserva"
+            android:src="@drawable/ic_guardar" />
 
     </LinearLayout>
 </ScrollView>

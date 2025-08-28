@@ -58,4 +58,6 @@
     <string name="txtCrearAmbiente">Crear ambiente</string>
     <string name="imagenAmbiente">Imagen ambiente:</string>
     <string name="rol">Rol:</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

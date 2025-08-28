@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="48dp"
+    android:layout_height="56dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="6dp"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp">
+
+    <TextView
+        android:id="@+id/tvDayNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|center_horizontal"
+        android:text="1"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="4dp">
+
+        <View
+            android:id="@+id/pillM"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/bg_pill_round" />
+
+        <View
+            android:id="@+id/pillT"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/bg_pill_round" />
+
+        <View
+            android:id="@+id/pillN"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/bg_pill_round" />
+    </LinearLayout>
+</FrameLayout>

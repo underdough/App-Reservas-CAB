@@ -1,12 +1,15 @@
 package com.amkj.appreservascab
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -29,16 +32,55 @@ class SolicitudReservas : AppCompatActivity() {
     private var fechaFinSeleccionada: String = ""
     private var horaFinSeleccionada: String = ""
 
-    // Memoria de disponibilidad por día (fecha -> libre_en)
-    private val disponibilidadPorDia: MutableMap<String, List<String>> = mutableMapOf()
+    // Día único (prioridad sobre rango)
+    private var jornadasLibresDelDiaAmbiente: Set<String> = emptySet()
 
-    // Jornadas libres en TODOS los días del rango
+    // Rango (fecha -> libre_en) + intersección
+    private val disponibilidadPorDia: MutableMap<String, List<String>> = mutableMapOf()
     private var jornadasLibresEnTodoElRango: Set<String> = emptySet()
 
-    // Jornadas seleccionadas por el usuario (máx 2)
+    // Selección del usuario (máximo 2)
     private val jornadasSeleccionadas: MutableSet<String> = linkedSetOf()
 
     private val TAG = "SolicitudReservasAmb"
+    private var ambienteIdParaCalendario: Int = 0
+
+    // === Selector calendario: recibe fecha y 1..2 jornadas ===
+    private val seleccionarFechaJornada =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { res ->
+            if (res.resultCode != Activity.RESULT_OK) return@registerForActivityResult
+            val data = res.data ?: return@registerForActivityResult
+
+            val fecha = data.getStringExtra(CalendarioDisponibilidadFragment.EXTRA_FECHA) ?: return@registerForActivityResult
+            val codes = data.getStringArrayListExtra(CalendarioDisponibilidadFragment.EXTRA_JORNADAS_LIST)
+            val fallbackCode = data.getStringExtra(CalendarioDisponibilidadFragment.EXTRA_JORNADA)
+
+            val codigos: List<String> = when {
+                !codes.isNullOrEmpty()        -> codes.toList()
+                !fallbackCode.isNullOrEmpty() -> listOf(fallbackCode!!)
+                else                          -> emptyList()
+            }
+            if (codigos.isEmpty()) return@registerForActivityResult
+
+            // 1) Rango = 1 día
+            fechaInicioSeleccionada = fecha
+            fechaFinSeleccionada = fecha
+            binding.tvFechaInicio.text = fecha
+            binding.tvFechaFin.text = fecha
+
+            // 2) Horas sugeridas (combina una o dos jornadas)
+            setHorasPorJornadas(codigos)
+
+            // 3) Selección visible (labels)
+            jornadasSeleccionadas.clear()
+            jornadasSeleccionadas.addAll(codigos.map(::codeToLabel))
+            setTextSeleccion()
+
+            // 4) Consulta **solo del día**
+            binding.pbDisponibilidad.visibility = View.VISIBLE
+            setTextDisponibilidad("Consultando disponibilidad del día...")
+            consultarDisponibilidadAmbienteDelDia(ambienteIdParaCalendario, fecha)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +95,7 @@ class SolicitudReservas : AppCompatActivity() {
 
         val ambiente = intent.getParcelableExtra<ModeloAmbientes>("ambiente")
         binding.tvNombreAmbiente.text = ambiente?.nombre ?: "Ambiente desconocido"
+        ambienteIdParaCalendario = ambiente?.id ?: 0
 
         val sharedPref = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
         val usuario = ModeloUsuarios(
@@ -63,38 +106,38 @@ class SolicitudReservas : AppCompatActivity() {
             rol = sharedPref.getString("rol", "Rol no asignado") ?: "Rol no asignado",
             telefono = sharedPref.getString("telefono", "Telefono no ingresado") ?: "Telefono no ingresado"
         )
-
         binding.tvSolicitante.text = usuario.nombre
         val usuarioId = usuario.id
+
         val calendar = Calendar.getInstance()
 
-        // Estado inicial badges
+        // Estado inicial
         pintarBadges(neutral = true)
         setBadgesEnabled(false)
         binding.pbDisponibilidad.visibility = View.GONE
-        binding.tvEstadoRango.text = "Selecciona fecha inicio y fin para ver disponibilidad"
+        setTextDisponibilidad("Selecciona fecha inicio y fin para ver disponibilidad")
+        setTextSeleccion()
 
-        // Pickers de fecha/hora
+        // Pickers INICIO
         binding.btnCalendarioInicio.setOnClickListener {
             DatePickerDialog(
                 this,
                 { _, y, m, d ->
                     fechaInicioSeleccionada = String.format("%04d-%02d-%02d", y, m + 1, d)
                     binding.tvFechaInicio.text = fechaInicioSeleccionada
-                    // Reset UI de disponibilidad
                     jornadasSeleccionadas.clear()
                     pintarBadges(neutral = true)
                     setBadgesEnabled(false)
                     binding.pbDisponibilidad.visibility = View.VISIBLE
-                    binding.tvEstadoRango.text = "Consultando disponibilidad..."
+                    setTextDisponibilidad("Consultando disponibilidad...")
                     intentarActualizarDisponibilidad(ambiente)
+                    setTextSeleccion()
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
             ).show()
         }
-
         binding.btnHoraInicio.setOnClickListener {
             TimePickerDialog(this, { _, h, min ->
                 horaInicioSeleccionada = String.format("%02d:%02d:00", h, min)
@@ -102,26 +145,26 @@ class SolicitudReservas : AppCompatActivity() {
             }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show()
         }
 
+        // Pickers FIN
         binding.btnCalendarioFin.setOnClickListener {
             DatePickerDialog(
                 this,
                 { _, y, m, d ->
                     fechaFinSeleccionada = String.format("%04d-%02d-%02d", y, m + 1, d)
                     binding.tvFechaFin.text = fechaFinSeleccionada
-                    // Reset UI de disponibilidad
                     jornadasSeleccionadas.clear()
                     pintarBadges(neutral = true)
                     setBadgesEnabled(false)
                     binding.pbDisponibilidad.visibility = View.VISIBLE
-                    binding.tvEstadoRango.text = "Consultando disponibilidad..."
+                    setTextDisponibilidad("Consultando disponibilidad...")
                     intentarActualizarDisponibilidad(ambiente)
+                    setTextSeleccion()
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
             ).show()
         }
-
         binding.btnHoraFin.setOnClickListener {
             TimePickerDialog(this, { _, h, min ->
                 horaFinSeleccionada = String.format("%02d:%02d:00", h, min)
@@ -129,12 +172,28 @@ class SolicitudReservas : AppCompatActivity() {
             }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show()
         }
 
-        // Clicks de badges
+        // Calendario mensual (1..2 jornadas)
+        binding.btnVerCalendario.setOnClickListener {
+            val amb = intent.getParcelableExtra<ModeloAmbientes>("ambiente")
+            val id = amb?.id ?: 0
+            if (id == 0) {
+                Toast.makeText(this, "No se reconoce el ambiente", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val i = Intent(this, DisponibilidadActivity::class.java).apply {
+                putExtra("tipo", "ambiente")
+                putExtra("recursoId", id)
+                putExtra("returnResult", true)
+            }
+            seleccionarFechaJornada.launch(i)
+        }
+
+        // Badges
         binding.badgeManana.setOnClickListener { onBadgeClick("Mañana", binding.badgeManana) }
         binding.badgeTarde.setOnClickListener  { onBadgeClick("Tarde",  binding.badgeTarde) }
         binding.badgeNoche.setOnClickListener  { onBadgeClick("Noche",  binding.badgeNoche) }
 
-        // Guardar
+        // Guardar (flujo igual; solo mensajes)
         binding.btnGuardar.setOnClickListener {
             if (ambiente == null ||
                 fechaInicioSeleccionada.isEmpty() || horaInicioSeleccionada.isEmpty() ||
@@ -160,7 +219,6 @@ class SolicitudReservas : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Validar vs disponibilidad del rango (intersección)
             if (jornadasLibresEnTodoElRango.isNotEmpty() &&
                 !jornadasSeleccionadas.all { it in jornadasLibresEnTodoElRango }) {
                 Toast.makeText(this, "Hay jornadas no libres en TODO el rango. Revisa la disponibilidad.", Toast.LENGTH_LONG).show()
@@ -179,32 +237,36 @@ class SolicitudReservas : AppCompatActivity() {
                 ambiente_imagen = null
             )
 
-            // Validación puntual (día inicio) para compatibilidad con tu backend actual
             val datos = SolicitudDisponibilidadRequest(
                 ambiente_id = ambiente.id,
                 fecha = fechaInicioSeleccionada,
-                jornadas = reserva.jornadas ?: ""
+                jornadas = jornadasSeleccionadas.joinToString(", ")
             )
 
-            Log.d(TAG, "Validando DISP puntual con: $datos")
             RetrofitClient.instance.validarDisponibilidadAmbiente(datos)
-                .enqueue(object : Callback<Map<String, Boolean>> {
+                .enqueue(object : Callback<ValidacionAmbienteResponse> {
                     override fun onResponse(
-                        call: Call<Map<String, Boolean>>,
-                        response: Response<Map<String, Boolean>>
+                        call: Call<ValidacionAmbienteResponse>,
+                        response: Response<ValidacionAmbienteResponse>
                     ) {
-                        val disponible = response.body()?.get("disponible") ?: false
-                        Log.d(TAG, "Resp validarDisponibilidadAmbiente=$disponible, code=${response.code()}")
-
-                        if (!disponible) {
-                            Toast.makeText(this@SolicitudReservas, "Este ambiente ya tiene una reserva aceptada en esa jornada (día de inicio)", Toast.LENGTH_SHORT).show()
+                        val body = response.body()
+                        if (!response.isSuccessful || body == null) {
+                            Toast.makeText(this@SolicitudReservas, "No se pudo validar disponibilidad", Toast.LENGTH_SHORT).show()
+                            Log.e(TAG, "validarDisponibilidadAmbiente code=${response.code()}")
+                            return
+                        }
+                        if (body.disponible != true) {
+                            val bloqueadas = body.detalle?.filterValues { it != "libre" }?.keys?.joinToString()
+                            val msg = if (!bloqueadas.isNullOrEmpty())
+                                "Jornadas no disponibles: $bloqueadas"
+                            else "Este ambiente ya tiene una reserva en esa(s) jornada(s)"
+                            Toast.makeText(this@SolicitudReservas, msg, Toast.LENGTH_LONG).show()
                             return
                         }
 
                         RetrofitClient.instance.guardarReserva(reserva)
                             .enqueue(object : Callback<ResponseBody> {
                                 override fun onResponse(call: Call<ResponseBody>, resp: Response<ResponseBody>) {
-                                    Log.d(TAG, "GuardarReserva code=${resp.code()}")
                                     if (resp.isSuccessful) {
                                         Toast.makeText(this@SolicitudReservas, "Reserva exitosa", Toast.LENGTH_SHORT).show()
                                         finish()
@@ -212,17 +274,13 @@ class SolicitudReservas : AppCompatActivity() {
                                         Toast.makeText(this@SolicitudReservas, "No se pudo guardar la reserva", Toast.LENGTH_SHORT).show()
                                     }
                                 }
-
                                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                                    Log.e(TAG, "Error al guardar", t)
                                     Toast.makeText(this@SolicitudReservas, "Error al guardar: ${t.message}", Toast.LENGTH_SHORT).show()
                                 }
                             })
                     }
-
-                    override fun onFailure(call: Call<Map<String, Boolean>>, t: Throwable) {
-                        Log.e(TAG, "Error validarDisponibilidadAmbiente", t)
-                        Toast.makeText(this@SolicitudReservas, "Error de red al validar disponibilidad", Toast.LENGTH_SHORT).show()
+                    override fun onFailure(call: Call<ValidacionAmbienteResponse>, t: Throwable) {
+                        Toast.makeText(this@SolicitudReservas, "Error de red al validar disponibilidad: ${t.message}", Toast.LENGTH_SHORT).show()
                     }
                 })
         }
@@ -230,99 +288,127 @@ class SolicitudReservas : AppCompatActivity() {
         binding.ibAtras.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
-    /**
-     * Consulta la disponibilidad del RANGO y actualiza la UI (badges) según intersección.
-     */
+    // --------- Disponibilidad (DÍA) ---------
+    private fun consultarDisponibilidadAmbienteDelDia(ambienteId: Int, fecha: String) {
+        RetrofitClient.instance.disponibilidadAmbienteDia(
+            ambienteId = ambienteId,
+            fecha = fecha
+        ).enqueue(object : Callback<DisponibilidadResponse> {
+            override fun onResponse(call: Call<DisponibilidadResponse>, response: Response<DisponibilidadResponse>) {
+                binding.pbDisponibilidad.visibility = View.GONE
+                if (!response.isSuccessful || response.body() == null) {
+                    jornadasLibresDelDiaAmbiente = emptySet()
+                    pintarBadges(neutral = true)
+                    setBadgesEnabled(false)
+                    setTextDisponibilidad("Sin datos de disponibilidad")
+                    setTextSeleccion()
+                    return
+                }
+
+                val dia = response.body()!!.dias.firstOrNull()
+                jornadasLibresDelDiaAmbiente = dia?.libre_en?.map { it.trim() }?.toSet() ?: emptySet()
+
+                Log.d(TAG, "Ambiente DIA libres=$jornadasLibresDelDiaAmbiente")
+
+                // Mantener solo selecciones que siguen libres
+                jornadasSeleccionadas.retainAll(jornadasLibresDelDiaAmbiente)
+
+                // UI
+                pintarBadges(neutral = false)
+                setBadgesEnabled(true)
+                setTextDisponibilidadByLibres()
+                setTextSeleccion()
+            }
+            override fun onFailure(call: Call<DisponibilidadResponse>, t: Throwable) {
+                binding.pbDisponibilidad.visibility = View.GONE
+                jornadasLibresDelDiaAmbiente = emptySet()
+                pintarBadges(neutral = true)
+                setBadgesEnabled(false)
+                setTextDisponibilidad("Sin datos de disponibilidad")
+                setTextSeleccion()
+                Toast.makeText(this@SolicitudReservas, "Error de red: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    // --------- Disponibilidad (RANGO) ---------
     private fun intentarActualizarDisponibilidad(ambiente: ModeloAmbientes?) {
         if (ambiente == null) return
         if (fechaInicioSeleccionada.isEmpty() || fechaFinSeleccionada.isEmpty()) return
 
-        Log.d(TAG, "Consultando disponibilidadAmbiente rango: $fechaInicioSeleccionada..$fechaFinSeleccionada (ambiente ${ambiente.id})")
+        // Si es un solo día, usamos el endpoint de día
+        if (fechaInicioSeleccionada == fechaFinSeleccionada) {
+            consultarDisponibilidadAmbienteDelDia(ambiente.id, fechaInicioSeleccionada)
+            return
+        }
 
         RetrofitClient.instance.disponibilidadAmbiente(
             ambienteId = ambiente.id,
             desde = fechaInicioSeleccionada,
             hasta = fechaFinSeleccionada
         ).enqueue(object : Callback<DisponibilidadResponse> {
-            override fun onResponse(
-                call: Call<DisponibilidadResponse>,
-                response: Response<DisponibilidadResponse>
-            ) {
+            override fun onResponse(call: Call<DisponibilidadResponse>, response: Response<DisponibilidadResponse>) {
                 binding.pbDisponibilidad.visibility = View.GONE
-
-                if (!response.isSuccessful) {
-                    Log.w(TAG, "Resp disponibilidadAmbiente no OK: code=${response.code()}")
-                    Toast.makeText(this@SolicitudReservas, "No fue posible obtener disponibilidad", Toast.LENGTH_SHORT).show()
-                    binding.tvEstadoRango.text = "Sin datos de disponibilidad"
+                if (!response.isSuccessful || response.body() == null) {
+                    jornadasLibresEnTodoElRango = emptySet()
+                    jornadasLibresDelDiaAmbiente = emptySet()
                     pintarBadges(neutral = true)
                     setBadgesEnabled(false)
+                    setTextDisponibilidad("Sin datos de disponibilidad")
+                    setTextSeleccion()
                     return
                 }
 
-                val body = response.body()
-                if (body == null) {
-                    Log.w(TAG, "Resp disponibilidadAmbiente sin body")
-                    Toast.makeText(this@SolicitudReservas, "No fue posible obtener disponibilidad", Toast.LENGTH_SHORT).show()
-                    binding.tvEstadoRango.text = "Sin datos de disponibilidad"
-                    pintarBadges(neutral = true)
-                    setBadgesEnabled(false)
-                    return
-                }
-
-                // (fecha -> libre_en)
+                val body = response.body()!!
                 disponibilidadPorDia.clear()
-                body.dias.forEach { d ->
-                    disponibilidadPorDia[d.fecha] = d.libre_en
-                }
+                body.dias.forEach { d -> disponibilidadPorDia[d.fecha] = d.libre_en }
 
-                // Intersección de jornadas libres en TODOS los días
                 jornadasLibresEnTodoElRango = calcularInterseccion(body.dias.map { it.libre_en })
-                Log.d(TAG, "Jornadas libres en TODO el rango: $jornadasLibresEnTodoElRango")
+                jornadasLibresDelDiaAmbiente = emptySet() // es rango
 
-                // Limpiar selecciones que ya no apliquen
+                // Limpiar selecciones que ya no aplican al rango
                 jornadasSeleccionadas.retainAll(jornadasLibresEnTodoElRango)
 
-                // Actualiza UI de badges
                 pintarBadges(neutral = false)
                 setBadgesEnabled(true)
 
-                val todas = setOf("Mañana", "Tarde", "Noche")
-                binding.tvEstadoRango.text = when {
+                val todas = setOf("Mañana","Tarde","Noche")
+                val msg = when {
                     jornadasLibresEnTodoElRango.isEmpty() -> "Sin jornadas libres en TODO el rango"
                     jornadasLibresEnTodoElRango == todas  -> "Libre TODO el rango (todas las jornadas)"
                     else -> "Libre en TODO el rango: ${jornadasLibresEnTodoElRango.joinToString()}"
                 }
+                setTextDisponibilidad(msg)
+                setTextSeleccion()
             }
-
             override fun onFailure(call: Call<DisponibilidadResponse>, t: Throwable) {
                 binding.pbDisponibilidad.visibility = View.GONE
-                Log.e(TAG, "Error disponibilidadAmbiente", t)
-                Toast.makeText(this@SolicitudReservas, "Error de red al consultar disponibilidad: ${t.message}", Toast.LENGTH_SHORT).show()
-                binding.tvEstadoRango.text = "Sin datos de disponibilidad"
+                jornadasLibresEnTodoElRango = emptySet()
+                jornadasLibresDelDiaAmbiente = emptySet()
                 pintarBadges(neutral = true)
                 setBadgesEnabled(false)
+                setTextDisponibilidad("Sin datos de disponibilidad")
+                setTextSeleccion()
+                Toast.makeText(this@SolicitudReservas, "Error de red al consultar disponibilidad: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    // Intersección de listas de jornadas
+    // Intersección para el rango
     private fun calcularInterseccion(listas: List<List<String>>): Set<String> {
-        if ( listas.isEmpty() ) return emptySet()
+        if (listas.isEmpty()) return emptySet()
         var inter = listas.first().map { it.trim() }.toSet()
-        listas.drop(1).forEach { l ->
-            inter = inter.intersect(l.map { it.trim() }.toSet())
-        }
+        listas.drop(1).forEach { l -> inter = inter.intersect(l.map { it.trim() }.toSet()) }
         return inter
     }
 
-    /** Badges: selección y pintado **/
+    // --------- Click de badge ---------
     private fun onBadgeClick(jornada: String, view: TextView) {
-        // Solo se puede seleccionar si está libre en TODO el rango
-        if (jornadasLibresEnTodoElRango.isNotEmpty() && jornada !in jornadasLibresEnTodoElRango) {
-            Toast.makeText(this, "La jornada '$jornada' no está libre en TODO el rango", Toast.LENGTH_SHORT).show()
+        val libres = jornadasDisponiblesActuales()
+        if (libres.isNotEmpty() && jornada !in libres) {
+            Toast.makeText(this, "La jornada '$jornada' no está libre", Toast.LENGTH_SHORT).show()
             return
         }
-
         if (jornadasSeleccionadas.contains(jornada)) {
             jornadasSeleccionadas.remove(jornada)
             setBadgeSelected(view, selected = false)
@@ -334,8 +420,13 @@ class SolicitudReservas : AppCompatActivity() {
             jornadasSeleccionadas.add(jornada)
             setBadgeSelected(view, selected = true)
         }
+        // Refresca habilitados y texto tras cualquier cambio
+        setBadgesEnabled(true)
+        pintarBadges(neutral = false)
+        setTextSeleccion()
     }
 
+    // --------- Pintado y habilitado ---------
     private fun pintarBadges(neutral: Boolean) {
         if (neutral) {
             paint(binding.badgeManana, R.drawable.bg_badge_neutral)
@@ -343,33 +434,106 @@ class SolicitudReservas : AppCompatActivity() {
             paint(binding.badgeNoche,  R.drawable.bg_badge_neutral)
             return
         }
-        fun bgFor(j: String, view: TextView): Int {
+        val libres = jornadasDisponiblesActuales()
+        fun bgFor(j: String): Int {
             val seleccionado = j in jornadasSeleccionadas
-            val libre = j in jornadasLibresEnTodoElRango
+            val libre = j in libres
             return when {
-                !libre -> R.drawable.bg_badge_bad
+                !libre       -> R.drawable.bg_badge_bad
                 seleccionado -> R.drawable.bg_badge_ok
-                else -> R.drawable.bg_badge_neutral
+                else         -> R.drawable.bg_badge_neutral
             }
         }
-        paint(binding.badgeManana, bgFor("Mañana", binding.badgeManana))
-        paint(binding.badgeTarde,  bgFor("Tarde",  binding.badgeTarde))
-        paint(binding.badgeNoche,  bgFor("Noche",  binding.badgeNoche))
+        paint(binding.badgeManana, bgFor("Mañana"))
+        paint(binding.badgeTarde,  bgFor("Tarde"))
+        paint(binding.badgeNoche,  bgFor("Noche"))
     }
 
     private fun setBadgesEnabled(enabledFromData: Boolean) {
-        binding.badgeManana.isEnabled = enabledFromData && ("Mañana" in jornadasLibresEnTodoElRango)
-        binding.badgeTarde.isEnabled  = enabledFromData && ("Tarde"  in jornadasLibresEnTodoElRango)
-        binding.badgeNoche.isEnabled  = enabledFromData && ("Noche"  in jornadasLibresEnTodoElRango)
+        val libres = jornadasDisponiblesActuales()
+        val maxReached = jornadasSeleccionadas.size >= 2
 
-        binding.badgeManana.alpha = if (binding.badgeManana.isEnabled) 1f else .5f
-        binding.badgeTarde.alpha  = if (binding.badgeTarde.isEnabled) 1f else .5f
-        binding.badgeNoche.alpha  = if (binding.badgeNoche.isEnabled) 1f else .5f
+        fun apply(label: String, v: TextView) {
+            val available = label in libres
+            val selected  = label in jornadasSeleccionadas
+            val enabled = when {
+                !enabledFromData        -> false
+                !available              -> false
+                maxReached && !selected -> false
+                else                    -> true
+            }
+            v.isEnabled = enabled
+            v.alpha = if (enabled) 1f else .5f
+        }
+
+        apply("Mañana", binding.badgeManana)
+        apply("Tarde",  binding.badgeTarde)
+        apply("Noche",  binding.badgeNoche)
     }
 
     private fun setBadgeSelected(view: TextView, selected: Boolean) {
         view.setBackgroundResource(if (selected) R.drawable.bg_badge_ok else R.drawable.bg_badge_neutral)
     }
-
     private fun paint(v: TextView, bg: Int) { v.setBackgroundResource(bg) }
+
+    // --------- Textos auxiliares ---------
+    private fun setTextDisponibilidad(msg: String?) {
+        binding.tvEstadoRango.text = msg ?: ""
+    }
+
+    private fun setTextDisponibilidadByLibres() {
+        val libres = jornadasDisponiblesActuales()
+        val todas = setOf("Mañana","Tarde","Noche")
+        val msg = when {
+            libres.isEmpty() -> "Disponibilidad: sin jornadas libres"
+            libres == todas  -> "Disponibilidad: libre todo el día"
+            else             -> "Disponibilidad: libre en ${libres.joinToString()}"
+        }
+        setTextDisponibilidad(msg)
+    }
+
+    private fun setTextSeleccion() {
+        val txt = if (jornadasSeleccionadas.isEmpty())
+            "Tu selección: (ninguna)"
+        else
+            "Tu selección: ${jornadasSeleccionadas.joinToString()}"
+
+        // Si existe tvSeleccionDia en tu XML lo usa; si no, hace fallback debajo del estado
+        val tvSel = binding.root.findViewById<TextView?>(R.id.tvSeleccionDia)
+        if (tvSel != null) {
+            tvSel.text = txt
+        } else {
+            val firstLine = binding.tvEstadoRango.text.toString().lineSequence().firstOrNull().orEmpty()
+            binding.tvEstadoRango.text = firstLine + "\n" + txt
+        }
+    }
+
+    // --------- Helpers ---------
+    private fun setHorasPorJornadas(codes: List<String>) {
+        fun rango(code: String): Pair<String, String>? = when (code.uppercase(Locale.getDefault())) {
+            "M" -> "08:00:00" to "12:00:00"
+            "T" -> "13:00:00" to "17:00:00"
+            "N" -> "18:00:00" to "22:00:00"
+            else -> null
+        }
+        val rangos = codes.mapNotNull(::rango)
+        if (rangos.isEmpty()) return
+        val inicio = rangos.minOf { it.first }
+        val fin    = rangos.maxOf { it.second }
+        horaInicioSeleccionada = inicio
+        horaFinSeleccionada = fin
+        binding.tvHoraInicio.text = horaInicioSeleccionada
+        binding.tvHoraFin.text = horaFinSeleccionada
+    }
+
+    private fun codeToLabel(j: String) = when (j.uppercase(Locale.getDefault())) {
+        "M" -> "Mañana"; "T" -> "Tarde"; "N" -> "Noche"; else -> j
+    }
+
+    private fun jornadasDisponiblesActuales(): Set<String> =
+        if (fechaInicioSeleccionada.isNotEmpty()
+            && fechaInicioSeleccionada == fechaFinSeleccionada
+            && jornadasLibresDelDiaAmbiente.isNotEmpty()
+        ) jornadasLibresDelDiaAmbiente
+        else jornadasLibresEnTodoElRango
 }

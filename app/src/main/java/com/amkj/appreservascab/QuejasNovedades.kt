@@ -99,7 +99,7 @@ class QuejasNovedades : AppCompatActivity() {
             .build()
 
         val request = Request.Builder()
-            .url("http://192.168.1.23/phpGestionReservas/guardarQueja.php")
+            .url("https://emma-essential-mae-singh.trycloudflare.com/phpGestionReservas/guardarQueja.php")
             .post(requestBody)
             .build()
 

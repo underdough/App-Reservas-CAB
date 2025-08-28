@@ -17,11 +17,17 @@
         android:roundIcon="@mipmap/ic_gr_app_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppReservasCAB"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".DisponibilidadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MisQuejasActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditarUsuario"
-            android:exported="false"
-           />
+            android:exported="false" />
         <activity
             android:name=".CrearUsuario"
             android:exported="false" />
@@ -63,6 +69,9 @@
             android:exported="false" />
         <activity
             android:name=".RCCorreoEnviado"
+            android:exported="false" />
+        <activity
+            android:name=".InformesActivity"
             android:exported="false" />
         <activity
             android:name=".RecuperarContrasena"

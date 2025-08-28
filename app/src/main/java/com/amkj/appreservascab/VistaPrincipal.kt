@@ -47,7 +47,7 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         tvUserSubtitle = headerView.findViewById(R.id.tvUserSubtitle)
 
         refreshDrawerHeader()
-        aplicarReglasDeMenuPorRol() // ⬅ Oculta/mostrar según rol (incluye Crear Usuario)
+        aplicarReglasDeMenuPorRol() // ⬅️ Oculta/mostrar según rol (incluye Crear Usuario)
 
         // Layouts horizontales
         binding.lyAmbientesPpal.recyclerAmbientes.layoutManager =
@@ -122,7 +122,7 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     override fun onResume() {
         super.onResume()
         refreshDrawerHeader()
-        aplicarReglasDeMenuPorRol() // ⬅ Revalida al volver (por si cambió el usuario)
+        aplicarReglasDeMenuPorRol() // ⬅️ Revalida al volver (por si cambió el usuario)
         verificarNotificacionesNoLeidas()
     }
 
@@ -132,7 +132,7 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         when (item.itemId) {
             R.id.nav_mi_reservas -> startActivity(Intent(this, InstruMisReservas::class.java))
             R.id.nav_perfil      -> startActivity(Intent(this, PerfilAprendizInstru::class.java))
-            R.id.nav_quejas      -> startActivity(Intent(this, QuejasNovedades::class.java))
+            R.id.nav_quejas      -> startActivity(Intent(this, MisQuejasActivity::class.java))
 
             R.id.nav_crear_equipo -> {
                 if (!esAdmin) {
@@ -150,13 +150,22 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 }
                 startActivity(Intent(this, CrearAmbiente::class.java))
             }
-            R.id.nav_crear_usuario -> { // ⬅ BLOQUEO NUEVO
+            R.id.nav_crear_usuario -> { // ⬅️ BLOQUEO NUEVO
                 if (!esAdmin) {
                     Toast.makeText(this, "No tienes permisos para crear usuarios.", Toast.LENGTH_SHORT).show()
                     binding.drawerLayout.closeDrawer(GravityCompat.END)
                     return true
                 }
                 startActivity(Intent(this, CrearUsuario::class.java))
+            }
+            R.id.nav_informes -> {
+                // Si quieres que solo admin vea informes, descomenta:
+                // if (!esAdmin) {
+                //     Toast.makeText(this, "No tienes permisos para ver Informes.", Toast.LENGTH_SHORT).show()
+                //     binding.drawerLayout.closeDrawer(GravityCompat.END)
+                //     return true
+                // }
+                startActivity(Intent(this, InformesActivity::class.java))
             }
             R.id.nav_cerrar_Sesion -> {
                 val shared = getSharedPreferences("UsuariosPrefs", MODE_PRIVATE)
@@ -217,7 +226,7 @@ class VistaPrincipal : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         menu.findItem(R.id.nav_crear_equipo)?.isVisible = esAdmin
         menu.findItem(R.id.nav_crear_ambiente)?.isVisible = esAdmin
-        menu.findItem(R.id.nav_crear_usuario)?.isVisible = esAdmin // ⬅ NUEVO
+        menu.findItem(R.id.nav_crear_usuario)?.isVisible = esAdmin // ⬅️ NUEVO
     }
 
     /** ¿Usuario actual es admin? */
